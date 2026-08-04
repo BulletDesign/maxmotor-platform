@@ -8,7 +8,7 @@ export function randomToken(bytes = 32) { const value = crypto.getRandomValues(n
 export async function hashPassword(password, saltBase64 = null) {
   const salt = saltBase64 ? fromBase64(saltBase64) : crypto.getRandomValues(new Uint8Array(16));
   const key = await crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveBits"]);
-  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt, iterations: 210000 }, key, 256);
+  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt, iterations: 100000 }, key, 256);
   return { hash: toBase64(new Uint8Array(bits)), salt: toBase64(salt) };
 }
 
