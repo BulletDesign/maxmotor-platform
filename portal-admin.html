@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Operaciones | MiMaxmotor</title>
+  <title>Portal Maxmotor | Operaciones</title>
   <meta name="description" content="Panel privado de operaciones para el equipo autorizado de Maxmotor 4x4.">
   <link rel="icon" href="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo_16x16.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
   <div class="portal-grid" aria-hidden="true"></div>
   <main class="admin-main">
     <section id="admin-login" class="admin-login">
-      <div class="admin-login-brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor 4x4"><p>MiMaxmotor / Centro de operaciones</p></div>
+      <div class="admin-login-brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor 4x4"><p>Portal Maxmotor / Equipo</p></div>
       <div class="admin-login-copy"><p class="eyebrow">ACCESO RESTRINGIDO / STAFF</p><h1>Control de<br>operaciones.</h1><p>Clientes, vehículos, garantías y puntos desde una interfaz preparada para mostrador y taller.</p></div>
       <form id="admin-login-form" class="portal-form admin-login-form">
         <p class="panel-index">IDENTIFICACIÓN</p>
@@ -31,21 +31,23 @@
     <section id="admin-app" class="admin-app" hidden>
       <aside class="admin-sidebar">
         <img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor 4x4">
-        <p>MiMaxmotor Ops</p>
+        <p>Portal Maxmotor</p>
         <nav><button class="admin-nav is-active" data-admin-view="overview">Resumen</button><button class="admin-nav" data-admin-view="customers">Clientes</button><button class="admin-nav" data-admin-view="points">Acreditar puntos</button></nav>
         <div class="admin-user"><strong id="admin-name">—</strong><span id="admin-role">—</span><button id="admin-logout" type="button">Cerrar sesión</button></div>
       </aside>
       <div class="admin-workspace">
         <header><div><p class="eyebrow">CENTRO DE OPERACIONES</p><h1 id="admin-title">Resumen</h1></div><span class="live-pill">D1 EN LÍNEA</span></header>
         <section class="admin-view" data-view="overview">
-          <div class="admin-stats"><article><span>Clientes activos</span><strong id="stat-customers">0</strong></article><article><span>Vehículos</span><strong id="stat-vehicles">0</strong></article><article><span>Garantías activas</span><strong id="stat-warranties">0</strong></article><article><span>Puntos emitidos</span><strong id="stat-points">0</strong></article></div>
+          <div class="admin-stats"><article><span>Facturas del mes</span><strong id="stat-invoices">0</strong></article><article><span>Nuevos clientes</span><strong id="stat-newCustomers">0</strong></article><article><span>Canjes pendientes</span><strong id="stat-redemptions">0</strong></article></div>
+          <div class="admin-panel"><div class="admin-panel-heading"><h2>Facturas por día</h2><span id="month-sales-total">USD 0</span></div><div id="sales-chart" class="sales-chart"></div></div>
           <div class="admin-panel"><div class="admin-panel-heading"><h2>Actividad reciente</h2><span>Auditoría del sistema</span></div><div id="recent-activity" class="admin-list"></div></div>
         </section>
         <section class="admin-view" data-view="customers" hidden>
-          <div class="admin-panel"><div class="admin-panel-heading"><div><h2>Clientes</h2><span>Busca por nombre, código, correo, teléfono o placa</span></div><input id="customer-search" type="search" placeholder="Buscar cliente…"></div><div id="customers-table" class="admin-list"></div></div>
+          <div id="customers-browser" class="admin-panel"><div class="admin-panel-heading"><div><h2>Clientes</h2><span>Busca por nombre, código, correo, teléfono o placa</span></div><input id="customer-search" type="search" placeholder="Buscar cliente…"></div><div id="customers-table" class="admin-list"></div></div>
+          <div id="customer-file" class="customer-file" hidden><button id="close-customer-file" class="text-action" type="button">← Volver a clientes</button><div class="customer-file-head"><div><p class="eyebrow">FICHA DE CLIENTE</p><h2 id="file-customer-name">—</h2><span id="file-customer-code">—</span></div><strong id="file-points">0 TP</strong></div><div class="customer-file-grid"><form id="customer-edit-form" class="portal-form admin-card"><h3>Información</h3><input name="id" type="hidden"><label>Nombre<input name="fullName" data-normalize="words" required></label><label>Correo<input name="email" type="email" required></label><label>Teléfono<input name="phone" required></label><button class="primary-action" type="submit"><span>Guardar cambios</span><b>→</b></button></form><form id="installation-form" class="portal-form admin-card"><h3>Instalar accesorio</h3><input name="customerId" type="hidden"><label>Vehículo<select name="vehicleId" required></select></label><label>Producto<select name="productId" required></select></label><div class="field-row"><label>Fecha<input name="installedAt" type="date" required></label><label>Kilometraje<input name="installedKm" type="number" min="0" required></label></div><button class="primary-action" type="submit"><span>Agregar con garantía</span><b>→</b></button></form></div><div class="admin-panel"><div class="admin-panel-heading"><h2>Accesorios y garantías</h2></div><div id="file-installations" class="admin-list"></div></div><div id="customer-file-message" class="form-message" hidden></div></div>
         </section>
         <section class="admin-view" data-view="points" hidden>
-          <div class="operation-grid"><div><p class="eyebrow">FACTURA / PUNTOS</p><h2>Acreditar una compra.</h2><p>El servidor valida la factura y calcula 1 punto por cada USD 30.</p></div><form id="award-points-form" class="portal-form"><label>Código de cliente<input name="customerCode" autocapitalize="characters" data-normalize="upper" required></label><label>Número de factura<input name="invoiceNumber" autocapitalize="characters" data-normalize="upper" required></label><div class="field-row"><label>Total de factura USD<input name="amount" type="number" min="30" step="0.01" required></label><label>Fecha<input name="issuedAt" type="date" required></label></div><button class="primary-action" type="submit"><span>Validar y acreditar</span><b>→</b></button><div id="points-message" class="form-message" role="status" hidden></div></form></div>
+          <div class="operation-grid"><div><p class="eyebrow">FACTURA / TRACTION POINTS</p><h2>Acreditar una compra.</h2><p>El servidor valida la factura y calcula 100 Traction Points por cada USD 30.</p></div><form id="award-points-form" class="portal-form"><label>Código de cliente<input name="customerCode" autocapitalize="characters" data-normalize="upper" required></label><label>Número de factura<input name="invoiceNumber" autocapitalize="characters" data-normalize="upper" required></label><div class="field-row"><label>Total de factura USD<input name="amount" type="number" min="30" step="0.01" required></label><label>Fecha<input name="issuedAt" type="date" required></label></div><button class="primary-action" type="submit"><span>Validar y acreditar</span><b>→</b></button><div id="points-message" class="form-message" role="status" hidden></div></form></div>
         </section>
       </div>
     </section>

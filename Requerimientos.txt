@@ -28,7 +28,7 @@ Campos obligatorios: marca / modelo / año / placa / VIN / color / kilometraje: 
 ¿El recordatorio es informativo o condiciona la garantía?: ambos, si el cliente no cumple con los periodos o la revisión de garantía, la pierde
 ¿El cliente debe aceptar términos específicos al instalar?: no
 Nombre comercial del programa: Off Road Points (por confirmar)
-Regla inicial: USD 30 = 1 punto: si
+Regla vigente: USD 30 = 100 Traction Points: si
 ¿Se calcula sobre subtotal, total o valor sin impuestos?: sobre el total de la factura
 ¿Todas las categorías generan puntos?: si
 ¿Los puntos expiran?: no

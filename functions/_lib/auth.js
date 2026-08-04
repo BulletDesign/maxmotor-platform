@@ -2,19 +2,21 @@ import { HttpError } from "./http.js";
 import { randomToken, sha256 } from "./crypto.js";
 
 const COOKIE = "mxr_session";
-const MAX_AGE = 60 * 60 * 24 * 14;
+const CUSTOMER_MAX_AGE = 60 * 60 * 24 * 14;
+const PRIVILEGED_MAX_AGE = 60 * 60 * 24;
 
 function cookieValue(request, name) {
   const cookies = request.headers.get("cookie") || "";
   return cookies.split(";").map(item => item.trim().split("=")).find(([key]) => key === name)?.[1] || null;
 }
 
-export async function createSession(db, userId, requestUrl) {
+export async function createSession(db, userId, requestUrl, role = "customer") {
+  const maxAge = role === "customer" ? CUSTOMER_MAX_AGE : PRIVILEGED_MAX_AGE;
   const token = randomToken(); const tokenHash = await sha256(token); const id = crypto.randomUUID();
-  const expiresAt = new Date(Date.now() + MAX_AGE * 1000).toISOString();
+  const expiresAt = new Date(Date.now() + maxAge * 1000).toISOString();
   await db.prepare("INSERT INTO sessions (id,user_id,token_hash,expires_at) VALUES (?1,?2,?3,?4)").bind(id, userId, tokenHash, expiresAt).run();
   const secure = new URL(requestUrl).protocol === "https:" ? "; Secure" : "";
-  return { token, cookie: `${COOKIE}=${token}; Path=/; HttpOnly${secure}; SameSite=Strict; Max-Age=${MAX_AGE}` };
+  return { token, cookie: `${COOKIE}=${token}; Path=/; HttpOnly${secure}; SameSite=Strict; Max-Age=${maxAge}` };
 }
 
 export async function currentUser(request, db) {

@@ -26,7 +26,7 @@ RESPUESTA:
 6. Productos que no generarán puntos:
 RESPUESTA:
 
-7. Confirmar regla: 1 punto por cada USD 30 del total de factura:
+7. Regla confirmada: 100 Traction Points por cada USD 30 del total de factura:
 RESPUESTA:
 
 8. ¿Cada ajuste manual de puntos debe incluir un motivo obligatorio?:

@@ -19,6 +19,7 @@ const files = [
   "index.html",
   "portal.html",
   "portal-admin.html",
+  "portal-superadmin.html",
   "mxr.html",
   "vitrina.html",
   "data.js",
@@ -26,6 +27,7 @@ const files = [
 const directories = ["assets", "catalog", "productos", "fichas"];
 
 await Promise.all(files.map((file) => cp(join(root, file), join(output, file))));
+await cp(join(root, "portal-admin.html"), join(output, "portal-maxmotor.html"));
 await Promise.all(directories.map((directory) => cp(join(root, directory), join(output, directory), { recursive: true })));
 
 // ASSET_ORIGIN is an emergency escape hatch for a poisoned custom-domain cache.

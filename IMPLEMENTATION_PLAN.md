@@ -4,7 +4,7 @@
 
 - Plataforma: Cloudflare Pages + Pages Functions + D1.
 - Roles: `customer`, `employee`, `superadmin`.
-- Regla inicial de puntos: 1 punto por cada USD 30 del total de factura.
+- Regla inicial: 100 Traction Points por cada USD 30 del total de factura.
 - Los puntos se calculan exclusivamente en el servidor y no expiran en el MVP.
 - Todo movimiento de puntos, instalacion, revision o cambio administrativo deja auditoria.
 - Una instalacion exige cliente, vehiculo, producto, factura unica y empleado responsable.
@@ -137,7 +137,7 @@ Disenado primero para telefono y operacion en mostrador/taller.
 
 ### 6.1 Control general
 
-- Metricas: clientes, puntos emitidos/canjeados, garantias proximas y operaciones recientes.
+- Metricas: clientes, facturas, Traction Points canjeados, garantias proximas y operaciones recientes.
 - Alertas de facturas duplicadas, intentos fallidos y acciones sensibles.
 
 ### 6.2 Usuarios y roles
