@@ -1,4 +1,5 @@
 import { requireUser } from "../../../_lib/auth.js";
+import { deleteCustomerData } from "../../../_lib/customer-data.js";
 import { assertSameOrigin, handleError, HttpError, json, readJson } from "../../../_lib/http.js";
 
 export async function onRequestGet({ request, env, params }) {
@@ -22,5 +23,5 @@ export async function onRequestPatch({request,env,params}){
 }
 
 export async function onRequestDelete({request,env,params}){
-  try{assertSameOrigin(request);const actor=await requireUser(request,env.DB,["superadmin"]);await env.DB.batch([env.DB.prepare("UPDATE users SET status='closed',email='closed-'||id||'@deleted.invalid',phone=NULL,national_id=NULL,updated_at=CURRENT_TIMESTAMP WHERE id=?1 AND role='customer'").bind(params.id),env.DB.prepare("DELETE FROM sessions WHERE user_id=?1").bind(params.id),env.DB.prepare("INSERT INTO audit_log(id,actor_user_id,action,entity_type,entity_id) VALUES(?1,?2,'customer.close','user',?3)").bind(crypto.randomUUID(),actor.id,params.id)]);return json({ok:true});}catch(error){return handleError(error);}
+  try{assertSameOrigin(request);const actor=await requireUser(request,env.DB,["employee","superadmin"]);const body=await readJson(request);if(String(body.confirmation||"")!=="ELIMINAR CLIENTE")throw new HttpError(400,"Confirmacion requerida");await deleteCustomerData(env.DB,params.id,actor.id);return json({ok:true});}catch(error){return handleError(error);}
 }

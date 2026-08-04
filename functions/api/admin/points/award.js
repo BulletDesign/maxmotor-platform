@@ -7,7 +7,7 @@ export async function onRequestPost({ request, env }) {
     assertSameOrigin(request); const actor=await requireUser(request,env.DB,["employee","superadmin"]); const body=await readJson(request);
     const amountCents=Number(body.amountCents); const invoiceNumber=String(body.invoiceNumber||"").trim(); const customerCode=String(body.customerCode||"").trim().toUpperCase();
     if (!Number.isInteger(amountCents)||amountCents<=0) throw new HttpError(400,"Monto invalido"); if(!invoiceNumber) throw new HttpError(400,"Factura requerida");
-    const customer=await env.DB.prepare("SELECT id FROM users WHERE customer_code=?1 AND status='active'").bind(customerCode).first(); if(!customer) throw new HttpError(404,"Cliente no encontrado");
+    const customer=await env.DB.prepare("SELECT id FROM users WHERE customer_code=?1 AND role='customer' AND status='active'").bind(customerCode).first(); if(!customer) throw new HttpError(404,"Cliente no encontrado");
     const duplicate=await env.DB.prepare("SELECT id FROM invoices WHERE invoice_number=?1").bind(invoiceNumber).first(); if(duplicate) throw new HttpError(409,"La factura ya fue registrada");
     const points=pointsForPurchase(amountCents); if(points<1) throw new HttpError(400,"La compra no alcanza el minimo para puntos");
     const invoiceId=crypto.randomUUID(); const movementId=crypto.randomUUID(); const auditId=crypto.randomUUID(); const issuedAt=String(body.issuedAt||new Date().toISOString());
