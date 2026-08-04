@@ -5,6 +5,7 @@
       <div class="top-banner"><div class="marquee-container"><span class="marquee-content">ENVIOS A TODO EL PAIS &nbsp;•&nbsp; ASESORIA TECNICA PERSONALIZADA &nbsp;•&nbsp; INSTALACION PROFESIONAL &nbsp;•&nbsp; ENVIOS A TODO EL PAIS</span></div></div>
       <nav>
         <a class="header-brand" href="index.html" aria-label="Ir al inicio"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" class="logo" alt="Maxmotor Accesorios 4x4"></a>
+        <a class="portal-entry" href="${rootPrefix}portal.html"><span>Mi Maxmotor</span><b aria-hidden="true">→</b></a>
         <div class="search-container">
           <input type="search" class="search-input" id="mainSearchInput" placeholder="Buscar accesorios o vehiculo..." oninput="buscarCatalogo(this.value)" onclick="if(!this.classList.contains('active')) toggleSearch(event)">
           <i class="fa-solid fa-search search-icon" id="mainSearchBtn" onclick="toggleSearch(event)" aria-hidden="true"></i>
