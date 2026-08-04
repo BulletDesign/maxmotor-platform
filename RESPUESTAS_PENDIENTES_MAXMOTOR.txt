@@ -1,0 +1,841 @@
+MAXMOTOR - RESPUESTAS PENDIENTES PARA DEFINICION FUNCIONAL Y LEGAL
+=================================================================
+
+INSTRUCCIONES
+-------------
+1. Escribe cada respuesta después de "RESPUESTA:".
+2. Si varios productos comparten exactamente la misma garantía, puedes escribir:
+   "Misma regla que: [nombre del producto]".
+3. No incluyas contraseñas, claves API, accesos bancarios ni credenciales reales.
+4. Si un producto listado ya no se vende, responde: "NO SE VENDE".
+5. Si falta un producto, agrégalo al final de la categoría correspondiente.
+
+
+1. PROVEEDORES EXTERNOS PROPUESTOS (COSTO INICIAL USD 0)
+========================================================
+
+Base de datos y autenticación:
+Supabase Free (PostgreSQL + Auth + Row Level Security).
+
+Hosting de la aplicación:
+Cloudflare Workers Free.
+
+Imágenes y archivos públicos del catálogo:
+Cloudflare R2, conservando el repositorio actual de imágenes.
+
+Autenticación propuesta para evitar SMS y costos:
+Número de teléfono + contraseña creada por el cliente.
+El número de teléfono funcionará como identificador de acceso.
+No se enviará OTP por SMS durante el MVP.
+
+Notificaciones:
+Solo notificaciones internas dentro del portal durante el MVP.
+No se integrará WhatsApp automático, SMS ni email comercial en esta fase.
+
+Analítica:
+No instalar Google Analytics, Meta Pixel ni cookies publicitarias durante el MVP.
+Se podrá añadir analítica respetuosa de privacidad posteriormente.
+
+Pagos:
+No se almacenarán tarjetas ni datos bancarios. La suscripción se diseñará en una
+fase posterior utilizando un proveedor de pagos externo.
+
+RESPUESTA - ¿Apruebas esta selección de proveedores y alcance inicial?:
+
+
+2. DECISIONES DE SEGURIDAD QUE REQUIEREN CONFIRMACION
+=====================================================
+
+2.1 CONTRASEÑAS
+No se recomienda generar contraseñas usando nombres, apellidos, cédula, placa,
+fecha de nacimiento o teléfono. Esos datos pueden ser conocidos o adivinados.
+
+Propuesta:
+- El cliente usa su teléfono como identificador.
+- El cliente crea una contraseña de mínimo 10 caracteres.
+- La contraseña se almacena únicamente como hash administrado por Supabase Auth.
+- Si la olvida, un empleado verifica presencialmente cédula y vehículo, y el
+  superadministrador habilita un cambio de contraseña.
+- La cédula nunca forma parte de la contraseña.
+
+RESPUESTA - ¿Apruebas esta regla?:
+El cliente usa su teléfono como identificador.
+
+2.2 ELIMINACION DE CUENTA
+No se recomienda eliminar inmediatamente facturas, instalaciones y movimientos
+de puntos. Las facturas deben conservarse al menos 7 años según la información
+publicada por el SRI. Además, borrar movimientos impediría investigar errores,
+fraudes, garantías o canjes.
+
+Propuesta al solicitar eliminación:
+- Bloquear inmediatamente el acceso del cliente.
+- Eliminar consentimiento de marketing.
+- Eliminar o anonimizar teléfono, email, fecha de nacimiento y credenciales.
+- Eliminar VIN y placa cuando ya no sean necesarios para una garantía o reclamo.
+- Conservar por 7 años la referencia fiscal mínima de facturas.
+- Conservar instalaciones mientras exista garantía, reclamo o plazo contractual.
+- Conservar movimientos de puntos y auditoría de forma seudonimizada.
+- Al terminar los plazos, ejecutar eliminación definitiva.
+
+RESPUESTA - ¿Apruebas esta regla?:
+las facturas nos se eliminaran del sistema contable, solo los datos del cliente y la interacción dentro del portal, la base datos contable permanece intacta. los datos contables son independientes de lo que pase en el portal
+
+3. DATOS LEGALES DE MAXMOTOR AUN PENDIENTES
+===========================================
+
+Razón social:
+RESPUESTA:
+
+Nombre comercial definitivo:
+RESPUESTA:
+
+RUC:
+RESPUESTA:
+
+Representante legal:
+RESPUESTA:
+
+Dirección legal completa:
+RESPUESTA:
+
+Correo legal de la empresa:
+RESPUESTA:
+
+Teléfono legal de la empresa:
+RESPUESTA:
+
+¿sales@bulletdsgn.com pertenece a Maxmotor o a un proveedor externo?:
+RESPUESTA:
+
+Si pertenece a un proveedor externo, indicar el correo propio de Maxmotor que
+recibirá solicitudes de privacidad:
+RESPUESTA:
+
+
+4. REGLA GENERAL DE GARANTIAS
+=============================
+
+¿La garantía inicia en la fecha de factura o en la fecha de instalación?:
+RESPUESTA: instalacio
+
+¿La garantía cubre únicamente el producto o también la instalación?:
+RESPUESTA: ambas
+ 
+¿Quién decide si una garantía es aceptada o rechazada?:
+RESPUESTA: Gerencia
+
+¿Cuántos días de tolerancia existen para una revisión por fecha?:
+RESPUESTA: la base serán dos reviones, por ejemplo, si el cliente no asiste a la primera ni a la segunda, pero si a la tercera, conserva, si ya no asiste a la tercera y se pasa con 1000km o 15 días la garantía se pierde
+
+¿Cuántos kilómetros de tolerancia existen para una revisión por kilometraje?:
+RESPUESTA:1000km o 15 días
+
+¿Qué evidencia presencial recibe actualmente el cliente sobre las condiciones
+de garantía?:
+RESPUESTA: no es escrita, solo por validación de palabra y se revisa con la factura
+
+¿Aceptas incorporar una aceptación digital de condiciones de garantía al
+registrar cada instalación?:
+RESPUESTA: si
+
+¿La falta de revisión anula toda la garantía o únicamente los daños relacionados
+con la falta de mantenimiento?:
+RESPUESTA: si
+
+
+5. PLANTILLA DE RESPUESTA POR PRODUCTO
+======================================
+
+Para cada producto completa:
+
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+
+
+6. TAPAS DE BALDE Y COMPLEMENTOS
+================================
+
+6.1 Tapa rígida Trifold
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+
+6.2 Tapa rígida Trifold para Kia Tasman
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+
+6.3 Tapa rígida QuadFold
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+
+6.4 Tapa rígida Enrollable
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+
+6.5 Tapa rígida Enrollable para F-150
+RESPUESTA:
+
+6.6 Tapa rígida Eléctrica
+RESPUESTA:
+
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+
+6.7 Tapa de lona
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+
+6.8 Seguro de compuerta
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+
+7. SUSPENSION, PERFORMANCE Y LLANTAS
+====================================
+
+7.1 Kit de altura
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+7.2 Suspensión Pro
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+7.3 Suspensión Old Man Emu (OME)
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+7.4 Suspensión Tough Dog
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+7.5 Suspensión Bilstein
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+7.6 Suspensión TJM
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+7.7 Suspensión RS / otras marcas
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+7.8 Espaciadores
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+7.9 Llantas All Terrain (AT)
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+7.10 Llantas Mud Terrain (MT)
+RESPUESTA:
+Garantía del producto (meses o años):
+Garantía de instalación (meses o años):
+Primera revisión (kilómetros):
+Primera revisión (días o meses):
+Revisiones posteriores:
+Tolerancia permitida:
+Mantenimiento requerido:
+Costo de la revisión:
+Causas específicas de pérdida de garantía:
+Notas:
+7.11 Otros accesorios de suspensión
+RESPUESTA:
+
+
+8. OVERLAND, RESCATE Y CAMPING
+==============================
+
+8.1 Toldo 180 Essential
+RESPUESTA:
+
+8.2 Toldo 180 Premium
+RESPUESTA:
+
+8.3 Toldo 270 Essential
+RESPUESTA:
+
+8.4 Toldo 270 Premium
+RESPUESTA:
+
+8.5 Wincha 8.000 lb
+RESPUESTA:
+
+8.6 Wincha 9.500 lb
+RESPUESTA:
+
+8.7 Wincha 10.000 lb
+RESPUESTA:
+
+8.8 Grilletes (todos los colores/acabados)
+RESPUESTA:
+
+8.9 Rampas de tracción pequeñas
+RESPUESTA:
+
+8.10 Rampas de tracción grandes
+RESPUESTA:
+
+8.11 Mesas de camping
+RESPUESTA:
+
+8.12 Sillas de camping
+RESPUESTA:
+
+8.13 Coolers
+RESPUESTA:
+
+
+9. LINEA MXR - FABRICACION Y PROTECCION
+=======================================
+
+9.1 Rollbar Hero
+RESPUESTA:
+
+9.2 Rollbar RR1
+RESPUESTA:
+
+9.3 Rollbar Hummer
+RESPUESTA:
+
+9.4 Rollbars MXR Heavy Duty / Sport
+RESPUESTA:
+
+9.5 Rollbars KEKO
+RESPUESTA:
+
+9.6 Bullbar Overland
+RESPUESTA:
+
+9.7 Bullbar Raptor
+RESPUESTA:
+
+9.8 Barra de tiro estándar MXR
+RESPUESTA:
+
+9.9 Barra de tiro reforzada / Heavy Duty MXR
+RESPUESTA:
+
+9.10 Barras de tiro KEKO
+RESPUESTA:
+
+9.11 Estribos Rock Sliders
+RESPUESTA:
+
+9.12 Estribos MXR
+RESPUESTA:
+
+9.13 Estribos KEKO
+RESPUESTA:
+
+9.14 Protector de cárter de acero 3 mm
+RESPUESTA:
+
+9.15 Protector inferior TRD de aluminio
+RESPUESTA:
+
+
+10. SISTEMAS DE CARGA
+=====================
+
+10.1 Portabicicletas Thule ProRide
+RESPUESTA:
+
+10.2 Portabicicletas Thule UpRide
+RESPUESTA:
+
+10.3 Portabicicletas Thule T2 Pro
+RESPUESTA:
+
+10.4 Portabicicletas Sportrack Ridge
+RESPUESTA:
+
+10.5 Portabicicletas Thule Apex XT
+RESPUESTA:
+
+10.6 Portabicicletas Sportrack Crest
+RESPUESTA:
+
+10.7 Portabicicletas BAIKTRACKS Pro
+RESPUESTA:
+
+10.8 Portabicicletas Thule Apex 5
+RESPUESTA:
+
+10.9 Portabicicletas Sportrack Super 5
+RESPUESTA:
+
+10.10 Parrilla de aluminio para carga liviana
+RESPUESTA:
+
+10.11 Parrilla de aluminio para carga pesada
+RESPUESTA:
+
+10.12 Parrilla de aluminio Carga Pesada Pro
+RESPUESTA:
+
+10.13 Parrilla de acero tipo chapa
+RESPUESTA:
+
+10.14 Parrilla tubular MXR
+RESPUESTA:
+
+10.15 Parrilla tubular Thule
+RESPUESTA:
+
+10.16 Expansor de parrilla Thule
+RESPUESTA:
+
+10.17 Bed Slider Doméstico
+RESPUESTA:
+
+10.18 Bed Slider Heavy Duty
+RESPUESTA:
+
+10.19 Bed Rack
+RESPUESTA:
+
+
+11. COMPLEMENTOS DE BED RACK
+============================
+
+11.1 Rampas de tracción para Bed Rack
+RESPUESTA:
+
+11.2 High-Lift Jack
+RESPUESTA:
+
+11.3 Mesa plegable
+RESPUESTA:
+
+11.4 Toldo para Bed Rack
+RESPUESTA:
+
+11.5 Kit de luces guía
+RESPUESTA:
+
+11.6 Faros LED
+RESPUESTA:
+
+11.7 Parrilla de asar
+RESPUESTA:
+
+11.8 Destapador
+RESPUESTA:
+
+11.9 Tanques de combustible
+RESPUESTA:
+
+11.10 Luz de stop
+RESPUESTA:
+
+
+12. BAULES DE TECHO
+===================
+
+¿Todos los baúles comparten la misma garantía?:
+RESPUESTA:
+
+12.1 Baúl 320 litros
+RESPUESTA:
+
+12.2 Baúl 360 litros
+RESPUESTA:
+
+12.3 Baúl 400 litros
+RESPUESTA:
+
+12.4 Baúl 450 litros
+RESPUESTA:
+
+12.5 Baúl 500 litros
+RESPUESTA:
+
+12.6 Baúl 600 litros
+RESPUESTA:
+
+12.7 Baúl X-Stream
+RESPUESTA:
+
+12.8 Baúl Alpine
+RESPUESTA:
+
+
+13. ACCESORIOS DE CARGA Y REMOLQUE
+==================================
+
+13.1 Tiedowns (par)
+RESPUESTA:
+
+13.2 Grilletes (par)
+RESPUESTA:
+
+13.3 Bolas de remolque
+RESPUESTA:
+
+13.4 Pines con llave
+RESPUESTA:
+
+13.5 Pines simples
+RESPUESTA:
+
+13.6 Lenguas de tiro
+RESPUESTA:
+
+13.7 Canastas de tiro
+RESPUESTA:
+
+13.8 Ganchos de remolque
+RESPUESTA:
+
+13.9 Base para High-Lift
+RESPUESTA:
+
+13.10 Soporte para tanques
+RESPUESTA:
+
+
+14. INTERIOR Y CONFORT
+======================
+
+14.1 Moquetas 5D
+RESPUESTA:
+
+14.2 Moquetas termoformadas
+RESPUESTA:
+
+14.3 Accesorios Sparco
+RESPUESTA:
+
+14.4 Productos de limpieza / Simoniz
+RESPUESTA:
+
+14.5 Radios Android
+RESPUESTA:
+
+14.6 Audio para vehículos
+RESPUESTA:
+
+
+15. ILUMINACION
+===============
+
+15.1 Lightforce
+RESPUESTA:
+
+15.2 Hella
+RESPUESTA:
+
+15.3 Barras LED alternativas
+RESPUESTA:
+
+15.4 Faros LED alternativos
+RESPUESTA:
+
+15.5 Neblineros
+RESPUESTA:
+
+15.6 Luces de faena
+RESPUESTA:
+
+
+16. RECUBRIMIENTO DE POLIURETANO
+================================
+
+16.1 Poliuretano Doméstico
+RESPUESTA:
+
+16.2 Poliuretano Comercial
+RESPUESTA:
+
+16.3 Poliuretano Industrial
+RESPUESTA:
+
+16.4 Protección de doble borde
+RESPUESTA:
+
+¿La garantía del poliuretano es por tiempo, tipo de uso o espesor aplicado?:
+RESPUESTA:
+
+¿Qué daños no cubre?:
+RESPUESTA:
+
+
+17. CONSERVACION, CIERRE DE CUENTA Y DERECHOS
+=============================================
+
+17.1 ¿Cuántos años deben conservarse las facturas?
+
+Propuesta técnica/legal inicial:
+Conservar la referencia y datos fiscales mínimos durante 7 años desde su emisión.
+
+RESPUESTA: el sistema de facturación es independiente de la base de datos del portal
+
+
+17.2 ¿Cuánto tiempo conservar el historial del vehículo?
+
+Aclara si aceptas conservar:
+- Instalaciones y accesorios durante toda la relación con el cliente.
+- Datos de garantía mientras esté vigente y durante el plazo de reclamos.
+- Solo el último kilometraje como dato actual.
+- Fechas de instalación y revisiones, aunque no se guarden todos los kilometrajes.
+
+RESPUESTA: 0 meses, si el cliente sale, pierde todo.
+
+
+17.3 ¿Qué ocurre cuando el cliente elimina su cuenta?
+
+Selecciona una opción:
+A. Borrado inmediato de todo, incluso trazabilidad fiscal y garantías.
+B. Cierre de acceso y anonimización; conservación legal mínima de facturas,
+   instalaciones, garantías, canjes y auditoría.
+
+Opción recomendada: B.
+
+RESPUESTA: A excepto trazabilidad fiscal y garantías ya que se valida con facturas
+
+
+17.4 ¿Se conservarán movimientos de puntos después de cerrar la cuenta?
+
+Propuesta:
+Sí, seudonimizados y sin posibilidad de reactivar el saldo, durante el mismo
+plazo de auditoría/facturación. Esto permite demostrar compras, canjes y ajustes.
+
+RESPUESTA: no 
+
+
+17.5 ¿Quién atenderá solicitudes de acceso, corrección y eliminación?
+
+Respuesta actual: superusuarios.
+
+Falta indicar:
+Nombre o cargo del responsable principal: 
+RESPUESTA:Juan Jose Lara Sanchez
+
+Nombre o cargo del reemplazo:
+RESPUESTA:Paul Enrique Lara Escobar
+
+Plazo interno máximo para responder:
+RESPUESTA:
+
+
+17.6 ¿En qué correo se recibirán esas solicitudes?
+
+Respuesta actual: sales@bulletdsgn.com
+
+Confirmar si es un correo controlado directamente por Maxmotor:
+RESPUESTA: no
+
+Si no lo es, indicar el correo definitivo de Maxmotor:
+RESPUESTA: maxmotordelecuador@gmial.com
+
+
+18. PROGRAMA OFF ROAD POINTS - DECISIONES PENDIENTES
+====================================================
+
+Nombre definitivo del programa:
+RESPUESTA: Tacion Points (conjetura a TP's)
+
+Valor o beneficio comercial de un punto:
+RESPUESTA: un punto por cada 30 dólares de compra, el beneficio es apoyo a productos seleccionados.
+
+Primeras recompensas:
+RESPUESTA:
+
+Productos excluidos:
+RESPUESTA:
+
+¿Un empleado puede ajustar puntos sin aprobación de superadmin?:
+RESPUESTA: si
+
+¿Se exige ingresar el número único de factura para acreditar puntos?:
+RESPUESTA: si
+
+¿Se bloqueará una factura usada anteriormente?:
+RESPUESTA: si 
+
+¿Se revertirán puntos mediante nota de crédito o anulación contable?:
+RESPUESTA: (por consultar al área de contabilidad)
+
+
+19. CONFIRMACION FINAL
+======================
+
+Nombre de quien completó este documento:
+RESPUESTA: Juan Jose Lara 
+
+Cargo:
+RESPUESTA: (Desarrollador Master)
+
+Fecha:
+RESPUESTA: 25 de julio de 2026
+
+Confirmo que las reglas de garantía descritas corresponden a las políticas
+reales que Maxmotor puede aplicar y demostrar:
+RESPUESTA: SI
+
+Confirmo que un abogado y un contador ecuatorianos revisarán los textos legales
+y plazos antes de publicar el sistema:
+RESPUESTA: SI
+
+
+REFERENCIAS PARA REVISION PROFESIONAL
+====================================
+
+Ley Orgánica de Protección de Datos Personales:
+https://spdp.gob.ec/wp-content/uploads/2024/12/03.pdf.pdf
+
+Resoluciones de la Superintendencia de Protección de Datos Personales:
+https://spdp.gob.ec/resoluciones2/
+
+Conservación de comprobantes electrónicos por 7 años - SRI:
+https://www.sri.gob.ec/detalle-noticias?idnoticia=1021&marquesina=1
+
+Supabase Free:
+https://supabase.com/pricing
+
+Cloudflare Workers Free:
+https://developers.cloudflare.com/workers/platform/pricing/
+

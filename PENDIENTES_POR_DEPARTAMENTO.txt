@@ -1,0 +1,199 @@
+MAXMOTOR - PENDIENTES PARA CERRAR EL MVP
+=======================================
+
+Este documento contiene solamente las decisiones que todavía faltan.
+Responder debajo de cada pregunta.
+
+
+VENTAS
+======
+
+1. Nombre definitivo del programa actualmente llamado "Tacion Points / TP's":
+RESPUESTA:
+
+2. ¿Qué significa "Tacion" y cómo debe escribirse públicamente?:
+RESPUESTA:
+
+3. Primeras recompensas disponibles:
+RESPUESTA:
+
+4. Puntos requeridos para cada recompensa:
+RESPUESTA:
+
+5. Productos que no podrán canjearse:
+RESPUESTA:
+
+6. Productos que no generarán puntos:
+RESPUESTA:
+
+7. Confirmar regla: 1 punto por cada USD 30 del total de factura:
+RESPUESTA:
+
+8. ¿Cada ajuste manual de puntos debe incluir un motivo obligatorio?:
+RESPUESTA:
+
+9. ¿Qué promociones se mostrarán inicialmente dentro del portal?:
+RESPUESTA:
+
+
+BODEGA / SERVICIO TECNICO
+=========================
+
+Para cada familia indicar:
+
+- Garantía del producto.
+- Garantía de instalación.
+- Primera revisión por kilómetros.
+- Primera revisión por días/meses.
+- Revisiones posteriores.
+- Mantenimiento requerido.
+- Costo de revisión.
+- Causas de pérdida de garantía.
+
+Familias:
+
+1. Tapas rígidas Trifold, QuadFold, Enrollable y Eléctrica:
+RESPUESTA:
+
+2. Tapa de lona y seguro de compuerta:
+RESPUESTA:
+
+3. Suspensión y kits de altura:
+RESPUESTA:
+
+4. Llantas AT y MT:
+RESPUESTA:
+
+5. Espaciadores y accesorios de suspensión:
+RESPUESTA:
+
+6. Toldos 180 y 270:
+RESPUESTA:
+
+7. Winchas:
+RESPUESTA:
+
+8. Rampas, grilletes y accesorios de rescate:
+RESPUESTA:
+
+9. Camping, mesas, sillas y coolers:
+RESPUESTA:
+
+10. Rollbars y bullbars MXR/KEKO:
+RESPUESTA:
+
+11. Barras de tiro:
+RESPUESTA:
+
+12. Estribos y Rock Sliders:
+RESPUESTA:
+
+13. Protectores inferiores y de cárter:
+RESPUESTA:
+
+14. Portabicicletas:
+RESPUESTA:
+
+15. Parrillas y expansores:
+RESPUESTA:
+
+16. Bed Slider y Bed Rack:
+RESPUESTA:
+
+17. Complementos de Bed Rack:
+RESPUESTA:
+
+18. Baúles:
+RESPUESTA:
+
+19. Accesorios de carga y remolque:
+RESPUESTA:
+
+20. Interior, audio, moquetas y limpieza:
+RESPUESTA:
+
+21. Lightforce, Hella y demás iluminación:
+RESPUESTA:
+
+22. Poliuretano Doméstico, Comercial e Industrial:
+RESPUESTA:
+
+23. Protección de doble borde:
+RESPUESTA:
+
+24. Confirmar las tres oportunidades de revisión antes de perder garantía:
+RESPUESTA:
+
+25. Aclarar: ¿la falta de revisión anula toda la garantía o solamente daños
+relacionados con falta de mantenimiento?:
+RESPUESTA:
+
+
+CONTABILIDAD
+============
+
+1. ¿Los puntos se calculan sobre el total final incluido IVA?:
+RESPUESTA:
+
+2. ¿Qué ocurre con los puntos al emitir una nota de crédito?:
+RESPUESTA:
+
+3. ¿Qué ocurre con los puntos al anular una factura?:
+RESPUESTA:
+
+4. ¿El portal puede consultar automáticamente el sistema contable en el futuro?:
+RESPUESTA:
+
+5. Nombre del sistema contable utilizado:
+RESPUESTA:
+
+6. Confirmar conservación fiscal independiente por mínimo 7 años:
+RESPUESTA:
+
+
+GERENCIA / LEGAL
+================
+
+1. Razón social:
+RESPUESTA:
+
+2. Nombre comercial:
+RESPUESTA:
+
+3. RUC:
+RESPUESTA:
+
+4. Representante legal:
+RESPUESTA:
+
+5. Dirección legal:
+RESPUESTA:
+
+6. Correo legal:
+RESPUESTA:
+
+7. Teléfono legal:
+RESPUESTA:
+
+8. Confirmar correo de privacidad:
+Se recibió `maxmotordelecuador@gmial.com`, que parece tener un error.
+RESPUESTA:
+
+9. Plazo interno para responder solicitudes de privacidad:
+RESPUESTA:
+
+10. Confirmar teléfono como usuario y contraseña creada por el cliente:
+RESPUESTA:
+
+11. Aprobar conservación de hash de factura para impedir reutilización después
+de eliminar una cuenta:
+RESPUESTA:
+
+12. Aprobar auditoría seudonimizada de operaciones administrativas:
+RESPUESTA:
+
+13. Aprobar aceptación digital de condiciones por cada instalación:
+RESPUESTA:
+
+14. Confirmar quién firma/aprueba el reglamento de garantías:
+RESPUESTA:

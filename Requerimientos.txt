@@ -1,0 +1,60 @@
+¿Solo mayores de 18 años podrán registrarse?: si
+Cantidad aproximada de clientes actuales: 0 (se les enviara una invitación o link de la pagina una vez la arquitectura este completa)
+Nuevos clientes mensuales:200 aprox pero fidelizados que quieran el programa alrederor de 90
+Cantidad de empleados: 6
+Cantidad de superadministradores: 2
+¿Cada sucursal debe ver solo sus clientes o todos?: solo hay una sucursal, pero todos pueden ver todos los clientes
+¿Un cliente puede tener varios vehículos?: si (pero solo se podrán agregar por medio de los empleados)
+¿Un vehículo puede pertenecer a más de un cliente o empresa?: no
+¿Atenderán también flotas y personas jurídicas?: no, solo es para personas naturales
+
+Método de ingreso preferido: email y contraseña / enlace por email / ambos: no queremos invertir en infraestructura, se registra el cliente y de una vez la pagina genera un usuario y contraseña basado en sus nombres, apellidos, numero de cedula. si algo pasa con las credenciales los usuarios deben contactarse al local 
+¿El cliente se registra solo o lo crea un empleado?: se registra solo (datos y modelo de auto "solo la primera vez") y el empleado setea los parámetros agrega accesorios, agrega o edita autos en el futuro
+¿El correo será obligatorio?: solo para enviar promociones en el futuro, pero no para la arquitectura interna
+¿El teléfono será obligatorio?: si, como parte de la base de datos, pero no interactua con la intefaz
+¿Se solicitará cédula? ¿Por qué?: si se solicita cedula, pero se tratara como un dato de verificación en caso de que exista alguien con el mismo nombre, apellidos y vehiculo
+¿Se solicitará fecha de nacimiento? ¿Por qué?: para autenticar que es mayor de 18 años
+¿Se permitirá eliminar la cuenta desde el portal?: si, y esto eliminara directamente de la basse de datos por lo que no se puede recuperar puntos o accesorios.
+Campos obligatorios: marca / modelo / año / placa / VIN / color / kilometraje: si, por pirmera vez se hará manual, se actulizara kilometraje en cada visita
+¿La placa es necesaria para buscar al cliente en el taller?: si
+¿El VIN es realmente necesario?: si, para comprobar que el vehiculo 
+¿Se guardarán fotografías del vehículo?: no
+¿Quién puede actualizar el kilometraje?: superadmin y empleados
+¿Se conservará el historial de kilometraje?: no 
+¿Se registrarán daños o fotografías antes de instalar productos?: no, pero cuando el cliente llega se le hace una revisión y esa revisión se hace notar de forma presencial, no se guarda en el portal
+¿Una instalación siempre debe estar vinculada a una factura?: si, indispensable
+¿Se registrará el técnico instalador?: no
+¿Se adjuntará factura o certificado?: no, pero el cliente tiene la factura en su correo electrónico, impresa y esta dentro de nuestro ssitema contable
+¿El recordatorio es informativo o condiciona la garantía?: ambos, si el cliente no cumple con los periodos o la revisión de garantía, la pierde
+¿El cliente debe aceptar términos específicos al instalar?: no
+Nombre comercial del programa: Off Road Points (por confirmar)
+Regla inicial: USD 10 = 1 punto: si
+¿Se calcula sobre subtotal, total o valor sin impuestos?: sobre el total de la factura
+¿Todas las categorías generan puntos?: si
+¿Los puntos expiran?: no
+¿Pueden transferirse?: no
+¿Pueden convertirse en dinero?: no
+¿Se acumulan con promociones?: no
+¿Qué ocurre con devoluciones o facturas anuladas?: no contamos con devoluciones, producto entregado no regresa al local
+¿Quién puede hacer ajustes manuales?: superadmin y empleado
+¿Existe máximo de puntos por compra o cliente?: no
+¿Un canje puede combinar puntos y dinero?: no
+Primeros productos o descuentos canjeables: por confirmar
+Puntos requeridos por cada recompensa: dependiendo la promoción
+¿El canje necesita aprobación?: si, por aprobación manual por el empelado
+¿Puede entregarse en cualquier sucursal?: si
+¿Tiene fecha de vencimiento?: no
+¿Hay productos excluidos?: si (por confirmar) 
+¿Quién puede modificar el catálogo de recompensas?: empelado y superusuario
+Canales: portal / email / WhatsApp / SMS: solo whatsapp
+Mensajes operativos: garantías, citas, puntos, seguridad: no
+Mensajes comerciales: promociones, nuevos productos, doble puntuación: si, pero solo como notifocacion dentro del portal
+¿El cliente puede aceptar marketing por separado?: no
+¿Existe actualmente una base de contactos que recibió promociones?: no
+¿Cómo se obtuvo el consentimiento de esos contactos?: -
+¿Cuántos años deben conservarse las facturas?: dependiente del cliente
+¿Cuánto tiempo conservar el historial del vehículo?: no hay historial de vehiculo, es decir, se actualizan nuevos accesorios, nuevo kilometraje, y se almacenan fechas de instalación de productos y solo la ultima visita. 
+¿Qué ocurre cuando el cliente elimina su cuenta?: todo se elimina
+¿Se conservarán movimientos de puntos después de cerrarla?: no
+¿Quién atenderá solicitudes de acceso, corrección y eliminación?: superusuarios
+¿En qué correo se recibirán esas solicitudes?: sales@bulletdsgn.com

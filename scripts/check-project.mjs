@@ -1,0 +1,39 @@
+import { access, readFile, readdir } from "node:fs/promises";
+import { join, resolve } from "node:path";
+
+const root = resolve(import.meta.dirname, "..");
+const dist = join(root, "dist");
+const errors = [];
+
+async function walk(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = await Promise.all(entries.map((entry) => {
+    const path = join(directory, entry.name);
+    return entry.isDirectory() ? walk(path) : [path];
+  }));
+  return files.flat();
+}
+
+for (const required of ["index.html", "robots.txt", "sitemap.xml", "_headers"]) {
+  try { await access(join(dist, required)); } catch { errors.push(`Falta ${required} en dist`); }
+}
+
+const files = await walk(dist);
+const htmlFiles = files.filter((file) => file.endsWith(".html"));
+for (const file of htmlFiles) {
+  const html = await readFile(file, "utf8");
+  if (!/<title>[^<]+<\/title>/.test(html)) errors.push(`Title ausente: ${file}`);
+  if (!/meta\s+name="description"\s+content="[^"]+"/s.test(html)) errors.push(`Description ausente: ${file}`);
+  if (/href="(?:\.\.\/)?fichas\//.test(html)) errors.push(`Enlace relativo a ficha: ${file}`);
+}
+
+const sitemap = await readFile(join(dist, "sitemap.xml"), "utf8");
+const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+if (urls.length !== new Set(urls).size) errors.push("El sitemap contiene URLs duplicadas");
+
+if (errors.length) {
+  console.error(errors.join("\n"));
+  process.exit(1);
+}
+
+console.log(`Verification passed: ${files.length} files, ${htmlFiles.length} HTML, ${urls.length} sitemap URLs`);

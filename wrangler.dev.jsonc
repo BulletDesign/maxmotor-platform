@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "maxmotor-platform-dev",
+  "pages_build_output_dir": "dist",
+  "compatibility_date": "2026-08-03",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "maxmotor-dev",
+      "database_id": "e96ada8b-bcd2-4c29-a52c-4779f0093265",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <link rel="canonical" href="https://maxmotor4x4.com/mxr">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo MXR | Accesorios 4x4 y Equipamiento Premium en Ecuador</title>
+    <meta name="description"
+        content="Descubre la línea MXR. Fabricación nacional de rollbars, bullbars y barras de tiro. Mejora tu 4x4 con equipamiento extremo y recubrimiento de poliuretano.">
+    <meta name="keywords"
+        content="accesorios 4x4, tapas de balde, recubrimiento de poliuretano, suspensiones off-road, equipamiento automotriz, Ecuador, MXR">
+    <meta name="author" content="Maxmotor del Ecuador">
+
+    <!-- Open Graph for Social Media (WhatsApp, Facebook) -->
+    <meta property="og:title" content="Catálogo MXR | Accesorios y Equipamiento 4x4 en Ecuador">
+    <meta property="og:description"
+        content="Descubre la línea MXR. Fabricación nacional de rollbars, bullbars y barras de tiro. Mejora tu 4x4 con equipamiento extremo y recubrimiento de poliuretano.">
+    <meta property="og:image" content="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png">
+    <meta property="og:url" content="https://maxmotor4x4.pages.dev/mxr.html">
+    <meta property="og:type" content="website">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Teko:wght@500;700&family=Barlow+Condensed:wght@400;600;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #060608;
+            --neon-red: #ff003c;
+            --neon-red-dim: rgba(255, 0, 60, 0.15);
+            --neon-orange: #ff6a00;
+            --neon-glow: 0 0 20px rgba(255, 0, 60, 0.6), 0 0 40px rgba(255, 0, 60, 0.3);
+            --neon-glow-sm: 0 0 10px rgba(255, 0, 60, 0.5);
+            --card-bg: #0d0d10;
+            --card-border: rgba(255, 0, 60, 0.25);
+            --text-light: #f0f0f5;
+            --text-muted: #888899;
+            --stripe: repeating-linear-gradient(-55deg,
+                    transparent,
+                    transparent 6px,
+                    rgba(255, 0, 60, 0.04) 6px,
+                    rgba(255, 0, 60, 0.04) 12px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            scrollbar-width: none;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        /* ── SCANLINES OVERLAY ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.07) 2px,
+                    rgba(0, 0, 0, 0.07) 4px);
+        }
+
+        /* ── HEADER ── */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(6, 6, 8, 0.92);
+            backdrop-filter: blur(14px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 0, 60, 0.18);
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-red), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        header.scrolled {
+            padding: 10px 5%;
+            border-bottom: 1px solid transparent;
+            box-shadow: 0 4px 30px rgba(255, 0, 60, 0.15);
+        }
+
+        header.scrolled::after {
+            opacity: 1;
+        }
+
+        .logo-container img {
+            height: 48px;
+            transition: height 0.3s ease;
+            filter: drop-shadow(0 0 8px rgba(255, 0, 60, 0.35));
+        }
+
+        header.scrolled .logo-container img {
+            height: 35px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            height: 40px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        header.scrolled .back-btn {
+            background: rgba(255, 0, 60, 0.08);
+            border-radius: 50%;
+            width: 40px;
+            border: 1px solid rgba(255, 0, 60, 0.35);
+            box-shadow: 0 0 12px rgba(255, 0, 60, 0.2);
+        }
+
+        header.scrolled .back-text {
+            display: none;
+        }
+
+        header.scrolled .back-btn i {
+            color: var(--neon-red);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(255, 0, 60, 0.18) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 25vh;
+            background: linear-gradient(to bottom, transparent, var(--bg-color));
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.35;
+            z-index: -1;
+        }
+
+        .hero-badge {
+            position: relative;
+            z-index: 2;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--neon-red);
+            border: 1px solid rgba(255, 0, 60, 0.4);
+            padding: 6px 18px;
+            border-radius: 2px;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+            background: rgba(255, 0, 60, 0.06);
+        }
+
+        .hero h1 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: clamp(4.5rem, 14vw, 11rem);
+            color: var(--text-light);
+            letter-spacing: -1px;
+            line-height: 0.88;
+            margin: 0;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out 0.1s both, glowPulse 3s infinite alternate 1s;
+        }
+
+        .hero h1 span {
+            color: var(--neon-red);
+            text-shadow: var(--neon-glow);
+            display: block;
+        }
+
+        .hero-line {
+            position: relative;
+            z-index: 2;
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-red), transparent);
+            margin: 18px auto;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .hero-desc {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(1rem, 2.5vw, 1.35rem);
+            color: #bbbbc8;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.7s forwards;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+            font-weight: 600;
+        }
+
+        .hero-scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.2s forwards;
+        }
+
+        .hero-scroll-indicator span {
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--neon-red), transparent);
+            animation: scrollBlink 1.8s ease-in-out infinite;
+        }
+
+        @keyframes scrollBlink {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scaleY(0.7);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+        }
+
+        /* ── STATS STRIP ── */
+        .stats-strip {
+            background: var(--card-bg);
+            border-top: 1px solid rgba(255, 0, 60, 0.2);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.2);
+            padding: 28px 5%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-strip::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--stripe);
+        }
+
+        .stat-item {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-number {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--neon-red);
+            text-shadow: var(--neon-glow-sm);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .stat-divider {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, rgba(255, 0, 60, 0.4), transparent);
+        }
+
+        /* ── CATALOG ── */
+        .catalog-container {
+            padding: 60px 0 60px;
+            position: relative;
+            z-index: 10;
+            background: var(--bg-color);
+        }
+
+        .category-section {
+            margin-bottom: 60px;
+        }
+
+        /* Category header with description */
+        .category-header {
+            padding: 0 5%;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .category-eyebrow {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--neon-red);
+            opacity: 0.85;
+        }
+
+        .category-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 0px;
+            text-transform: uppercase;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .category-title::before {
+            content: '';
+            display: inline-block;
+            width: 5px;
+            height: 2.4rem;
+            background: var(--neon-red);
+            box-shadow: var(--neon-glow-sm);
+            border-radius: 1px;
+            flex-shrink: 0;
+        }
+
+        .category-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+            max-width: 480px;
+            font-weight: 500;
+        }
+
+        .horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 16px;
+            padding: 8px 5% 24px;
+        }
+
+        .horizontal-scroll::after {
+            content: '';
+            flex: 0 0 5%;
+        }
+
+        /* ── PRODUCT CARD ── */
+        .product-card {
+            flex: 0 0 82vw;
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid rgba(255, 0, 60, 0.15);
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+            scroll-snap-align: center;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7);
+            color: inherit;
+            text-decoration: none;
+        }
+
+        @media (min-width: 768px) {
+            .product-card {
+                flex: 0 0 340px;
+                scroll-snap-align: start;
+            }
+        }
+
+        .product-card:hover {
+            border-color: rgba(255, 0, 60, 0.55);
+            box-shadow: 0 0 0 1px rgba(255, 0, 60, 0.3), 0 16px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 0, 60, 0.12);
+            transform: translateY(-3px);
+        }
+
+        .product-card:active {
+            transform: scale(0.975);
+        }
+
+        .card-img-wrap {
+            width: 100%;
+            height: 58vw;
+            max-height: 290px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-img-wrap img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .card-img-wrap img {
+            transform: scale(1.04);
+        }
+
+        /* Corner accent */
+        .card-img-wrap::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(225deg, rgba(255, 0, 60, 0.3) 0%, transparent 60%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .card-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(6, 6, 8, 0.88);
+            backdrop-filter: blur(10px);
+            color: var(--text-muted);
+            padding: 5px 11px;
+            border-radius: 3px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            border-left: 2px solid var(--neon-red);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            z-index: 3;
+        }
+
+        .card-img-wrap::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 55%;
+            background: linear-gradient(to top, var(--card-bg) 0%, rgba(13, 13, 16, 0) 100%);
+            z-index: 1;
+        }
+
+        .card-info {
+            padding: 14px 18px 18px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            background: var(--card-bg);
+        }
+
+        .card-title-wrap {
+            flex: 1;
+            padding-right: 12px;
+        }
+
+        .card-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--text-light);
+            line-height: 1;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-hint {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.72rem;
+            color: var(--neon-red);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        .card-action-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 3px;
+            background: rgba(255, 0, 60, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-red);
+            font-size: 1rem;
+            border: 1px solid rgba(255, 0, 60, 0.3);
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .product-card:hover .card-action-icon {
+            background: rgba(255, 0, 60, 0.18);
+            border-color: var(--neon-red);
+            box-shadow: 0 0 12px rgba(255, 0, 60, 0.25);
+        }
+
+        /* ── KEYFRAMES ── */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                text-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+            }
+
+            100% {
+                text-shadow: 0 0 20px rgba(255, 0, 60, 0.7), 0 0 40px rgba(255, 0, 60, 0.4), 0 0 60px rgba(255, 0, 60, 0.15);
+            }
+        }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            z-index: 2000;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #0d0d10;
+            width: 100%;
+            max-width: 600px;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            padding: 30px 22px;
+            position: relative;
+            transform: translateY(100%);
+            transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-top: 2px solid var(--neon-red);
+            box-shadow: 0 -10px 50px rgba(255, 0, 60, 0.25), 0 -1px 0 rgba(255, 0, 60, 0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 0, 60, 0.15);
+            border-right: 1px solid rgba(255, 0, 60, 0.15);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: transparent;
+            border: 1px solid #1e1e28;
+            color: #444;
+            font-size: 0.85rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.18s;
+            width: 30px;
+            height: 30px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 0, 60, 0.12);
+            border-color: rgba(255, 0, 60, 0.4);
+            color: #fff;
+        }
+
+        .modal-gallery {
+            width: 100%;
+            height: 250px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 22px;
+            border: 1px solid rgba(255, 0, 60, 0.2);
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+
+        .modal-gallery::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modal-gallery img {
+            flex: 0 0 100%;
+            height: 100%;
+            object-fit: cover;
+            scroll-snap-align: start;
+        }
+
+        .swipe-hint {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(6, 6, 8, 0.8);
+            padding: 4px 10px;
+            border-radius: 2px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.7rem;
+            color: #555;
+            z-index: 5;
+            pointer-events: none;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .m-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 0.5px;
+            line-height: 1;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .c-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.7rem;
+            color: var(--neon-red);
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            opacity: 0.8;
+        }
+
+        .c-label::before {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 1px;
+            background: var(--neon-red);
+        }
+
+        .finish-options {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+
+        .finish-btn {
+            background: transparent;
+            border: 1px solid #222230;
+            border-left: 3px solid #222230;
+            color: #555566;
+            padding: 10px 14px;
+            border-radius: 3px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            flex: 1;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .finish-btn:hover {
+            border-left-color: rgba(255, 0, 60, 0.5);
+            color: #aaa;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .finish-btn.selected {
+            background: rgba(255, 0, 60, 0.06);
+            border-color: rgba(255, 0, 60, 0.2);
+            border-left: 3px solid var(--neon-red);
+            color: #fff;
+            box-shadow: inset 0 0 16px rgba(255, 0, 60, 0.08);
+        }
+
+        .finish-btn.selected::after {
+            content: '✓';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neon-red);
+            font-size: 0.85rem;
+            font-weight: 900;
+        }
+
+        .price-display {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 4.2rem;
+            font-weight: 900;
+            color: var(--neon-red);
+            text-shadow: var(--neon-glow);
+            text-align: center;
+            margin: 8px 0 20px;
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        .price-pop {
+            animation: pricePop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pricePop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .btn-whatsapp-solid {
+            background: var(--neon-red);
+            color: #fff;
+            width: 100%;
+            padding: 17px 24px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            box-shadow: 0 4px 24px rgba(255, 0, 60, 0.4);
+            text-decoration: none;
+            transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+            font-family: 'Barlow Condensed', sans-serif;
+            clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+        }
+
+        .btn-whatsapp-solid:hover {
+            background: #e0003a;
+            box-shadow: 0 6px 32px rgba(255, 0, 60, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .btn-whatsapp-solid:active {
+            transform: scale(0.98);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: #050507;
+            padding: 50px 5% 24px;
+            border-top: 1px solid rgba(255, 0, 60, 0.18);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-red) 30%, var(--neon-orange) 70%, transparent);
+            opacity: 0.7;
+        }
+
+        .footer-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .footer-col {
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .footer-logo {
+            width: 140px;
+            margin-bottom: 14px;
+            filter: drop-shadow(0 0 8px rgba(255, 0, 60, 0.35));
+        }
+
+        .footer-col p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .footer-col h4 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 0, 60, 0.2);
+            padding-bottom: 8px;
+        }
+
+        .phone-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 0, 60, 0.07);
+            color: var(--text-light);
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.82rem;
+            border: 1px solid rgba(255, 0, 60, 0.2);
+            margin-top: 10px;
+            transition: 0.22s;
+            font-weight: 600;
+        }
+
+        .phone-btn:hover {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+            box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+        }
+
+        .map-link-btn {
+            display: inline-block;
+            color: var(--neon-red);
+            font-size: 0.82rem;
+            text-decoration: none;
+            margin-top: 10px;
+            font-weight: 600;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .map-link-btn:hover {
+            opacity: 1;
+        }
+
+        /* ── FLOATING SOCIALS ── */
+        .floating-socials {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4px;
+            z-index: 1000;
+            background: rgba(8, 8, 10, 0.9);
+            backdrop-filter: blur(14px);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 0, 60, 0.15);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        .floating-socials a {
+            color: #666;
+            font-size: 1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            background: transparent;
+        }
+
+        .floating-socials a:hover {
+            color: var(--neon-red);
+            background: rgba(255, 0, 60, 0.1);
+        }
+
+        .footer-socials-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .footer-socials-row a {
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            transition: 0.3s;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #222;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .footer-socials-row a:hover {
+            color: var(--neon-red);
+            border-color: rgba(255, 0, 60, 0.4);
+            box-shadow: 0 0 12px rgba(255, 0, 60, 0.2);
+        }
+
+        .design-credit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        .design-credit a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #444;
+            font-size: 0.72rem;
+            transition: 0.3s;
+        }
+
+        .design-credit a:hover {
+            color: #fff;
+        }
+
+        .design-credit img {
+            height: 18px;
+            filter: grayscale(100%);
+            opacity: 0.5;
+            transition: 0.3s;
+        }
+
+        .design-credit a:hover img {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        /* ── MODAL DESC ── */
+        #modal-desc {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="main-header" style="justify-content: center;">
+        <a href="index.html" class="logo-container" style="text-decoration: none;">
+            <img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png"
+                alt="Maxmotor Inicio">
+        </a>
+    </header>
+
+    <section class="hero">
+        <video autoplay muted loop playsinline preload="none">
+            <source src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/video_mxr.mp4" type="video/mp4">
+        </video>
+        <div class="hero-badge">Fabricación Nacional · Ecuador</div>
+        <h1>LÍNEA<span>MXR</span></h1>
+        <div class="hero-line"></div>
+        <p class="hero-desc">Equipamiento Off-Road de Ingeniería Extrema</p>
+        <div class="hero-scroll-indicator">
+            <span>Explorar</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- STATS STRIP -->
+    <div class="stats-strip">
+        <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Acero Nacional</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <div class="stat-number">+50</div>
+            <div class="stat-label">Modelos de Vehículo</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <div class="stat-number">10K</div>
+            <div class="stat-label">Lbs Capacidad</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <div class="stat-number">3mm</div>
+            <div class="stat-label">Espesor Mínimo</div>
+        </div>
+    </div>
+
+    <!-- VITRINA APP-LIKE (CATEGORÍAS SCROLL HORIZONTAL) -->
+    <div class="catalog-container" id="product-catalog">
+        <!-- Los contenedores horizontales se inyectan vía JS -->
+    </div>
+
+    <!-- MODAL OSCURO -->
+    <div class="modal-overlay" id="config-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+
+            <!-- Swipe Gallery -->
+            <div style="position: relative;">
+                <div class="modal-gallery" id="modal-gallery">
+                    <!-- Images injected dynamically -->
+                </div>
+                <div class="swipe-hint" id="swipe-hint"><i class="fa-solid fa-arrows-left-right"></i> Desliza para más
+                    fotos</div>
+            </div>
+
+            <h2 class="m-title" id="modal-title">Nombre Producto</h2>
+            <p class="modal-desc" id="modal-desc"
+                style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px; line-height:1.4;"></p>
+
+            <span class="c-label">Acabado</span>
+            <div class="finish-options" id="modal-options">
+                <!-- Se inyecta dinámicamente -->
+            </div>
+
+            <div class="price-display" id="modal-price">$0.00</div>
+
+            <a href="#" class="btn-whatsapp-solid" id="modal-whatsapp" target="_blank">
+                <span>COTIZAR ESTE MODELO</span> <i class="fa-brands fa-whatsapp"></i>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // DATA CENTRALIZADA DE PRODUCTOS MXR (Modificada con descripciones e imágenes)
+        const mxrProducts = [
+            // CATEGORÍA: ROLLBARS
+            {
+                id: 'rollbar_hero',
+                name: 'Rollbar Hero',
+                category: 'Rollbars',
+                tag: 'Instalado en: Hilux Revo',
+                description: 'Diseño aerodinámico premium. Estructura tubular en acero de alta resistencia con base portafocos soldada láser y placa insignia lateral. Anclajes directos al balde sin perforaciones mayores.',
+                images: [
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/rollbar_1.webp',
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/tiro_1.jpg' // Demo de 2da foto
+                ],
+                finishes: [
+                    { name: 'Negro Mate', price: 290 },
+                    { name: 'Texturizado Batepiedra', price: 340 }
+                ]
+            },
+            {
+                id: 'rollbar_rr1',
+                name: 'Rollbar RR1',
+                category: 'Rollbars',
+                tag: 'Instalado en: D-Max 4x4',
+                description: 'Modelo Overland de doble viga angular. Incluye parrilla de carga superior de barras múltiples en aluminio ligero, ideal para llevar carpas o equipo en el techo con máxima rigidez y bajo centro de gravedad.',
+                images: [
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/rollbar_1.webp',
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/estribos_1.jpg'
+                ],
+                finishes: [
+                    { name: 'Negro Mate', price: 310 },
+                    { name: 'Texturizado Batepiedra', price: 360 }
+                ]
+            },
+            {
+                id: 'rollbar_hummer',
+                name: 'Rollbar Hummer',
+                category: 'Rollbars',
+                tag: 'Instalado en: Ranger',
+                description: 'Corte militar extremo. Formato tipo jaula con tubos reforzados de 3 pulgadas y recubrimiento texturizado mate de alta densidad anti-raya. Soportes laterales extensos para mayor protección volumétrica en vuelcos.',
+                images: [
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/rollbar_1.webp'
+                ],
+                finishes: [
+                    { name: 'Negro Mate', price: 330 },
+                    { name: 'Texturizado Batepiedra', price: 380 }
+                ]
+            },
+
+            // CATEGORÍA: BULLBARS DELANTEROS
+            {
+                id: 'bullbar_overland',
+                name: 'Bullbar Overland',
+                category: 'Protección Frontal',
+                tag: 'Instalado en: Hilux Revo',
+                description: 'Defensa integral en acero al carbón plegado de 4mm con tubo overrider. Base universal para wincha de hasta 12000 lbs y anclajes directos al chasis para rescate con grilletes de 3/4.',
+                images: [
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_overland.webp',
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/rollbar_1.webp'
+                ],
+                finishes: [
+                    { name: 'Negro Mate', price: 650 },
+                    { name: 'Texturizado Batepiedra', price: 700 }
+                ]
+            },
+            {
+                id: 'bullbar_raptor',
+                name: 'Bullbar Raptor',
+                category: 'Protección Frontal',
+                tag: 'Instalado en: F-150',
+                description: 'Diseño agresivo de perfil bajo (Stubby). Mejora drásticamente el ángulo de ataque en rock-crawling y expone las llantas de serie. Incluye luces exploradoras antiniebla integradas en cavidades selladas.',
+                images: [
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_overland.webp',
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/tiro_1.jpg'
+                ],
+                finishes: [
+                    { name: 'Negro Mate', price: 720 },
+                    { name: 'Texturizado Batepiedra', price: 780 }
+                ]
+            },
+
+            // CATEGORÍA: BARRAS DE TIRO
+            {
+                id: 'tiro_estandar',
+                name: 'Barra de Tiro Estándar',
+                category: 'Protección Posterior',
+                tag: 'Instalado en: D-Max 2024',
+                description: 'Barra oculta clase III. Tubo principal cuadrado de acero A36. Receptor de 2 pulgadas estandarizado. Enganche apto para remolques ligeros de hasta 5,000 lbs tipo porta-bicicletas.',
+                images: [
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/tiro_1.jpg'
+                ],
+                finishes: [
+                    { name: 'Estándar', price: 180 }
+                ]
+            },
+            {
+                id: 'tiro_hd',
+                name: 'Barra de Tiro Heavy Duty',
+                category: 'Protección Posterior',
+                tag: 'Instalado en: Land Cruiser',
+                description: 'Sistema Clase IV reforzado. Orejas de arrastre fundidas en una sola pieza. Soporte de carga bruta y arrastre pesado hasta 10,000 lbs. Base para ploteo eléctrico universal de 7 varillas integrado al armazón.',
+                images: [
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/tiro_1.jpg',
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/rollbar_1.webp'
+                ],
+                finishes: [
+                    { name: 'Tiro Pesado', price: 250 }
+                ]
+            },
+
+            // CATEGORÍA: ESTRIBOS
+            {
+                id: 'estribos_rock',
+                name: 'Estribos Rock Sliders',
+                category: 'Protección Lateral',
+                tag: 'Instalado en: Tacoma',
+                description: 'Rieles laterales diseñados para pivotar sobre rocas. Soldadura de alta penetración estructural sobre el chasis. Soportan completamente el peso del vehículo, protegiendo paneles y puertas en terrenos inclinados.',
+                images: [
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/estribos_1.jpg'
+                ],
+                finishes: [
+                    { name: 'Tubular', price: 250 }
+                ]
+            },
+
+            // CATEGORÍA: PROTECTORES
+            {
+                id: 'carter_acero',
+                name: 'Protector de Cárter 3mm',
+                category: 'Protección Inferior',
+                tag: 'Instalado en: BT-50',
+                description: 'Plancha de acero de 3 milímetros con pintura anti-corrosiva de doble capa. Protección balística básica contra impactos directos de piedras hacia el sumidero y cárter del motor. Agujeros de refrigeración integrados.',
+                images: [
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_seguro.jpeg'
+                ],
+                finishes: [
+                    { name: 'Rojo/Negro', price: 150 }
+                ]
+            },
+            {
+                id: 'carter_aluminio',
+                name: 'Protector Inferior TRD',
+                category: 'Protección Inferior',
+                tag: 'Instalado en: TRD Pro',
+                description: 'Diseño en aleación de duraluminio aeronáutico para rebajar peso muerto y maximizar durabilidad. Letras TRD estampadas en alto relieve central.',
+                images: [
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_seguro.jpeg',
+                    'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/estribos_1.jpg'
+                ],
+                finishes: [
+                    { name: 'Aluminio', price: 280 }
+                ]
+            }
+        ];
+
+        // LÓGICA DE INTERFAZ APP-LIKE
+        const catalogContainer = document.getElementById('product-catalog');
+        const header = document.getElementById('main-header');
+
+        let currentProduct = null;
+        let currentFinishIndex = 0;
+
+        // Renderizar Tarjetas Agrupadas por Categoría
+        function renderCards() {
+            catalogContainer.innerHTML = '';
+
+            // Agrupar productos por categoría
+            const groupedProducts = {};
+            mxrProducts.forEach((prod, idx) => {
+                // Guardamos el índice original para el Modal
+                if (!groupedProducts[prod.category]) {
+                    groupedProducts[prod.category] = [];
+                }
+                groupedProducts[prod.category].push({ ...prod, originalIdx: idx });
+            });
+
+            // Descripciones por categoría
+            const categoryDescriptions = {
+                'Rollbars': { eyebrow: 'Protección Posterior', subtitle: 'Estructuras tubulares de acero de alta resistencia con bases portafocos soldadas por láser. Diseñadas para proteger la cabina y elevar el perfil visual de tu 4x4.' },
+                'Protección Frontal': { eyebrow: 'Bull & Winch Bars', subtitle: 'Defensas delanteras en acero al carbón de 4mm con soporte para winchas hasta 12.000 lbs. Máximo ángulo de ataque para cualquier terreno.' },
+                'Protección Posterior': { eyebrow: 'Enganche & Remolque', subtitle: 'Barras de tiro clase III y IV con receptores estandarizados de 2 pulgadas. Capacidad de arrastre certificada para las condiciones más exigentes.' },
+                'Protección Lateral': { eyebrow: 'Rock Sliders & Estribos', subtitle: 'Rieles laterales de alta penetración estructural que soportan el peso completo del vehículo en terrenos inclinados, protegiendo paneles y puertas.' },
+                'Protección Inferior': { eyebrow: 'Skid Plates', subtitle: 'Planchas de acero y duraluminio aeronáutico para blindar el cárter, transmisión y diferencial contra impactos directos en ruta.' }
+            };
+
+            // Generar HTML por categoría
+            for (const category in groupedProducts) {
+                const section = document.createElement('div');
+                section.className = 'category-section';
+
+                const catInfo = categoryDescriptions[category] || { eyebrow: 'Accesorios MXR', subtitle: 'Fabricación nacional de alta ingeniería para tu vehículo 4x4.' };
+
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'category-header';
+                headerDiv.innerHTML = `
+                    <span class="category-eyebrow">${catInfo.eyebrow}</span>
+                    <h2 class="category-title">${category}</h2>
+                    <p class="category-subtitle">${catInfo.subtitle}</p>
+                `;
+                section.appendChild(headerDiv);
+
+                const scrollContainer = document.createElement('div');
+                scrollContainer.className = 'horizontal-scroll';
+
+                groupedProducts[category].forEach((prod) => {
+                    const fallbackImg = 'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png';
+                    let firstImg = (prod.images && prod.images.length > 0) ? prod.images[0] : fallbackImg;
+                    if (firstImg.includes('Reuse img for demo') || firstImg.includes('Reuse%20img%20for%20demo')) firstImg = fallbackImg;
+
+                    const card = document.createElement('a');
+                    card.className = 'product-card';
+                    card.href = `productos/${prod.id.replaceAll('_', '-')}.html`;
+                    card.setAttribute('aria-label', `Ver ficha y cotizar ${prod.name}`);
+                    card.innerHTML = `
+                        <div class="card-img-wrap">
+                            <span class="card-tag">${prod.tag}</span>
+                            <img src="${firstImg}" alt="${prod.name} ${prod.category.toLowerCase()} ${prod.tag.toLowerCase().replace(':', '')}" loading="lazy" onerror="this.src='${fallbackImg}'; this.style.objectFit='contain';">
+                        </div>
+                        <div class="card-info">
+                            <div class="card-title-wrap">
+                                <div class="card-title">${prod.name}</div>
+                                <div class="card-desc">${prod.description}</div>
+                                <div class="card-hint">VER FICHA Y COTIZAR</div>
+                            </div>
+                            <div class="card-action-icon">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                        </div>
+                    `;
+                    scrollContainer.appendChild(card);
+                });
+
+                section.appendChild(scrollContainer);
+                catalogContainer.appendChild(section);
+            }
+        }
+
+        // Window Scrolling Event
+        window.addEventListener('scroll', () => {
+            // Header
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        // MODAL LOGIC (Se mantiene intacta, solo se ajusta CSS de las clases y galería dinámica)
+        const modal = document.getElementById('config-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalGallery = document.getElementById('modal-gallery');
+        const swipeHint = document.getElementById('swipe-hint');
+        const modalOptions = document.getElementById('modal-options');
+        const modalPrice = document.getElementById('modal-price');
+        const modalWhatsapp = document.getElementById('modal-whatsapp');
+
+        function openModal(idx) {
+            currentProduct = mxrProducts[idx];
+            currentFinishIndex = 0;
+
+            modalTitle.innerText = currentProduct.name;
+            document.getElementById('modal-desc').innerText = currentProduct.description || '';
+
+            // Inyectar Galería Swipeable
+            modalGallery.innerHTML = '';
+
+            const fallbackImg = 'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png';
+            let imagesToDisplay = currentProduct.images;
+            if (!imagesToDisplay || imagesToDisplay.length === 0) imagesToDisplay = [fallbackImg];
+
+            // Filter out placeholders
+            imagesToDisplay = imagesToDisplay.map(img => (img.includes('Reuse img') || img.includes('Reuse%20img')) ? fallbackImg : img);
+
+            imagesToDisplay.forEach(imgSrc => {
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.onerror = function () { this.src = fallbackImg; this.style.objectFit = 'contain'; };
+                modalGallery.appendChild(img);
+            });
+
+            // Mostrar u ocultar el hint de swipe
+            if (imagesToDisplay.length > 1) {
+                swipeHint.style.display = 'block';
+            } else {
+                swipeHint.style.display = 'none';
+            }
+
+            renderFinishes();
+            updateCheckout();
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevenir scroll fondo
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restaurar scroll
+        }
+
+        function renderFinishes() {
+            modalOptions.innerHTML = '';
+            currentProduct.finishes.forEach((fin, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'finish-btn ' + (idx === currentFinishIndex ? 'selected' : '');
+                btn.innerText = fin.name;
+                btn.onclick = () => {
+                    currentFinishIndex = idx;
+                    renderFinishes(); // Re-render buttons pure react style
+                    updateCheckout();
+                };
+                modalOptions.appendChild(btn);
+            });
+        }
+
+        function updateCheckout() {
+            const selectedFinish = currentProduct.finishes[currentFinishIndex];
+            modalPrice.innerText = `$${selectedFinish.price}`;
+
+            // Animar el precio (pop effect)
+            modalPrice.classList.remove('price-pop');
+            void modalPrice.offsetWidth; // Trigger reflow for animation restart
+            modalPrice.classList.add('price-pop');
+
+            // Generar Link WhatsApp
+            const msg = `Hola, vengo del catálogo Premium. Me interesa el producto *${currentProduct.name}* con acabado *${selectedFinish.name}* (Precio ref: $${selectedFinish.price}). ¿Podrían asesorarme para mi vehículo?`;
+            modalWhatsapp.href = `https://wa.me/593960855932?text=${encodeURIComponent(msg)}`;
+        }
+
+        // Click outside to close
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', renderCards);
+
+    </script>
+
+    <!-- FLOATING SOCIALS -->
+    <div class="floating-socials">
+        <a href="https://www.instagram.com/maxmotor4x4/?hl=es" target="_blank"><i
+                class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.facebook.com/maxmotordelecuador/?locale=es_LA" target="_blank"><i
+                class="fa-brands fa-facebook"></i></a>
+        <a href="https://www.tiktok.com/@maxmotordelecuador" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+    </div>
+
+    <!-- FOOTER MXR -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo maxmotor.png"
+                    class="footer-logo" alt="MXR Logo">
+                <p>Equipamiento 4x4 de alta ingeniería.</p>
+            </div>
+            <div class="footer-col">
+                <h4>SHOWROOM AMBATO</h4>
+                <p><i class="fa-solid fa-location-dot" style="color:var(--neon-red)"></i> Av. Atahualpa 18-0202<br>entre
+                    Paltas y Rumiñahui</p>
+                <a href="tel:+593960855932" class="phone-btn"><i class="fa-solid fa-phone"></i> Llamar: 096 085 5932</a>
+                <br>
+                <a href="https://www.google.com/maps/place/Maxmotor+del+Ecuador/@-1.2552713,-78.6323022,20.91z/data=!4m6!3m5!1s0x91d3818d6de5daa5:0x8f09bbfce70af8b8!8m2!3d-1.2552967!4d-78.6321357!16s%2Fg%2F1pztf47xd?entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank" class="map-link-btn">&#128205; Ver en Mapa</a>
+            </div>
+            <div class="footer-col">
+                <h4>SUCURSAL QUITO</h4>
+                <p><i class="fa-solid fa-location-dot" style="color:var(--neon-red)"></i> De Las Hiedras 428,<br>Torre
+                    Oxford</p>
+                <a href="tel:+593987986672" class="phone-btn"><i class="fa-solid fa-phone"></i> Llamar: 098 798 6672</a>
+                <br>
+                <a href="https://www.google.com/maps/place/Torre+Oxford/@-0.1660193,-78.4771156,17z/data=!3m1!4b1!4m6!3m5!1s0x91d591111698c9f1:0xad54b9bcac15ff65!8m2!3d-0.1660247!4d-78.4745407!16s%2Fg%2F11jvcdc9lh?entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank" class="map-link-btn">&#128205; Ver en Mapa</a>
+            </div>
+        </div>
+
+        <div class="footer-socials-row">
+            <a href="https://www.instagram.com/maxmotor4x4/?hl=es" target="_blank"><i
+                    class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/maxmotordelecuador/?locale=es_LA" target="_blank"><i
+                    class="fa-brands fa-facebook"></i></a>
+            <a href="https://www.tiktok.com/@maxmotordelecuador" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+
+        <p style="text-align:center; color:#999; margin-top:40px; font-size:0.8rem;">© 2026 MXR Store. Todos los
+            derechos reservados.</p>
+
+        <div class="design-credit">
+            <a href="https://www.instagram.com/juanesss.jls?igsh=MW5ud3NxYXMwazV3Zg%3D%3D&utm_source=qr" target="_blank"
+                rel="noopener noreferrer">
+                <span>Diseño y desarrollo por</span>
+                <img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/Logo-Bullet.png"
+                    alt="Bullet Design">
+            </a>
+        </div>
+    </footer>
+</body>
+
+</html>

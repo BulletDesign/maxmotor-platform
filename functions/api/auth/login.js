@@ -1,0 +1,13 @@
+import { verifyPassword } from "../../_lib/crypto.js";
+import { createSession } from "../../_lib/auth.js";
+import { assertSameOrigin, handleError, HttpError, json, readJson } from "../../_lib/http.js";
+
+export async function onRequestPost({ request, env }) {
+  try {
+    assertSameOrigin(request); const body = await readJson(request); const email = String(body.email || "").trim().toLowerCase();
+    const user = await env.DB.prepare("SELECT * FROM users WHERE email=?1 AND status='active'").bind(email).first();
+    if (!user || !await verifyPassword(String(body.password || ""), user.password_hash, user.password_salt)) throw new HttpError(401, "Credenciales invalidas");
+    const session = await createSession(env.DB, user.id, request.url);
+    return json({ user: { id:user.id, customerCode:user.customer_code, email:user.email, fullName:user.full_name, role:user.role } }, 200, { "set-cookie": session.cookie });
+  } catch (error) { return handleError(error); }
+}

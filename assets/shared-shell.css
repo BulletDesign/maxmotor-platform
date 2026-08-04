@@ -1,0 +1,13 @@
+:root { --shell-black:#070908; --shell-white:#f5f3ec; --shell-muted:#9b9d96; --shell-red:#f02b22; --shell-line:rgba(255,255,255,.13); }
+maxmotor-header,maxmotor-footer { display:block; }
+.compact-header { min-height:76px; padding:0 max(20px,5vw); display:flex; align-items:center; justify-content:space-between; gap:24px; color:var(--shell-white); border-bottom:1px solid var(--shell-line); background:var(--shell-black); }
+.compact-header__brand { display:flex; align-items:center; text-decoration:none; }.compact-header__brand img { width:220px; height:58px; object-fit:contain; }
+.compact-header__back { color:var(--shell-white); text-decoration:none; font:800 .7rem/1 Montserrat,sans-serif; letter-spacing:.12em; text-transform:uppercase; }
+.shared-footer { padding:54px max(20px,5vw) 24px; color:var(--shell-muted); border-top:1px solid var(--shell-line); background:#050605; font-family:Montserrat,sans-serif; }
+.shared-footer__grid { display:grid; grid-template-columns:1.7fr 1fr 1.2fr; gap:45px; }.shared-footer__brand img { width:min(300px,100%); margin-bottom:15px; }
+.shared-footer small { color:var(--shell-red); font-weight:800; letter-spacing:.12em; }.shared-footer p { line-height:1.65; }.shared-footer a { color:inherit; text-decoration:none; }
+.footer-nav{display:grid;align-content:start;gap:12px}.footer-nav small{margin-bottom:5px}.footer-nav a:hover,.footer-social a:hover{color:#fff}.footer-locations b{color:#fff}.footer-social{display:flex;flex-wrap:wrap;gap:1px;margin-top:38px}.footer-social a{flex:1;min-width:140px;padding:17px;border:1px solid var(--shell-line);color:var(--shell-muted);font-size:.72rem;font-weight:800;text-align:center;text-transform:uppercase}
+.shared-footer__legal { display:flex; justify-content:space-between; align-items:center; gap:20px; margin-top:38px; padding-top:22px; border-top:1px solid var(--shell-line); font-size:.72rem; }
+.bullet-credit { margin-left:auto; color:white !important; }.bullet-credit strong { color:var(--shell-red); }
+.floating-whatsapp{position:fixed;z-index:4500;right:22px;bottom:22px;display:flex;align-items:center;gap:15px;padding:9px 9px 9px 18px;color:#071208!important;background:#55d66b;text-decoration:none;font:800 .7rem/1 Montserrat,sans-serif;text-transform:uppercase;box-shadow:0 14px 40px rgba(0,0,0,.35)}.floating-whatsapp b{display:grid;place-items:center;width:34px;height:34px;color:#fff;background:#101510;font-size:1.2rem}
+@media(max-width:800px){.compact-header__brand img{width:150px;height:48px}.compact-header__back{font-size:.6rem}.shared-footer__grid{grid-template-columns:1fr}.shared-footer__legal{display:grid}.bullet-credit{margin-left:0}}

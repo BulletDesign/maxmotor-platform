@@ -1,0 +1,3 @@
+import { requireUser } from "../../_lib/auth.js";
+import { handleError, json } from "../../_lib/http.js";
+export async function onRequestGet({ request, env }) { try { const user=await requireUser(request,env.DB); const balance=await env.DB.prepare("SELECT COALESCE(SUM(points),0) balance FROM points_ledger WHERE user_id=?1").bind(user.id).first(); const movements=await env.DB.prepare("SELECT movement_type,points,description,created_at FROM points_ledger WHERE user_id=?1 ORDER BY created_at DESC LIMIT 50").bind(user.id).all(); return json({ balance:balance.balance,movements:movements.results }); } catch(error){ return handleError(error); } }

@@ -1,0 +1,43 @@
+suv_chico, AT, 235/70 R16
+
+suv_chico, AT, 245/65 R17
+
+suv_chico, AT, 255/65 R17
+
+suv_chico, AT, 265/60 R18
+
+suv_chico, MT, 245/70 R16
+
+suv_chico, MT, 255/70 R16
+
+suv_chico, MT, 265/60 R18
+
+camioneta_mediana, AT, 265/70 R17
+
+camioneta_mediana, AT, 265/65 R18
+
+camioneta_mediana, AT, 275/65 R18
+
+camioneta_mediana, AT, 275/70 R17
+
+camioneta_mediana, MT, 285/70 R17
+
+camioneta_mediana, MT, 285/65 R18
+
+camioneta_mediana, MT, 275/70 R18
+
+pickup_full_size, AT, 275/65 R18
+
+pickup_full_size, AT, 275/70 R18
+
+pickup_full_size, AT, 275/55 R20
+
+pickup_full_size, AT, 285/55 R20
+
+pickup_full_size, AT, 305/55 R20
+
+pickup_full_size, MT, 305/65 R18
+
+pickup_full_size, MT, 315/70 R17
+
+pickup_full_size, MT, 295/70 R18
