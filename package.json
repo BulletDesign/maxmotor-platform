@@ -8,6 +8,8 @@
     "test": "node --test tests/*.test.mjs",
     "verify": "npm run build && npm run check && npm test",
     "deploy:static": "npm run build && wrangler pages deploy dist --project-name=maxmotor-platform",
+    "build:production": "node scripts/build-production-static.mjs",
+    "deploy:production": "node scripts/deploy-production-static.mjs",
     "dev": "wrangler pages dev dist",
     "db:migrate:local": "wrangler d1 migrations apply DB --local --config wrangler.dev.jsonc",
     "db:migrate:dev": "wrangler d1 migrations apply DB --remote --config wrangler.dev.jsonc",
