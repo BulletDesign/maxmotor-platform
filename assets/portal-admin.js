@@ -3,6 +3,7 @@ const appView = document.querySelector("#admin-app");
 const loginMessage = document.querySelector("#admin-login-message");
 const fileMessage = document.querySelector("#customer-file-message");
 let operationalCatalog = [];
+let activeCustomerId = null;
 
 async function api(path, options = {}) {
   const response = await fetch(path, {
@@ -70,6 +71,7 @@ async function loadCustomers(query) {
 async function openCustomerFile(id) {
   const data = await api(`/api/admin/customers/${encodeURIComponent(id)}`);
   const { customer, vehicles, installations } = data;
+  activeCustomerId = customer.id;
   document.querySelector("#customers-browser").hidden = true;
   document.querySelector("#customer-file").hidden = false;
   document.querySelector("#file-customer-name").textContent = customer.fullName;
@@ -80,6 +82,15 @@ async function openCustomerFile(id) {
   editForm.elements.fullName.value = customer.fullName;
   editForm.elements.email.value = customer.email;
   editForm.elements.phone.value = customer.phone;
+  const invoiceForm = document.querySelector("#customer-invoice-form");
+  invoiceForm.elements.customerCode.value = customer.customerCode;
+  invoiceForm.elements.issuedAt.value = new Date().toISOString().slice(0, 10);
+  let adjustForm = document.querySelector("#points-adjust-form");
+  if (!adjustForm) {
+    document.querySelector(".customer-file-grid").insertAdjacentHTML("beforeend", '<form id="points-adjust-form" class="portal-form admin-card"><h3>Ajuste manual de TP</h3><input name="customerCode" type="hidden"><label>Traction Points<input name="points" type="number" min="1" max="1000000" required></label><label>Motivo<input name="reason" minlength="5" placeholder="Bonificacion autorizada" required></label><button class="primary-action" type="submit"><span>Sumar Traction Points</span><b>→</b></button></form>');
+    adjustForm = document.querySelector("#points-adjust-form");
+  }
+  adjustForm.elements.customerCode.value = customer.customerCode;
   const installForm = document.querySelector("#installation-form");
   installForm.elements.customerId.value = customer.id;
   installForm.elements.installedAt.value = new Date().toISOString().slice(0, 10);
@@ -87,7 +98,7 @@ async function openCustomerFile(id) {
   installForm.elements.productId.innerHTML = operationalCatalog.map((product) => `<option value="${product.id}">${escapeHtml(product.familyName)} / ${escapeHtml(product.name)}</option>`).join("");
   installForm.elements.installedKm.value = vehicles[0]?.odometerKm || 0;
   document.querySelector("#file-installations").innerHTML = installations.length
-    ? installations.map((item) => `<article class="admin-list-row"><strong>${escapeHtml(item.productName)}</strong><span>${escapeHtml(item.brand)} ${escapeHtml(item.model)}</span><small>Revision: ${item.nextServiceAt ? new Date(item.nextServiceAt).toLocaleDateString("es-EC") : "sin fecha"} / ${item.nextServiceKm ? `${Number(item.nextServiceKm).toLocaleString("es-EC")} km` : "sin kilometraje"}</small><em>${escapeHtml(item.status)}</em></article>`).join("")
+    ? installations.map((item) => `<article class="admin-list-row"><strong>${escapeHtml(item.productName)}</strong><span>${escapeHtml(item.brand)} ${escapeHtml(item.model)}</span><small>Revision: ${item.nextServiceAt ? new Date(item.nextServiceAt).toLocaleDateString("es-EC") : "sin fecha"} / ${item.nextServiceKm ? `${Number(item.nextServiceKm).toLocaleString("es-EC")} km` : "sin kilometraje"}</small><button type="button" data-extend-installation="${item.id}">Extender</button></article>`).join("")
     : '<p class="empty-state">Este cliente aun no tiene accesorios instalados.</p>';
 }
 
@@ -95,7 +106,7 @@ document.querySelector("#admin-login-form").addEventListener("submit", async (ev
   event.preventDefault();
   const values = Object.fromEntries(new FormData(event.currentTarget));
   setMessage(loginMessage, "");
-  try { await openAdmin((await api("/api/auth/login", { method: "POST", body: JSON.stringify(values) })).user); }
+  try { await openAdmin((await api("/api/auth/login", { method: "POST", body: JSON.stringify({ ...values, expectedRole: "employee" }) })).user); }
   catch (error) { setMessage(loginMessage, error.message); }
 });
 
@@ -143,6 +154,65 @@ document.querySelector("#installation-form").addEventListener("submit", async (e
   } catch (error) { setMessage(fileMessage, error.message); }
 });
 
+document.querySelector("#customer-invoice-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const values = Object.fromEntries(new FormData(form));
+  try {
+    const data = await api("/api/admin/points/award", { method: "POST", body: JSON.stringify({ customerCode: values.customerCode, invoiceNumber: values.invoiceNumber, amountCents: Math.round(Number(values.amount) * 100), issuedAt: new Date(`${values.issuedAt}T12:00:00`).toISOString() }) });
+    setMessage(fileMessage, `${Number(data.points).toLocaleString("es-EC")} Traction Points acreditados.`, true);
+    form.elements.invoiceNumber.value = "";
+    form.elements.amount.value = "";
+    await Promise.all([openCustomerFile(activeCustomerId), loadOverview()]);
+  } catch (error) { setMessage(fileMessage, error.message); }
+});
+
+document.querySelector(".customer-file-grid").addEventListener("submit", async (event) => {
+  if (event.target.id !== "points-adjust-form") return;
+  event.preventDefault();
+  const form = event.target;
+  const values = Object.fromEntries(new FormData(form));
+  try {
+    const data = await api("/api/admin/points/adjust", { method: "POST", body: JSON.stringify({ customerCode: values.customerCode, points: Number(values.points), reason: values.reason }) });
+    setMessage(fileMessage, `${Number(data.points).toLocaleString("es-EC")} Traction Points sumados.`, true);
+    form.elements.points.value = "";
+    form.elements.reason.value = "";
+    await openCustomerFile(activeCustomerId);
+  } catch (error) { setMessage(fileMessage, error.message); }
+});
+
+document.querySelector("#suspend-customer").addEventListener("click", async () => {
+  if (!activeCustomerId || !confirm("¿Suspender el acceso de este cliente? Su historial se conservara.")) return;
+  try {
+    const form = document.querySelector("#customer-edit-form");
+    await api(`/api/admin/customers/${activeCustomerId}`, { method: "PATCH", body: JSON.stringify({ fullName: form.elements.fullName.value, email: form.elements.email.value, phone: form.elements.phone.value, status: "suspended" }) });
+    setMessage(fileMessage, "Cuenta suspendida y sesiones cerradas.", true);
+    await loadCustomers("");
+  } catch (error) { setMessage(fileMessage, error.message); }
+});
+
+document.querySelector("#file-installations").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-extend-installation]");
+  if (!button) return;
+  const form = document.querySelector("#warranty-extension-form");
+  form.elements.installationId.value = button.dataset.extendInstallation;
+  form.hidden = false;
+  form.scrollIntoView({ behavior: "smooth", block: "center" });
+});
+document.querySelector("#cancel-extension").addEventListener("click", () => { document.querySelector("#warranty-extension-form").hidden = true; });
+document.querySelector("#warranty-extension-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const values = Object.fromEntries(new FormData(form));
+  try {
+    await api(`/api/admin/installations/${values.installationId}`, { method: "PATCH", body: JSON.stringify({ additionalDays: Number(values.additionalDays), additionalKm: Number(values.additionalKm), notes: values.notes }) });
+    setMessage(fileMessage, "Garantia y proxima revision extendidas.", true);
+    form.hidden = true;
+    form.reset();
+    await openCustomerFile(activeCustomerId);
+  } catch (error) { setMessage(fileMessage, error.message); }
+});
+
 document.querySelectorAll("[data-normalize]").forEach((input) => input.addEventListener("input", () => {
   if (input.dataset.normalize === "upper") input.value = input.value.toUpperCase();
   if (input.dataset.normalize === "words") input.value = input.value.replace(/(^|\s|[-'])\p{L}/gu, (letter) => letter.toUpperCase());
@@ -163,9 +233,9 @@ document.querySelector("#award-points-form").addEventListener("submit", async (e
 });
 
 document.querySelector("#admin-logout").addEventListener("click", async () => {
-  await api("/api/auth/logout", { method: "POST" });
+  await api("/api/auth/logout?role=employee", { method: "POST" });
   appView.hidden = true;
   loginView.hidden = false;
 });
 
-api("/api/auth/me").then(({ user }) => { if (user) return openAdmin(user); }).catch(() => {});
+api("/api/auth/me?role=employee").then(({ user }) => { if (user) return openAdmin(user); }).catch(() => {});
