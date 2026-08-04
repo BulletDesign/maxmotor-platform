@@ -270,8 +270,8 @@ Estado del nombre: PENDIENTE DE CONFIRMACIÓN COMERCIAL.
 
 Reglas confirmadas:
 
-- Se acredita 1 punto por cada USD 30 del total de factura.
-- Cálculo: `floor(total_factura / 30)`.
+- Se acredita 1 punto por cada USD 10 del total de factura.
+- Cálculo: `floor(total_factura / 10)`.
 - Todas las categorías generan puntos inicialmente.
 - Los puntos no expiran.
 - No se transfieren.
