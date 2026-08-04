@@ -352,7 +352,7 @@ Campos:
 
 Reglas:
 
-- Una factura genera `floor(total_cents / 1000)` puntos.
+- Una factura genera `floor(total_cents / 3000)` puntos.
 - No se aceptan movimientos directos desde el navegador.
 - Cada ajuste manual requiere empleado y auditoría.
 - El saldo no puede quedar negativo.

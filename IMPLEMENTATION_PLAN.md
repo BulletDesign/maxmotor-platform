@@ -4,7 +4,7 @@
 
 - Plataforma: Cloudflare Pages + Pages Functions + D1.
 - Roles: `customer`, `employee`, `superadmin`.
-- Regla inicial de puntos: 1 punto por cada USD 10 del total de factura.
+- Regla inicial de puntos: 1 punto por cada USD 30 del total de factura.
 - Los puntos se calculan exclusivamente en el servidor y no expiran en el MVP.
 - Todo movimiento de puntos, instalacion, revision o cambio administrativo deja auditoria.
 - Una instalacion exige cliente, vehiculo, producto, factura unica y empleado responsable.
@@ -107,7 +107,7 @@ Disenado primero para telefono y operacion en mostrador/taller.
 
 1. Buscar cliente.
 2. Ingresar numero unico, fecha y total de factura.
-3. Backend bloquea duplicados y calcula `floor(total_cents / 1000)`.
+3. Backend bloquea duplicados y calcula `floor(total_cents / 3000)`.
 4. Empleado revisa el resumen y confirma.
 5. Se crean factura, movimiento y auditoria en una sola transaccion.
 

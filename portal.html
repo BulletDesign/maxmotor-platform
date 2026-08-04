@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es-EC">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Portal Maxmotor 4x4</title>
+  <meta name="description" content="Portal privado de clientes Maxmotor para consultar vehículos, instalaciones, garantías y puntos.">
+  <link rel="icon" href="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo_16x16.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/portal.css">
+</head>
+<body>
+  <a class="skip-link" href="#portal-main">Saltar al contenido</a>
+  <div class="portal-grid" aria-hidden="true"></div>
+  <header class="portal-header">
+    <a class="portal-brand" href="/" aria-label="Volver a Maxmotor 4x4">
+      <img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor 4x4">
+    </a>
+    <div class="portal-status"><span></span> Portal de propietarios</div>
+    <a class="portal-back" href="/">Volver al sitio</a>
+  </header>
+
+  <main id="portal-main" class="portal-main">
+    <section id="auth-view" class="auth-layout">
+      <div class="auth-story">
+        <p class="eyebrow">MAXMOTOR ID / 01</p>
+        <h1>Tu 4x4.<br><span>Bajo control.</span></h1>
+        <p class="auth-lead">Instalaciones, kilometraje, garantías y puntos en una sola bitácora diseñada para seguir avanzando.</p>
+        <div class="story-metric">
+          <strong>1 : 30</strong>
+          <span>Un punto por cada USD 30 de compra registrada.</span>
+        </div>
+      </div>
+
+      <div class="auth-panel">
+        <div class="auth-tabs" role="tablist" aria-label="Acceso al portal">
+          <button id="login-tab" class="auth-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="login-panel">Ingresar</button>
+          <button id="register-tab" class="auth-tab" type="button" role="tab" aria-selected="false" aria-controls="register-panel">Crear cuenta</button>
+        </div>
+
+        <section id="login-panel" class="auth-form-panel" role="tabpanel" aria-labelledby="login-tab">
+          <p class="panel-index">01 / ACCESO</p>
+          <h2>Continúa tu ruta</h2>
+          <p>Usa el correo con el que registraste tu vehículo.</p>
+          <form id="login-form" class="portal-form">
+            <label>Correo electrónico<input name="email" type="email" autocomplete="email" required></label>
+            <label>Contraseña<input name="password" type="password" autocomplete="current-password" minlength="10" required></label>
+            <button class="primary-action" type="submit"><span>Ingresar al portal</span><b aria-hidden="true">→</b></button>
+            <p class="form-help">¿No recuerdas tu acceso? <a href="https://wa.me/593960855932?text=Necesito%20ayuda%20con%20mi%20acceso%20al%20portal%20Maxmotor">Solicita verificación</a></p>
+          </form>
+        </section>
+
+        <section id="register-panel" class="auth-form-panel" role="tabpanel" aria-labelledby="register-tab" hidden>
+          <div class="step-heading"><p class="panel-index">REGISTRO / <span id="step-count">01</span></p><div class="step-track"><span id="step-progress"></span></div></div>
+          <form id="register-form" class="portal-form">
+            <fieldset class="register-step is-active" data-step="1">
+              <legend>Primero, tú</legend>
+              <p>Crea una identidad segura para tu bitácora Maxmotor.</p>
+              <label>Nombre completo<input name="fullName" autocomplete="name" minlength="3" required></label>
+              <div class="field-row">
+                <label>Cédula<input name="nationalId" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required></label>
+                <label>Teléfono<input name="phone" type="tel" autocomplete="tel" required></label>
+              </div>
+              <label>Correo electrónico<input name="email" type="email" autocomplete="email" required></label>
+              <label>Contraseña<input name="password" type="password" autocomplete="new-password" minlength="10" required><small>Mínimo 10 caracteres.</small></label>
+              <button class="primary-action next-step" type="button"><span>Registrar mi vehículo</span><b aria-hidden="true">→</b></button>
+            </fieldset>
+
+            <fieldset class="register-step" data-step="2" hidden>
+              <legend>Ahora, tu máquina</legend>
+              <p>Este será el primer vehículo vinculado a tu cuenta.</p>
+              <div class="field-row">
+                <label>Marca<input name="brand" placeholder="Toyota" required></label>
+                <label>Modelo<input name="model" placeholder="Hilux" required></label>
+              </div>
+              <div class="field-row">
+                <label>Año<input name="modelYear" type="number" inputmode="numeric" min="1950" max="2030"></label>
+                <label>Kilometraje<input name="odometerKm" type="number" inputmode="numeric" min="0" value="0"></label>
+              </div>
+              <div class="field-row">
+                <label>Placa<input name="plate" autocomplete="off"></label>
+                <label>VIN<input name="vin" autocomplete="off" maxlength="17"></label>
+              </div>
+              <label class="consent"><input name="consent" type="checkbox" required><span>Acepto el tratamiento de datos para operar el portal, garantías y programa de puntos.</span></label>
+              <div class="form-actions"><button class="text-action previous-step" type="button">← Volver</button><button class="primary-action" type="submit"><span>Crear mi cuenta</span><b aria-hidden="true">→</b></button></div>
+            </fieldset>
+          </form>
+        </section>
+        <div id="form-message" class="form-message" role="status" aria-live="polite" hidden></div>
+      </div>
+    </section>
+
+    <section id="dashboard-view" class="dashboard" hidden>
+      <aside class="dashboard-nav">
+        <p class="eyebrow">MAXMOTOR ID</p>
+        <strong id="customer-code">—</strong>
+        <nav aria-label="Portal cliente">
+          <button class="nav-item is-active" type="button"><span>01</span> Resumen</button>
+          <button class="nav-item" type="button" disabled><span>02</span> Vehículos</button>
+          <button class="nav-item" type="button" disabled><span>03</span> Garantías</button>
+          <button class="nav-item" type="button" disabled><span>04</span> Puntos</button>
+        </nav>
+        <button id="logout-button" class="logout-button" type="button">Cerrar sesión</button>
+      </aside>
+      <div class="dashboard-content">
+        <div class="dashboard-intro"><div><p class="eyebrow">BITÁCORA ACTIVA</p><h1>Hola, <span id="customer-name">propietario</span>.</h1></div><p>Tu equipamiento y beneficios, sin perder el rastro.</p></div>
+        <div class="dashboard-cards">
+          <article class="vehicle-card"><p class="card-label">VEHÍCULO PRINCIPAL / 01</p><div id="vehicle-summary" class="vehicle-summary"><span>Cargando vehículo...</span></div></article>
+          <article class="points-card"><p class="card-label">PUNTOS DISPONIBLES</p><strong id="points-balance">0</strong><span>1 punto por cada USD 30</span></article>
+          <article class="warranty-card"><p class="card-label">PRÓXIMA REVISIÓN</p><strong>Sin instalaciones</strong><span>Cuando registremos tu equipamiento aparecerá aquí.</span></article>
+        </div>
+        <div class="dashboard-next"><span>PRÓXIMO PASO</span><h2>Completa tu primera instalación en Maxmotor.</h2><a href="https://wa.me/593960855932?text=Quiero%20registrar%20mi%20primera%20instalaci%C3%B3n%20en%20el%20portal">Contactar asesor →</a></div>
+      </div>
+    </section>
+  </main>
+  <script src="assets/portal.js" type="module"></script>
+</body>
+</html>

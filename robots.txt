@@ -11,5 +11,6 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /admin/
+Disallow: /portal.html
 
 Sitemap: https://maxmotor4x4.com/sitemap.xml
