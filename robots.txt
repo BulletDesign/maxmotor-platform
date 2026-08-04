@@ -12,5 +12,6 @@ Allow: /
 Disallow: /api/
 Disallow: /admin/
 Disallow: /portal.html
+Disallow: /portal-admin.html
 
 Sitemap: https://maxmotor4x4.com/sitemap.xml

@@ -20,7 +20,7 @@ export async function createSession(db, userId, requestUrl) {
 export async function currentUser(request, db) {
   const token = cookieValue(request, COOKIE); if (!token) return null;
   const tokenHash = await sha256(token);
-  return db.prepare("SELECT u.id,u.customer_code AS customerCode,u.email,u.full_name AS fullName,u.phone,u.role,u.status FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=?1 AND datetime(s.expires_at)>CURRENT_TIMESTAMP AND u.status='active'").bind(tokenHash).first();
+  return db.prepare("SELECT u.id,u.customer_code AS customerCode,u.email,u.full_name AS fullName,u.phone,u.role,u.status,u.must_change_password AS mustChangePassword FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=?1 AND datetime(s.expires_at)>CURRENT_TIMESTAMP AND u.status='active'").bind(tokenHash).first();
 }
 
 export async function requireUser(request, db, roles = []) {

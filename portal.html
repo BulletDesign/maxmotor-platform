@@ -29,6 +29,14 @@
         <p class="eyebrow">MAXMOTOR ID / 01</p>
         <h1>Tu 4x4.<br><span>Bajo control.</span></h1>
         <p class="auth-lead">Instalaciones, kilometraje, garantías y puntos en una sola bitácora diseñada para seguir avanzando.</p>
+        <div class="benefit-grid" aria-label="Beneficios de MiMaxmotor">
+          <span><b>01</b> Historial de accesorios instalados</span>
+          <span><b>02</b> Garantías y próximas revisiones</span>
+          <span><b>03</b> Puntos por cada compra registrada</span>
+          <span><b>04</b> Recompensas y descuentos exclusivos</span>
+          <span><b>05</b> Todos tus vehículos en una cuenta</span>
+          <span><b>06</b> Atención técnica con tu historial</span>
+        </div>
         <div class="story-metric">
           <strong>1 : 30</strong>
           <span>Un punto por cada USD 30 de compra registrada.</span>
@@ -59,7 +67,7 @@
             <fieldset class="register-step is-active" data-step="1">
               <legend>Primero, tú</legend>
               <p>Crea una identidad segura para tu bitácora Maxmotor.</p>
-              <label>Nombre completo<input name="fullName" autocomplete="name" minlength="3" required></label>
+              <label>Nombre completo<input name="fullName" autocomplete="name" autocapitalize="words" data-normalize="words" minlength="3" required></label>
               <div class="field-row">
                 <label>Cédula<input name="nationalId" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required></label>
                 <label>Teléfono<input name="phone" type="tel" autocomplete="tel" required></label>
@@ -73,16 +81,16 @@
               <legend>Ahora, tu máquina</legend>
               <p>Este será el primer vehículo vinculado a tu cuenta.</p>
               <div class="field-row">
-                <label>Marca<input name="brand" placeholder="Toyota" required></label>
-                <label>Modelo<input name="model" placeholder="Hilux" required></label>
+                <label>Marca<select name="brand" required><option value="">Selecciona una marca</option><option>Baic</option><option>BMW</option><option>BYD</option><option>Changan</option><option>Chery</option><option>Chevrolet</option><option>Citroën</option><option>DFSK</option><option>Dongfeng</option><option>Fiat</option><option>Ford</option><option>Foton</option><option>Geely</option><option>Great Wall</option><option>Haval</option><option>Honda</option><option>Hyundai</option><option>Isuzu</option><option>JAC</option><option>Jeep</option><option>JMC</option><option>Kia</option><option>Land Rover</option><option>Lexus</option><option>Mazda</option><option>Mercedes-Benz</option><option>MG</option><option>Mitsubishi</option><option>Nissan</option><option>Peugeot</option><option>RAM</option><option>Renault</option><option>Shineray</option><option>Sinotruk</option><option>Subaru</option><option>Suzuki</option><option>Toyota</option><option>Volkswagen</option><option>Volvo</option><option>Zotye</option></select></label>
+                <label>Modelo<input name="model" placeholder="Hilux" autocapitalize="words" data-normalize="words" required></label>
               </div>
               <div class="field-row">
                 <label>Año<input name="modelYear" type="number" inputmode="numeric" min="1950" max="2030"></label>
                 <label>Kilometraje<input name="odometerKm" type="number" inputmode="numeric" min="0" value="0"></label>
               </div>
               <div class="field-row">
-                <label>Placa<input name="plate" autocomplete="off"></label>
-                <label>VIN<input name="vin" autocomplete="off" maxlength="17"></label>
+                <label>Placa<input name="plate" autocomplete="off" autocapitalize="characters" data-normalize="upper"></label>
+                <label>VIN<input name="vin" autocomplete="off" autocapitalize="characters" data-normalize="upper" maxlength="17"></label>
               </div>
               <label class="consent"><input name="consent" type="checkbox" required><span>Acepto el tratamiento de datos para operar el portal, garantías y programa de puntos.</span></label>
               <div class="form-actions"><button class="text-action previous-step" type="button">← Volver</button><button class="primary-action" type="submit"><span>Crear mi cuenta</span><b aria-hidden="true">→</b></button></div>
@@ -98,14 +106,15 @@
         <p class="eyebrow">MAXMOTOR ID</p>
         <strong id="customer-code">—</strong>
         <nav aria-label="Portal cliente">
-          <button class="nav-item is-active" type="button"><span>01</span> Resumen</button>
-          <button class="nav-item" type="button" disabled><span>02</span> Vehículos</button>
-          <button class="nav-item" type="button" disabled><span>03</span> Garantías</button>
-          <button class="nav-item" type="button" disabled><span>04</span> Puntos</button>
+          <button class="nav-item is-active" type="button" data-client-view="summary"><span>01</span> Resumen</button>
+          <button class="nav-item" type="button" data-client-view="vehicles"><span>02</span> Vehículos</button>
+          <button class="nav-item" type="button" data-client-view="warranties"><span>03</span> Garantías</button>
+          <button class="nav-item" type="button" data-client-view="points"><span>04</span> Puntos</button>
         </nav>
         <button id="logout-button" class="logout-button" type="button">Cerrar sesión</button>
       </aside>
-      <div class="dashboard-content">
+      <div class="dashboard-content client-view" data-view="summary">
+        <div id="password-warning" class="password-warning" hidden><strong>Acceso temporal</strong><span>Solicita el cambio de tu contraseña temporal antes de usar la cuenta regularmente.</span></div>
         <div class="dashboard-intro"><div><p class="eyebrow">BITÁCORA ACTIVA</p><h1>Hola, <span id="customer-name">propietario</span>.</h1></div><p>Tu equipamiento y beneficios, sin perder el rastro.</p></div>
         <div class="dashboard-cards">
           <article class="vehicle-card"><p class="card-label">VEHÍCULO PRINCIPAL / 01</p><div id="vehicle-summary" class="vehicle-summary"><span>Cargando vehículo...</span></div></article>
@@ -114,6 +123,9 @@
         </div>
         <div class="dashboard-next"><span>PRÓXIMO PASO</span><h2>Completa tu primera instalación en Maxmotor.</h2><a href="https://wa.me/593960855932?text=Quiero%20registrar%20mi%20primera%20instalaci%C3%B3n%20en%20el%20portal">Contactar asesor →</a></div>
       </div>
+      <div class="dashboard-content client-view" data-view="vehicles" hidden><div class="section-heading"><p class="eyebrow">MIS VEHÍCULOS</p><h1>Tu garaje.</h1><p>Los vehículos adicionales son registrados y verificados por nuestro equipo.</p></div><div id="vehicles-list" class="data-list"></div></div>
+      <div class="dashboard-content client-view" data-view="warranties" hidden><div class="section-heading"><p class="eyebrow">GARANTÍAS</p><h1>Protección activa.</h1><p>Controla revisiones por fecha y kilometraje de cada instalación.</p></div><div id="warranties-list" class="data-list"></div></div>
+      <div class="dashboard-content client-view" data-view="points" hidden><div class="section-heading"><p class="eyebrow">MI FIDELIDAD</p><h1>Puntos que avanzan.</h1><p>Recibes 1 punto por cada USD 30 del total de tu factura.</p></div><div class="points-ledger-head"><strong id="points-total">0</strong><span>Puntos disponibles</span></div><div id="points-movements" class="data-list"></div></div>
     </section>
   </main>
   <script src="assets/portal.js" type="module"></script>

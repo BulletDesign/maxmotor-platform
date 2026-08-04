@@ -50,13 +50,30 @@ async function loadDashboard(user) {
   dashboardView.hidden = false;
   document.querySelector("#customer-name").textContent = user.fullName.split(" ")[0];
   document.querySelector("#customer-code").textContent = user.customerCode;
-  const [vehiclesData, pointsData] = await Promise.all([api("/api/vehicles"), api("/api/points/summary")]);
+  document.querySelector("#password-warning").hidden = !Boolean(user.mustChangePassword);
+  const [vehiclesData, pointsData, warrantiesData] = await Promise.all([api("/api/vehicles"), api("/api/points/summary"), api("/api/warranties")]);
   const vehicle = vehiclesData.vehicles[0];
   const vehicleSummary = document.querySelector("#vehicle-summary");
   vehicleSummary.innerHTML = vehicle
     ? `<strong>${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</strong><span>${vehicle.modelYear || "Año no registrado"} · ${Number(vehicle.odometerKm || 0).toLocaleString("es-EC")} KM · ${escapeHtml(vehicle.plate || "Sin placa")}</span>`
     : "<strong>Sin vehículo</strong><span>Solicita ayuda a un asesor.</span>";
   document.querySelector("#points-balance").textContent = Number(pointsData.balance || 0).toLocaleString("es-EC");
+  document.querySelector("#points-total").textContent = Number(pointsData.balance || 0).toLocaleString("es-EC");
+  renderVehicles(vehiclesData.vehicles);
+  renderWarranties(warrantiesData.warranties);
+  renderMovements(pointsData.movements || []);
+}
+
+function renderVehicles(vehicles) {
+  document.querySelector("#vehicles-list").innerHTML = vehicles.length ? vehicles.map((vehicle) => `<article class="data-row"><strong>${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</strong><span>${vehicle.modelYear || "Año pendiente"} · ${Number(vehicle.odometerKm || 0).toLocaleString("es-EC")} KM</span><em>${escapeHtml(vehicle.plate || "Sin placa")}</em></article>`).join("") : '<p class="empty-state">No existen vehículos asociados.</p>';
+}
+
+function renderWarranties(warranties) {
+  document.querySelector("#warranties-list").innerHTML = warranties.length ? warranties.map((item) => `<article class="data-row"><strong>${escapeHtml(item.productName)}</strong><span>${escapeHtml(item.brand)} ${escapeHtml(item.model)} · Instalado ${new Date(item.installedAt).toLocaleDateString("es-EC")}</span><em>${escapeHtml(item.status)}</em></article>`).join("") : '<p class="empty-state">Todavía no tienes instalaciones con garantía registradas.</p>';
+}
+
+function renderMovements(movements) {
+  document.querySelector("#points-movements").innerHTML = movements.length ? movements.map((item) => `<article class="data-row"><strong>${escapeHtml(item.description)}</strong><span>${new Date(item.created_at).toLocaleDateString("es-EC")}</span><em>${item.points > 0 ? "+" : ""}${item.points} pts</em></article>`).join("") : '<p class="empty-state">Tu primer movimiento aparecerá cuando registremos una factura.</p>';
 }
 
 function escapeHtml(value) {
@@ -72,6 +89,15 @@ document.querySelector(".next-step").addEventListener("click", () => {
   if (fields.every((field) => field.reportValidity())) showStep(2);
 });
 document.querySelector(".previous-step").addEventListener("click", () => showStep(1));
+document.querySelectorAll("[data-normalize]").forEach((input) => input.addEventListener("input", () => {
+  if (input.dataset.normalize === "upper") input.value = input.value.toUpperCase();
+  if (input.dataset.normalize === "words") input.value = input.value.replace(/(^|\s|[-'])\p{L}/gu, (letter) => letter.toUpperCase());
+}));
+document.querySelectorAll("[data-client-view]").forEach((button) => button.addEventListener("click", () => {
+  const view = button.dataset.clientView;
+  document.querySelectorAll("[data-client-view]").forEach((item) => item.classList.toggle("is-active", item === button));
+  document.querySelectorAll(".client-view").forEach((section) => { section.hidden = section.dataset.view !== view; });
+}));
 
 document.querySelector("#login-form").addEventListener("submit", async (event) => {
   event.preventDefault();

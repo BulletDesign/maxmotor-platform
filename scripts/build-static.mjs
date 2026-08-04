@@ -18,6 +18,7 @@ const files = [
   "sitemap.xml",
   "index.html",
   "portal.html",
+  "portal-admin.html",
   "mxr.html",
   "vitrina.html",
   "data.js",
