@@ -6,8 +6,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "maxmotor-dev",
-      "database_id": "e96ada8b-bcd2-4c29-a52c-4779f0093265",
+      "database_name": "maxmotor-prod",
+      "database_id": "340c1ba4-52a1-4025-967c-6494b7de7421",
       "migrations_dir": "migrations"
     }
   ]
