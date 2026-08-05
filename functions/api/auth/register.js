@@ -1,6 +1,7 @@
 import { hashPassword } from "../../_lib/crypto.js";
 import { createSession } from "../../_lib/auth.js";
 import { assertSameOrigin, handleError, HttpError, json, readJson } from "../../_lib/http.js";
+import { isWelcomePointsEligible, WELCOME_POINTS_AMOUNT } from "../../_lib/promotions.js";
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -9,7 +10,8 @@ export async function onRequestPost({ request, env }) {
     const nationalId = String(body.nationalId || "").replace(/\D/g, "");
     const birthDate = String(body.birthDate || "").trim();
     const originProvince = String(body.originProvince || "").trim();
-    const wantsWelcomeOffer = body.welcomeOffer === true;
+    const welcomePoints = isWelcomePointsEligible() ? WELCOME_POINTS_AMOUNT : 0;
+    const wantsWelcomeCoupon = body.welcomeOffer === true && welcomePoints > 0;
     const vehicle = body.vehicle || {};
     if (!/^\S+@\S+\.\S+$/.test(email)) throw new HttpError(400, "Correo invalido");
     if (fullName.length < 3) throw new HttpError(400, "Nombre requerido");
@@ -30,16 +32,21 @@ export async function onRequestPost({ request, env }) {
       env.DB.prepare("INSERT INTO consents (id,user_id,consent_type,version) VALUES (?1,?2,'privacy','2026-08-04')").bind(crypto.randomUUID(),id)
     ];
     let welcomeCoupon = null;
-    if (wantsWelcomeOffer) {
+    if (welcomePoints > 0) {
+      statements.push(
+        env.DB.prepare("INSERT INTO points_ledger(id,user_id,movement_type,points,description,created_by) VALUES(?1,?2,'adjust',?3,'Bienvenida MiMaxmotor',?2)").bind(crypto.randomUUID(), id, welcomePoints),
+        env.DB.prepare("INSERT INTO audit_log(id,actor_user_id,action,entity_type,entity_id,metadata_json) VALUES(?1,?2,'welcome.points','user',?2,?3)").bind(crypto.randomUUID(), id, JSON.stringify({ points: welcomePoints, campaignEndsAt: "2026-12-31" }))
+      );
+    }
+    if (wantsWelcomeCoupon) {
       welcomeCoupon = `MAX10-${crypto.randomUUID().replace(/-/g, "").slice(0, 8).toUpperCase()}`;
       statements.push(
         env.DB.prepare("INSERT INTO coupons(id,user_id,code,discount_percent,terms,expires_at) VALUES(?1,?2,?3,10,'10% OFF en productos seleccionados. Valido una vez y sujeto a disponibilidad.',datetime('now','+90 days'))").bind(crypto.randomUUID(), id, welcomeCoupon),
-        env.DB.prepare("INSERT INTO points_ledger(id,user_id,movement_type,points,description,created_by) VALUES(?1,?2,'adjust',100,'Bienvenida MiMaxmotor',?2)").bind(crypto.randomUUID(), id),
-        env.DB.prepare("INSERT INTO audit_log(id,actor_user_id,action,entity_type,entity_id,metadata_json) VALUES(?1,?2,'welcome.offer','user',?2,?3)").bind(crypto.randomUUID(), id, JSON.stringify({ coupon: welcomeCoupon, points: 100 }))
+        env.DB.prepare("INSERT INTO audit_log(id,actor_user_id,action,entity_type,entity_id,metadata_json) VALUES(?1,?2,'welcome.coupon','user',?2,?3)").bind(crypto.randomUUID(), id, JSON.stringify({ coupon: welcomeCoupon, discountPercent: 10 }))
       );
     }
     await env.DB.batch(statements);
     const session = await createSession(env.DB, id, request.url);
-    return json({ user: { id, customerCode, email, fullName, role: "customer" }, welcomeCoupon }, 201, { "set-cookie": session.cookie });
+    return json({ user: { id, customerCode, email, fullName, role: "customer" }, welcomeCoupon, welcomePoints }, 201, { "set-cookie": session.cookie });
   } catch (error) { return handleError(error); }
 }

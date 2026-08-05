@@ -30,6 +30,18 @@ for (const file of htmlFiles) {
 const sitemap = await readFile(join(dist, "sitemap.xml"), "utf8");
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 if (urls.length !== new Set(urls).size) errors.push("El sitemap contiene URLs duplicadas");
+if (urls.some((url) => !url.startsWith("https://maxmotor4x4.com/"))) errors.push("El sitemap contiene URLs fuera del dominio de produccion");
+if (urls.some((url) => /\/(?:api|portal|admin)(?:\/|$)/.test(new URL(url).pathname))) errors.push("El sitemap contiene rutas privadas");
+
+const robots = await readFile(join(dist, "robots.txt"), "utf8");
+if (!robots.includes("Sitemap: https://maxmotor4x4.com/sitemap.xml")) errors.push("robots.txt no referencia el sitemap de produccion");
+for (const privatePath of ["/api/", "/portal", "/portal-maxmotor", "/portal-superadmin"]) {
+  if (!robots.includes(`Disallow: ${privatePath}`)) errors.push(`robots.txt no bloquea ${privatePath}`);
+}
+
+const home = await readFile(join(dist, "index.html"), "utf8");
+if (!home.includes('href="/portal?tab=register"')) errors.push("Falta el CTA de registro MiMaxmotor en el index");
+if (!home.includes('rel="canonical" href="https://maxmotor4x4.com/"')) errors.push("Canonical de produccion ausente en el index");
 
 if (errors.length) {
   console.error(errors.join("\n"));

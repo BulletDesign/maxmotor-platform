@@ -12,9 +12,13 @@ Allow: /
 Allow: /assets/favicon-maxmotor.png
 Disallow: /api/
 Disallow: /admin/
+Disallow: /portal
 Disallow: /portal.html
+Disallow: /portal-admin
 Disallow: /portal-admin.html
+Disallow: /portal-maxmotor
 Disallow: /portal-maxmotor.html
+Disallow: /portal-superadmin
 Disallow: /portal-superadmin.html
 
 Sitemap: https://maxmotor4x4.com/sitemap.xml
