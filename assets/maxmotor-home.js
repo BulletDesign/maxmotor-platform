@@ -199,8 +199,14 @@ function initMaxmotorHero() {
   restart();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initMaxmotorHome() {
   renderMaxmotorCategories();
   initMaxmotorIntro();
   initMaxmotorHero();
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initMaxmotorHome, { once: true });
+} else {
+  initMaxmotorHome();
+}
