@@ -32,7 +32,7 @@ for (const family of families) {
   <link rel="stylesheet" href="assets/shared-shell.css?v=20260805-2">
   <link rel="stylesheet" href="assets/product-detail.css?v=20260805-2">
   <link rel="stylesheet" href="assets/type-system.css?v=20260805-2">
-  <script src="assets/site-shell.js?v=20260805-2"></script>
+  <script src="assets/site-shell.js?v=20260805-3"></script>
   <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "Product", name: product.name, description: product.summary, image: product.image, brand: { "@type": "Brand", name: product.marca || "Maxmotor 4x4" }, url: `https://maxmotor4x4.com/fichas/${product.slug}` })}</script>
 </head>
 <body>
