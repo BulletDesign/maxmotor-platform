@@ -7,17 +7,21 @@ export async function onRequestPost({ request, env, params }) {
     const actor = await requireUser(request, env.DB, ["employee", "superadmin"]);
     const body = await readJson(request);
     const current = await env.DB.prepare(
-      "SELECT i.id,i.vehicle_id vehicleId,i.warranty_id warrantyId,i.installed_km installedKm,i.next_service_at nextServiceAt,i.next_service_km nextServiceKm,p.service_days serviceDays,p.service_km serviceKm,p.warranty_days warrantyDays,p.warranty_km warrantyKm FROM installations i JOIN operational_products p ON p.id=i.product_id WHERE i.id=?1 AND i.status!='void'"
+      "SELECT i.id,i.vehicle_id vehicleId,i.warranty_id warrantyId,i.installed_km installedKm,i.next_service_at nextServiceAt,i.next_service_km nextServiceKm,i.coverage_type coverageType,i.tracking_mode trackingMode,p.service_days serviceDays,p.service_km serviceKm,p.warranty_days warrantyDays,p.warranty_km warrantyKm,v.odometer_km vehicleOdometer FROM installations i JOIN operational_products p ON p.id=i.product_id JOIN vehicles v ON v.id=i.vehicle_id WHERE i.id=?1 AND i.status!='void'"
     ).bind(params.id).first();
     if (!current) throw new HttpError(404, "Accesorio instalado no encontrado");
 
-    const odometerKm = Number(body.odometerKm);
+    if (current.coverageType === "limited" || current.trackingMode === "none") throw new HttpError(409, "La garantia limitada no requiere mantenimientos programados");
+    const tracksMileage = ["mileage", "both"].includes(current.trackingMode);
+    const tracksTime = ["time", "both"].includes(current.trackingMode);
+    if (tracksMileage && (body.odometerKm === null || body.odometerKm === undefined || body.odometerKm === "")) throw new HttpError(400, "El kilometraje actual es obligatorio para este producto");
+    const odometerKm = tracksMileage ? Number(body.odometerKm) : Number(body.odometerKm ?? current.vehicleOdometer ?? current.installedKm ?? 0);
     if (!Number.isInteger(odometerKm) || odometerKm < Number(current.installedKm || 0)) throw new HttpError(400, "Kilometraje actual invalido");
     const servicedAt = String(body.servicedAt || new Date().toISOString());
     const servicedDate = new Date(servicedAt);
     if (Number.isNaN(servicedDate.getTime())) throw new HttpError(400, "Fecha de revision invalida");
-    const serviceDays = Math.max(0, Number(current.serviceDays ?? current.warrantyDays) || 0);
-    const serviceKm = Math.max(0, Number(current.serviceKm ?? current.warrantyKm) || 0);
+    const serviceDays = tracksTime ? Math.max(0, Number(current.serviceDays ?? current.warrantyDays) || 0) : 0;
+    const serviceKm = tracksMileage ? Math.max(0, Number(current.serviceKm ?? current.warrantyKm) || 0) : 0;
     if (!serviceDays && !serviceKm) throw new HttpError(409, "El producto no tiene un intervalo de mantenimiento configurado");
 
     const nextServiceAt = serviceDays ? new Date(servicedDate.getTime() + serviceDays * 86400000).toISOString() : null;

@@ -16,16 +16,16 @@ const files = [
   "robots.txt",
   "sitemap.xml",
   "index.html",
-  "portal.html",
   "portal-admin.html",
-  "portal-superadmin.html",
   "mxr.html",
   "data.js",
 ];
 const directories = ["assets", "catalog", "fichas"];
 
 await Promise.all(files.map((file) => cp(join(root, file), join(output, file))));
+await cp(join(root, "portal.html"), join(output, "MiMaxmotor.html"));
 await cp(join(root, "portal-admin.html"), join(output, "portal-maxmotor.html"));
+await cp(join(root, "portal-superadmin.html"), join(output, "console.html"));
 await Promise.all(directories.map((directory) => cp(join(root, directory), join(output, directory), { recursive: true })));
 
 // ASSET_ORIGIN is an emergency escape hatch for a poisoned custom-domain cache.

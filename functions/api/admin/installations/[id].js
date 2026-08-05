@@ -6,8 +6,9 @@ export async function onRequestPatch({request,env,params}){
     assertSameOrigin(request);
     const actor=await requireUser(request,env.DB,["employee","superadmin"]);
     const body=await readJson(request);
-    const current=await env.DB.prepare("SELECT id,next_service_at nextServiceAt,next_service_km nextServiceKm,status FROM installations WHERE id=?1").bind(params.id).first();
+    const current=await env.DB.prepare("SELECT id,next_service_at nextServiceAt,next_service_km nextServiceKm,status,coverage_type coverageType,tracking_mode trackingMode FROM installations WHERE id=?1").bind(params.id).first();
     if(!current)throw new HttpError(404,"Instalacion no encontrada");
+    if(current.coverageType==="limited"||!["time","both"].includes(current.trackingMode))throw new HttpError(409,"Esta cobertura no admite extensiones por tiempo");
     const addDays=Math.max(0,Number(body.additionalDays)||0);
     if(!addDays)throw new HttpError(400,"Indica los dias pagados para extender la garantia");
     const baseDate=current.nextServiceAt?new Date(current.nextServiceAt):new Date();

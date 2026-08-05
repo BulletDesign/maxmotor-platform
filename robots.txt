@@ -14,11 +14,13 @@ Disallow: /api/
 Disallow: /admin/
 Disallow: /portal
 Disallow: /portal.html
+Disallow: /MiMaxmotor
 Disallow: /portal-admin
 Disallow: /portal-admin.html
 Disallow: /portal-maxmotor
 Disallow: /portal-maxmotor.html
 Disallow: /portal-superadmin
 Disallow: /portal-superadmin.html
+Disallow: /console
 
 Sitemap: https://maxmotor4x4.com/sitemap.xml

@@ -13,5 +13,24 @@ export async function onRequest(context) {
     return Response.redirect(url.toString(), 308);
   }
 
+  if (["/portal", "/portal.html", "/MiMaxmotor.html"].includes(url.pathname)) {
+    url.pathname = "/MiMaxmotor";
+    return Response.redirect(url.toString(), 308);
+  }
+
+  if (["/portal-admin", "/portal-admin.html", "/portal-maxmotor.html"].includes(url.pathname)) {
+    url.pathname = "/portal-maxmotor";
+    return Response.redirect(url.toString(), 308);
+  }
+
+  if (url.pathname === "/console.html") {
+    url.pathname = "/console";
+    return Response.redirect(url.toString(), 308);
+  }
+
+  if (["/portal-superadmin", "/portal-superadmin.html"].includes(url.pathname)) {
+    return new Response("Not Found", { status: 404, headers: { "cache-control": "no-store" } });
+  }
+
   return context.next();
 }

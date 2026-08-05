@@ -23,6 +23,38 @@ function setMessage(element, text, success = false) { element.textContent = text
 function report(selector, text, success = false) { setMessage(document.querySelector(selector), text, success); }
 function money(cents) { return `USD ${Number((cents || 0) / 100).toLocaleString("es-EC", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; }
 function resetManagedForm(form) { form.reset(); form.elements.id.value = ""; if (form.elements.active) form.elements.active.checked = true; form.querySelector("[data-cancel-form]").hidden = true; }
+const trackingLabels = { none: "Sin seguimiento", time: "Solo tiempo", mileage: "Solo kilometraje", both: "Tiempo y kilometraje" };
+function productOption(product) { return `<option value="${product.id}" data-coverage="${Number(product.coverageAvailable)}" data-tracking="${product.trackingMode}">${escapeHtml(product.familyName)} / ${escapeHtml(product.name)}</option>`; }
+function syncProductTrackingForm(form) {
+  const coverage = form.elements.coverageAvailable.value === "yes";
+  const mode = coverage ? form.elements.trackingMode.value : "none";
+  form.elements.trackingMode.disabled = !coverage;
+  form.querySelector("[data-tracking-choice]").classList.toggle("is-disabled", !coverage);
+  const timeField = form.querySelector("[data-tracking-time]");
+  const mileageField = form.querySelector("[data-tracking-mileage]");
+  timeField.hidden = !coverage || !["time", "both"].includes(mode);
+  mileageField.hidden = !coverage || !["mileage", "both"].includes(mode);
+  timeField.querySelector("input").required = !timeField.hidden;
+  mileageField.querySelector("input").required = !mileageField.hidden;
+}
+function syncSaleCoverage(form) {
+  const product = form.elements.productId.selectedOptions[0];
+  const coverageAvailable = product?.dataset.coverage === "1";
+  const trackingMode = coverageAvailable ? product?.dataset.tracking || "none" : "none";
+  const coverageSelect = form.elements.appliesWarranty;
+  const hint = form.querySelector(".coverage-hint");
+  if (!coverageAvailable) coverageSelect.value = "no";
+  coverageSelect.disabled = !coverageAvailable;
+  hint.textContent = coverageAvailable ? `Seguimiento configurado: ${trackingLabels[trackingMode] || trackingMode}.` : "Este producto solo admite garantia limitada.";
+  const details = form.querySelector(".warranty-details");
+  const showDetails = coverageAvailable && coverageSelect.value === "yes" && trackingMode !== "none";
+  details.hidden = !showDetails;
+  const timeField = details.querySelector("[data-warranty-time]");
+  const mileageField = details.querySelector("[data-warranty-mileage]");
+  timeField.hidden = !showDetails || !["time", "both"].includes(trackingMode);
+  mileageField.hidden = !showDetails || !["mileage", "both"].includes(trackingMode);
+  if (!showDetails) details.querySelectorAll("input").forEach((input) => { input.value = ""; });
+}
 function openAdminView(view) { document.querySelector(`[data-admin-view="${view}"]`)?.click(); }
 function initializeAdminTour() {
   setupGuidedTour({
@@ -56,9 +88,9 @@ async function loadCatalog() {
   catalogFamilies = data.families || [];
   document.querySelector("#product-form [name='familyId']").innerHTML = catalogFamilies.filter((item) => Number(item.active)).map((item) => `<option value="${item.id}">${escapeHtml(item.name)}</option>`).join("");
   document.querySelector("#family-list").innerHTML = catalogFamilies.length ? catalogFamilies.map((item) => `<article class="admin-list-row"><strong>${escapeHtml(item.name)}</strong><span>Familia operativa</span><small>${Number(item.active) ? "Visible" : "Inactiva"}</small><button type="button" data-edit-family="${item.id}">Editar</button></article>`).join("") : '<p class="empty-state">No hay familias creadas.</p>';
-  document.querySelector("#product-list").innerHTML = operationalCatalog.length ? operationalCatalog.map((item) => `<article class="admin-list-row"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.familyName)}</span><small>Revision: ${item.serviceDays || 0} dias / ${Number(item.serviceKm || 0).toLocaleString("es-EC")} km</small><button type="button" data-edit-product="${item.id}">${Number(item.active) ? "Editar" : "Inactivo / Editar"}</button></article>`).join("") : '<p class="empty-state">No hay productos creados.</p>';
-  const options = operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map((product) => `<option value="${product.id}">${escapeHtml(product.familyName)} / ${escapeHtml(product.name)}</option>`).join("");
-  document.querySelectorAll(".sale-form [name='productId']").forEach((select) => { select.innerHTML = options; });
+  document.querySelector("#product-list").innerHTML = operationalCatalog.length ? operationalCatalog.map((item) => `<article class="admin-list-row"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.familyName)}</span><small>${Number(item.coverageAvailable) ? `${trackingLabels[item.trackingMode] || item.trackingMode}${item.serviceDays ? ` / ${item.serviceDays} dias` : ""}${item.serviceKm ? ` / ${Number(item.serviceKm).toLocaleString("es-EC")} km` : ""}` : "Garantia limitada"}</small><button type="button" data-edit-product="${item.id}">${Number(item.active) ? "Editar" : "Inactivo / Editar"}</button></article>`).join("") : '<p class="empty-state">No hay productos creados.</p>';
+  const options = operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map(productOption).join("");
+  document.querySelectorAll(".sale-form [name='productId']").forEach((select) => { select.innerHTML = options; syncSaleCoverage(select.closest("form")); });
   const rewardProduct = document.querySelector("#reward-form [name='productId']");
   if (rewardProduct) rewardProduct.innerHTML = `<option value="">Selecciona un producto</option>${options}`;
 }
@@ -103,8 +135,9 @@ async function openCustomerFile(id) {
   editForm.elements.id.value = customer.id; editForm.elements.fullName.value = customer.fullName; editForm.elements.email.value = customer.email; editForm.elements.phone.value = customer.phone || "";
   const invoiceForm = document.querySelector("#customer-invoice-form"); invoiceForm.elements.customerCode.value = customer.customerCode; invoiceForm.elements.issuedAt.value = new Date().toISOString().slice(0, 10); invoiceForm.elements.installedAt.value = "";
   invoiceForm.elements.vehicleId.innerHTML = vehicles.map((vehicle) => `<option value="${vehicle.id}" data-km="${vehicle.odometerKm || 0}">${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)} - ${escapeHtml(vehicle.plate || "sin placa")}</option>`).join("");
-  invoiceForm.elements.productId.innerHTML = operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map((product) => `<option value="${product.id}">${escapeHtml(product.familyName)} / ${escapeHtml(product.name)}</option>`).join("");
+  invoiceForm.elements.productId.innerHTML = operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map(productOption).join("");
   invoiceForm.elements.installedKm.value = vehicles[0]?.odometerKm || 0;
+  syncSaleCoverage(invoiceForm);
   document.querySelector("#file-vehicles").innerHTML = vehicles.length ? vehicles.map((vehicle) => `<article class="admin-list-row"><strong>${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</strong><span>${vehicle.modelYear || "Ano pendiente"} / ${escapeHtml(vehicle.plate || "Sin placa")}</span><small>VIN ${escapeHtml(vehicle.vin || "no registrado")} / ${Number(vehicle.odometerKm || 0).toLocaleString("es-EC")} km</small><button type="button" data-delete-vehicle="${vehicle.id}">Eliminar vehiculo</button></article>`).join("") : '<p class="empty-state">Este cliente no tiene vehiculos vinculados.</p>';
   const maintenanceByInstallation = new Map();
   (data.maintenanceHistory || []).forEach((event) => maintenanceByInstallation.set(event.installationId, [...(maintenanceByInstallation.get(event.installationId) || []), event]));
@@ -114,13 +147,18 @@ async function openCustomerFile(id) {
     const lastKm = item.lastServiceKm ?? item.installedKm;
     const historyMarkup = history.length ? `<details class="maintenance-history"><summary>Ver historial (${history.length})</summary>${history.map((entry) => `<div><time>${new Date(entry.servicedAt).toLocaleDateString("es-EC")}</time><strong>${Number(entry.odometerKm || 0).toLocaleString("es-EC")} km</strong><span>${escapeHtml(entry.notes || "Revision completada")}</span></div>`).join("")}</details>` : '<p class="empty-state compact">Sin revisiones completadas.</p>';
     const coverage = { full: "Garantia completa", limited: "Garantia limitada", reward: "Recompensa instalada" }[item.coverageType] || "Garantia completa";
-    return `<article class="installation-card"><header><div><span>${escapeHtml(item.familyName)} / ${coverage}</span><h3>${escapeHtml(item.productName)}</h3></div><strong>${escapeHtml(item.brand)} ${escapeHtml(item.model)}<small>${escapeHtml(item.plate || "Sin placa")}</small></strong></header><div class="maintenance-facts"><p><span>Ultima revision o instalacion</span><b>${lastDate ? new Date(lastDate).toLocaleDateString("es-EC") : "Sin fecha"} / ${Number(lastKm || 0).toLocaleString("es-EC")} km</b></p><p><span>Proxima revision</span><b>${item.nextServiceAt ? new Date(item.nextServiceAt).toLocaleDateString("es-EC") : coverage} / ${item.nextServiceKm ? `${Number(item.nextServiceKm).toLocaleString("es-EC")} km` : "sin limite km"}</b></p></div>${historyMarkup}<div class="installation-actions"><button class="primary-inline" type="button" data-complete-installation="${item.id}" data-min-km="${lastKm || 0}">Completado</button><button type="button" data-extend-installation="${item.id}">Extender garantia</button><button class="danger-inline" type="button" data-delete-installation="${item.id}">Eliminar accesorio</button></div></article>`;
+    if (item.coverageType === "limited" || item.trackingMode === "none") return `<article class="installation-card is-limited"><header><div><span>${escapeHtml(item.familyName)}</span><h3>${escapeHtml(item.productName)}</h3></div><strong>${escapeHtml(item.brand)} ${escapeHtml(item.model)}<small>${escapeHtml(item.plate || "Sin placa")}</small></strong></header><div class="limited-maintenance">Garantia limitada</div><div class="installation-actions"><button class="danger-inline" type="button" data-delete-installation="${item.id}">Eliminar accesorio</button></div></article>`;
+    const tracksTime = ["time", "both"].includes(item.trackingMode);
+    const tracksMileage = ["mileage", "both"].includes(item.trackingMode);
+    const lastParts = [tracksTime && lastDate ? new Date(lastDate).toLocaleDateString("es-EC") : null, tracksMileage ? `${Number(lastKm || 0).toLocaleString("es-EC")} km` : null].filter(Boolean);
+    const nextParts = [tracksTime && item.nextServiceAt ? new Date(item.nextServiceAt).toLocaleDateString("es-EC") : null, tracksMileage && item.nextServiceKm ? `${Number(item.nextServiceKm).toLocaleString("es-EC")} km` : null].filter(Boolean);
+    return `<article class="installation-card"><header><div><span>${escapeHtml(item.familyName)} / ${coverage}</span><h3>${escapeHtml(item.productName)}</h3></div><strong>${escapeHtml(item.brand)} ${escapeHtml(item.model)}<small>${escapeHtml(item.plate || "Sin placa")}</small></strong></header><div class="tracking-mode-pill">${trackingLabels[item.trackingMode] || item.trackingMode}</div><div class="maintenance-facts"><p><span>Ultima revision o instalacion</span><b>${lastParts.join(" / ")}</b></p><p><span>Proxima revision</span><b>${nextParts.join(" / ")}</b></p></div>${historyMarkup}<div class="installation-actions"><button class="primary-inline" type="button" data-complete-installation="${item.id}" data-tracking-mode="${item.trackingMode}" data-min-km="${lastKm || 0}">Completado</button>${tracksTime ? `<button type="button" data-extend-installation="${item.id}">Extender garantia</button>` : ""}<button class="danger-inline" type="button" data-delete-installation="${item.id}">Eliminar accesorio</button></div></article>`;
   }).join("") : '<p class="empty-state">Este cliente aun no tiene accesorios instalados.</p>';
 }
 
 async function openAdmin(user) {
-  if (user?.role === "superadmin") return location.replace("/portal-superadmin");
-  if (user?.role === "customer") return location.replace("/portal");
+  if (user?.role === "superadmin") return location.replace("/console");
+  if (user?.role === "customer") return location.replace("/MiMaxmotor");
   if (!user || user.role !== "employee") throw new Error("Esta cuenta no tiene acceso al Portal Maxmotor");
   loginView.hidden = true; appView.hidden = false;
   document.querySelector("#admin-name").textContent = user.fullName;
@@ -141,7 +179,8 @@ document.querySelector("#customer-search").addEventListener("input", (event) => 
 document.querySelector("#customers-table").addEventListener("click", (event) => { const row = event.target.closest("[data-customer-id]"); if (row) openCustomerFile(row.dataset.customerId).catch((error) => setMessage(fileMessage, error.message)); });
 document.querySelector("#close-customer-file").addEventListener("click", () => { document.querySelector("#customer-file").hidden = true; document.querySelector("#customers-browser").hidden = false; activeCustomerId = null; });
 document.querySelectorAll(".sale-form [name='vehicleId']").forEach((select) => select.addEventListener("change", (event) => { const form = event.target.closest("form"); if (form.elements.appliesWarranty.value === "yes" && !form.elements.installedKm.value) form.elements.installedKm.placeholder = event.target.selectedOptions[0]?.dataset.km || 0; }));
-document.querySelectorAll(".sale-form [name='appliesWarranty']").forEach((select) => select.addEventListener("change", () => { const details = select.closest("form").querySelector(".warranty-details"); details.hidden = select.value !== "yes"; if (details.hidden) details.querySelectorAll("input").forEach((input) => { input.value = ""; }); }));
+document.querySelectorAll(".sale-form [name='productId']").forEach((select) => select.addEventListener("change", () => syncSaleCoverage(select.closest("form"))));
+document.querySelectorAll(".sale-form [name='appliesWarranty']").forEach((select) => select.addEventListener("change", () => syncSaleCoverage(select.closest("form"))));
 
 document.querySelector("#customer-edit-form").addEventListener("submit", async (event) => { event.preventDefault(); const values = Object.fromEntries(new FormData(event.currentTarget)); try { await api(`/api/admin/customers/${values.id}`, { method: "PATCH", body: JSON.stringify(values) }); setMessage(fileMessage, "Ficha actualizada correctamente.", true); await Promise.all([openCustomerFile(values.id), loadCustomers("")]); } catch (error) { setMessage(fileMessage, error.message); } });
 document.querySelector("#customer-invoice-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); try { const data = await api("/api/admin/sales", { method: "POST", body: JSON.stringify(salePayload(values)) }); setMessage(fileMessage, `Venta completa: ${Number(data.points).toLocaleString("es-EC")} TP, instalacion y garantia registradas.`, true); form.elements.invoiceNumber.value = ""; form.elements.amount.value = ""; await Promise.all([openCustomerFile(activeCustomerId), loadOverview()]); } catch (error) { setMessage(fileMessage, error.message); } });
@@ -156,11 +195,16 @@ document.querySelector("#file-installations").addEventListener("click", async (e
   const deleteButton = event.target.closest("[data-delete-installation]");
   if (completeButton) {
     const form = document.querySelector("#maintenance-form");
+    const trackingMode = completeButton.dataset.trackingMode || "both";
+    const tracksMileage = ["mileage", "both"].includes(trackingMode);
     form.reset();
     form.elements.installationId.value = completeButton.dataset.completeInstallation;
+    form.elements.trackingMode.value = trackingMode;
     form.elements.servicedAt.value = new Date().toISOString().slice(0, 10);
     form.elements.odometerKm.min = completeButton.dataset.minKm || 0;
-    form.elements.odometerKm.value = completeButton.dataset.minKm || 0;
+    form.elements.odometerKm.value = tracksMileage ? completeButton.dataset.minKm || 0 : "";
+    form.elements.odometerKm.required = tracksMileage;
+    form.querySelector("[data-maintenance-mileage]").hidden = !tracksMileage;
     form.hidden = false;
     document.querySelector("#warranty-extension-form").hidden = true;
     form.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -188,8 +232,9 @@ document.querySelector("#maintenance-form").addEventListener("submit", async (ev
   const form = event.currentTarget;
   const values = Object.fromEntries(new FormData(form));
   try {
-    const data = await api(`/api/admin/installations/${values.installationId}/services`, { method: "POST", body: JSON.stringify({ servicedAt: new Date(`${values.servicedAt}T12:00:00`).toISOString(), odometerKm: Number(values.odometerKm), notes: values.notes }) });
-    setMessage(fileMessage, `Mantenimiento registrado. Proxima revision: ${new Date(data.nextServiceAt).toLocaleDateString("es-EC")} o ${Number(data.nextServiceKm).toLocaleString("es-EC")} km.`, true);
+    const data = await api(`/api/admin/installations/${values.installationId}/services`, { method: "POST", body: JSON.stringify({ servicedAt: new Date(`${values.servicedAt}T12:00:00`).toISOString(), odometerKm: values.odometerKm === "" ? null : Number(values.odometerKm), notes: values.notes }) });
+    const nextReview = [data.nextServiceAt ? new Date(data.nextServiceAt).toLocaleDateString("es-EC") : null, data.nextServiceKm ? `${Number(data.nextServiceKm).toLocaleString("es-EC")} km` : null].filter(Boolean).join(" / ");
+    setMessage(fileMessage, `Mantenimiento registrado. Proxima revision: ${nextReview}.`, true);
     form.hidden = true;
     form.reset();
     await openCustomerFile(activeCustomerId);
@@ -215,6 +260,7 @@ async function loadAwardCustomer(customerCode) {
   form.elements.vehicleId.innerHTML = detail.vehicles.map((vehicle) => `<option value="${vehicle.id}" data-km="${vehicle.odometerKm || 0}">${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)} - ${escapeHtml(vehicle.plate || "sin placa")}</option>`).join("");
   form.elements.vehicleId.disabled = detail.vehicles.length === 0;
   form.elements.installedKm.placeholder = detail.vehicles[0]?.odometerKm || 0;
+  syncSaleCoverage(form);
   status.textContent = `${customer.fullName} / ${detail.vehicles.length} vehiculo(s)`; status.classList.add("is-ready");
 }
 
@@ -224,9 +270,11 @@ document.querySelector("#award-points-form [name='customerCode']").addEventListe
 document.querySelector("#award-points-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); report("#points-message", ""); try { const data = await api("/api/admin/sales", { method: "POST", body: JSON.stringify(salePayload(values)) }); report("#points-message", `Operacion completa: ${Number(data.points).toLocaleString("es-EC")} TP y ${data.coverageType === "limited" ? "garantia limitada" : "garantia completa"}.`, true); const customerCode = values.customerCode; form.reset(); form.elements.customerCode.value = customerCode; form.elements.issuedAt.value = new Date().toISOString().slice(0, 10); await Promise.all([loadAwardCustomer(customerCode), loadOverview(), loadCustomers("")]); } catch (error) { report("#points-message", error.message); } });
 
 document.querySelector("#family-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const id = form.elements.id.value; try { await api(id ? `/api/catalog/families/${id}` : "/api/catalog/families", { method: id ? "PATCH" : "POST", body: JSON.stringify({ name: form.elements.name.value, active: form.elements.active.checked }) }); report("#family-message", id ? "Familia actualizada." : "Familia creada.", true); resetManagedForm(form); await loadCatalog(); } catch (error) { report("#family-message", error.message); } });
-document.querySelector("#product-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); const id = values.id; try { await api(id ? `/api/catalog/operational/${id}` : "/api/catalog/operational", { method: id ? "PATCH" : "POST", body: JSON.stringify({ ...values, active: form.elements.active.checked }) }); report("#product-message", id ? "Producto actualizado." : "Producto creado.", true); resetManagedForm(form); await loadCatalog(); if (activeCustomerId) await openCustomerFile(activeCustomerId); } catch (error) { report("#product-message", error.message); } });
+document.querySelector("#product-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); const id = values.id; const coverageAvailable = form.elements.coverageAvailable.value === "yes"; try { await api(id ? `/api/catalog/operational/${id}` : "/api/catalog/operational", { method: id ? "PATCH" : "POST", body: JSON.stringify({ ...values, coverageAvailable, trackingMode: coverageAvailable ? form.elements.trackingMode.value : "none", active: form.elements.active.checked }) }); report("#product-message", id ? "Producto actualizado." : "Producto creado.", true); resetManagedForm(form); syncProductTrackingForm(form); await loadCatalog(); if (activeCustomerId) await openCustomerFile(activeCustomerId); } catch (error) { report("#product-message", error.message); } });
 document.querySelector("#family-list").addEventListener("click", (event) => { const button = event.target.closest("[data-edit-family]"); if (!button) return; const item = catalogFamilies.find((entry) => entry.id === button.dataset.editFamily); const form = document.querySelector("#family-form"); form.elements.id.value = item.id; form.elements.name.value = item.name; form.elements.active.checked = Boolean(Number(item.active)); form.querySelector("[data-cancel-form]").hidden = false; form.scrollIntoView({ behavior: "smooth" }); });
-document.querySelector("#product-list").addEventListener("click", (event) => { const button = event.target.closest("[data-edit-product]"); if (!button) return; const item = operationalCatalog.find((entry) => entry.id === button.dataset.editProduct); const form = document.querySelector("#product-form"); form.elements.id.value = item.id; form.elements.familyId.value = item.familyId; form.elements.name.value = item.name; form.elements.warrantyDays.value = item.warrantyDays || 0; form.elements.warrantyKm.value = item.warrantyKm || 0; form.elements.serviceDays.value = item.serviceDays || 0; form.elements.serviceKm.value = item.serviceKm || 0; form.elements.active.checked = Boolean(Number(item.active)); form.querySelector("[data-cancel-form]").hidden = false; form.scrollIntoView({ behavior: "smooth" }); });
+document.querySelector("#product-list").addEventListener("click", (event) => { const button = event.target.closest("[data-edit-product]"); if (!button) return; const item = operationalCatalog.find((entry) => entry.id === button.dataset.editProduct); const form = document.querySelector("#product-form"); form.elements.id.value = item.id; form.elements.familyId.value = item.familyId; form.elements.name.value = item.name; form.elements.coverageAvailable.value = Number(item.coverageAvailable) ? "yes" : "no"; form.elements.trackingMode.value = item.trackingMode || "none"; form.elements.serviceDays.value = item.serviceDays || 0; form.elements.serviceKm.value = item.serviceKm || 0; form.elements.active.checked = Boolean(Number(item.active)); syncProductTrackingForm(form); form.querySelector("[data-cancel-form]").hidden = false; form.scrollIntoView({ behavior: "smooth" }); });
+document.querySelector("#product-form [name='coverageAvailable']").addEventListener("change", (event) => syncProductTrackingForm(event.currentTarget.form));
+document.querySelector("#product-form [name='trackingMode']").addEventListener("change", (event) => syncProductTrackingForm(event.currentTarget.form));
 
 document.querySelector("#reward-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); const id = values.id; try { await api(id ? `/api/rewards/${id}` : "/api/rewards", { method: id ? "PATCH" : "POST", body: JSON.stringify({ ...values, active: form.elements.active.checked }) }); report("#reward-message", id ? "Recompensa actualizada." : "Recompensa publicada.", true); resetManagedForm(form); await loadRewards(); } catch (error) { report("#reward-message", error.message); } });
 document.querySelector("#reward-form [name='fulfillmentType']").addEventListener("change", (event) => { const field = document.querySelector(".reward-product-field"); field.hidden = event.target.value !== "install"; field.querySelector("select").required = !field.hidden; });
@@ -243,7 +291,7 @@ document.querySelector("#reward-list").addEventListener("click", async (event) =
   const form = document.querySelector("#reward-form");
   form.elements.id.value = item.id; form.elements.name.value = item.name; form.elements.description.value = item.description || ""; form.elements.fulfillmentType.value = item.fulfillmentType || "sale"; form.elements.productId.value = item.productId || ""; form.elements.fulfillmentType.dispatchEvent(new Event("change")); form.elements.price.value = Number(item.priceCents || 0) / 100; form.elements.pointsCost.value = item.pointsCost; form.elements.cashAfterPoints.value = Number(item.cashAfterPointsCents || 0) / 100; form.elements.stockLimit.value = item.stockLimit; form.elements.active.checked = Boolean(Number(item.active)); form.querySelector("[data-cancel-form]").hidden = false; form.scrollIntoView({ behavior: "smooth" });
 });
-document.querySelectorAll("[data-cancel-form]").forEach((button) => button.addEventListener("click", () => resetManagedForm(document.querySelector(`#${button.dataset.cancelForm}`))));
+document.querySelectorAll("[data-cancel-form]").forEach((button) => button.addEventListener("click", () => { const form = document.querySelector(`#${button.dataset.cancelForm}`); resetManagedForm(form); if (form.id === "product-form") syncProductTrackingForm(form); }));
 
 document.querySelector("#redemption-list").addEventListener("click", async (event) => { const button = event.target.closest("[data-redemption-id]"); if (!button) return; const row = button.closest(".admin-list-row"); const vehicleId = row.querySelector("[data-redemption-vehicle]")?.value; try { await api(`/api/redemptions/${button.dataset.redemptionId}`, { method: "PATCH", body: JSON.stringify({ status: button.dataset.status, vehicleId }) }); report("#redemption-message", button.dataset.status === "pending_delivery" ? "Canje aceptado y puesto por entregar." : button.dataset.status === "claimed" ? "Canje marcado como reclamado." : "Estado del canje actualizado.", true); await Promise.all([loadRedemptions(), loadRewards(), loadOverview()]); } catch (error) { report("#redemption-message", error.message); } });
 document.querySelector("#notification-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; try { await api("/api/notifications", { method: "POST", body: JSON.stringify(Object.fromEntries(new FormData(form))) }); report("#notification-message", "Aviso publicado para todos los clientes durante 30 dias.", true); form.reset(); await loadNotifications(); } catch (error) { report("#notification-message", error.message); } });

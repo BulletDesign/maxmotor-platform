@@ -37,7 +37,7 @@ export async function currentUser(request, db, roles = []) {
   for (const expectedRole of normalizeRoles(roles)) {
     const token = cookieValue(request, COOKIE_BY_ROLE[expectedRole]);
     if (!token) continue;
-    const user = await db.prepare("SELECT u.id,u.customer_code AS customerCode,u.email,u.full_name AS fullName,u.phone,u.role,u.status,u.must_change_password AS mustChangePassword FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=?1 AND datetime(s.expires_at)>CURRENT_TIMESTAMP AND u.status='active' AND u.role=?2").bind(await sha256(token), expectedRole).first();
+    const user = await db.prepare("SELECT u.id,u.customer_code AS customerCode,u.email,u.full_name AS fullName,u.phone,u.role,u.status,u.job_title AS jobTitle,u.must_change_password AS mustChangePassword FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=?1 AND datetime(s.expires_at)>CURRENT_TIMESTAMP AND u.status='active' AND u.role=?2").bind(await sha256(token), expectedRole).first();
     if (user) return user;
   }
   return null;

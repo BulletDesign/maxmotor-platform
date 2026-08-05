@@ -11,14 +11,14 @@
             <i class="fa-solid fa-search search-icon" id="mainSearchBtn" onclick="toggleSearch(event)" aria-hidden="true"></i>
             <div id="searchResults" class="search-results"></div>
           </div>
-          <a class="portal-entry" href="/portal"><small>PORTAL 4X4</small><span>Mi Maxmotor</span><b aria-hidden="true">→</b></a>
+          <a class="portal-entry" href="/MiMaxmotor"><small>PORTAL 4X4</small><span>Mi Maxmotor</span><b aria-hidden="true">→</b></a>
         </div>
       </nav>
     </div>`;
   const footer = `
     <footer class="shared-footer">
       <div class="shared-footer__grid">
-        <div class="shared-footer__brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor 4x4"><p>Equipamiento e ingenieria para camionetas, SUV y proyectos off-road.</p><div class="footer-actions"><a class="footer-action footer-action--primary" href="https://wa.me/593960855932?text=Hola%20Maxmotor%204x4%2C%20necesito%20asesoria." target="_blank" rel="noopener">Contactar por WhatsApp</a><a class="footer-action" href="/portal">Mi Maxmotor</a></div></div>
+        <div class="shared-footer__brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor 4x4"><p>Equipamiento e ingenieria para camionetas, SUV y proyectos off-road.</p><div class="footer-actions"><a class="footer-action footer-action--primary" href="https://wa.me/593960855932?text=Hola%20Maxmotor%204x4%2C%20necesito%20asesoria." target="_blank" rel="noopener">Contactar por WhatsApp</a><a class="footer-action" href="/MiMaxmotor">Mi Maxmotor</a></div></div>
         <nav class="footer-nav" aria-label="Navegacion del pie"><small>NAVEGACION</small><a href="${rootPrefix}index.html">Inicio</a><a href="${rootPrefix}index.html#main-catalog">Accesorios 4x4</a><a href="${rootPrefix}fichas/tough-dog.html">Suspensiones</a><a href="${rootPrefix}fichas/tapa-trifold.html">Tapas rigidas</a><a href="${rootPrefix}fichas/tiro-hd.html">Barras de tiro</a><a href="${rootPrefix}fichas/bullbar-overland.html">Bullbars</a><a href="${rootPrefix}mxr.html">Linea MXR</a></nav>
         <div class="footer-locations"><small>SUCURSALES</small><p><b>Ambato</b><br>Av. Atahualpa 18-0202<br><a href="tel:+593960855932">096 085 5932</a></p><p><b>Quito</b><br>De Las Hiedras 428, Torre Oxford<br><a href="tel:+593987986672">098 798 6672</a></p></div>
       </div>

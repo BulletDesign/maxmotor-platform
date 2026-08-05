@@ -21,6 +21,23 @@ test("redirects technical Pages URLs to the production host", async () => {
   assert.equal(response.headers.get("location"), "https://maxmotor4x4.com/portal?tab=register");
 });
 
+test("canonicalizes the legacy customer portal URL", async () => {
+  const response = await onRequest({
+    request: new Request("https://maxmotor4x4.com/portal?tab=register"),
+    next: () => { throw new Error("Legacy portal must not continue"); },
+  });
+  assert.equal(response.status, 308);
+  assert.equal(response.headers.get("location"), "https://maxmotor4x4.com/MiMaxmotor?tab=register");
+});
+
+test("does not expose the legacy superadmin route", async () => {
+  const response = await onRequest({
+    request: new Request("https://maxmotor4x4.com/portal-superadmin"),
+    next: () => { throw new Error("Legacy console route must not continue"); },
+  });
+  assert.equal(response.status, 404);
+});
+
 test("serves the production host without redirecting", async () => {
   const expected = new Response("production");
   const response = await onRequest({

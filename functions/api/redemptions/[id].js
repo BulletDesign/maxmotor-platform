@@ -24,19 +24,20 @@ export async function onRequestPatch({ request, env, params }) {
       if (!current.productId) throw new HttpError(409, "La recompensa ya no tiene un producto instalable vinculado");
       const [vehicle, product] = await Promise.all([
         env.DB.prepare("SELECT id,user_id userId,odometer_km odometerKm FROM vehicles WHERE id=?1").bind(body.vehicleId).first(),
-        env.DB.prepare("SELECT id,name,service_days serviceDays,service_km serviceKm FROM operational_products WHERE id=?1").bind(current.productId).first(),
+        env.DB.prepare("SELECT id,name,service_days serviceDays,service_km serviceKm,coverage_available coverageAvailable,tracking_mode trackingMode FROM operational_products WHERE id=?1").bind(current.productId).first(),
       ]);
       if (!vehicle || vehicle.userId !== current.userId) throw new HttpError(400, "Selecciona un vehiculo del cliente");
       if (!product) throw new HttpError(409, "Producto de recompensa no disponible");
       const installedAt = new Date().toISOString();
       const installedKm = Number(vehicle.odometerKm || 0);
-      const nextServiceAt = product.serviceDays ? new Date(Date.now() + Number(product.serviceDays) * 86400000).toISOString() : null;
-      const nextServiceKm = product.serviceKm ? installedKm + Number(product.serviceKm) : null;
+      const trackingMode = Number(product.coverageAvailable) ? product.trackingMode || "none" : "none";
+      const nextServiceAt = ["time", "both"].includes(trackingMode) && product.serviceDays ? new Date(Date.now() + Number(product.serviceDays) * 86400000).toISOString() : null;
+      const nextServiceKm = ["mileage", "both"].includes(trackingMode) && product.serviceKm ? installedKm + Number(product.serviceKm) : null;
       const warrantyId = crypto.randomUUID();
       installationId = crypto.randomUUID();
       statements.push(
         env.DB.prepare("INSERT INTO warranties(id,user_id,vehicle_id,product_name,installed_at,service_due_km,service_due_at,status) VALUES(?1,?2,?3,?4,?5,?6,?7,'active')").bind(warrantyId, current.userId, vehicle.id, product.name, installedAt, nextServiceKm, nextServiceAt),
-        env.DB.prepare("INSERT INTO installations(id,user_id,vehicle_id,product_id,warranty_id,installed_at,installed_km,next_service_at,next_service_km,coverage_type,created_by) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,'reward',?10)").bind(installationId, current.userId, vehicle.id, product.id, warrantyId, installedAt, installedKm, nextServiceAt, nextServiceKm, actor.id),
+        env.DB.prepare("INSERT INTO installations(id,user_id,vehicle_id,product_id,warranty_id,installed_at,installed_km,next_service_at,next_service_km,coverage_type,tracking_mode,created_by) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,'reward',?10,?11)").bind(installationId, current.userId, vehicle.id, product.id, warrantyId, installedAt, installedKm, nextServiceAt, nextServiceKm, trackingMode, actor.id),
         env.DB.prepare("UPDATE redemptions SET installation_id=?1 WHERE id=?2").bind(installationId, params.id),
       );
     }
