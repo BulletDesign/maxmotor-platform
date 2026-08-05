@@ -9,6 +9,3 @@
 
 /catalog/*
   Cache-Control: public, max-age=3600
-
-/productos/*
-  Cache-Control: public, max-age=3600

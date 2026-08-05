@@ -6,7 +6,6 @@ const root = resolve(import.meta.dirname, "..");
 const output = join(root, "dist");
 if (basename(output) !== "dist" || !output.startsWith(root)) throw new Error("Unsafe output directory");
 
-execFileSync(process.execPath, [join(root, "scripts", "generate-product-pages.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-accessory-pages.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-sitemap.mjs")], { cwd: root, stdio: "inherit" });
 await rm(output, { recursive: true, force: true });
@@ -21,10 +20,9 @@ const files = [
   "portal-admin.html",
   "portal-superadmin.html",
   "mxr.html",
-  "vitrina.html",
   "data.js",
 ];
-const directories = ["assets", "catalog", "productos", "fichas"];
+const directories = ["assets", "catalog", "fichas"];
 
 await Promise.all(files.map((file) => cp(join(root, file), join(output, file))));
 await cp(join(root, "portal-admin.html"), join(output, "portal-maxmotor.html"));

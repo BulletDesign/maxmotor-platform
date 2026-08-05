@@ -179,3 +179,18 @@ a { color: inherit; }
   .data-row{gap:.75rem;padding:1.1rem}.data-row span{overflow-wrap:anywhere}
   .portal-dialog{max-height:calc(100dvh - 1rem);overflow:auto}
 }
+
+.client-maintenance-history{grid-column:1/-1;border-top:1px solid var(--portal-line);padding-top:.8rem}
+.client-maintenance-history summary{color:var(--portal-red);font-size:.65rem;font-weight:800;text-transform:uppercase;cursor:pointer}
+.client-maintenance-history article{display:grid;grid-template-columns:auto auto 1fr;gap:.8rem;margin-top:.7rem;padding:.75rem;border-left:2px solid var(--portal-red);background:#080907}
+.client-maintenance-history time,.client-maintenance-history span{color:var(--portal-muted);font-size:.65rem}
+.client-maintenance-history strong{font:700 .78rem var(--font-display)}
+.maintenance-empty{grid-column:1/-1;margin:.2rem 0;color:var(--portal-muted);font-size:.64rem!important}
+.tour-replay{color:#fff!important}
+.portal-main,.dashboard,.dashboard-content,.garage-card,.accessory-status,.portal-form,.field-row,.portal-form label{min-width:0;max-width:100%}
+.portal-form input,.portal-form select,.portal-form textarea{min-width:0;max-width:100%}
+@media(max-width:620px){
+  .client-maintenance-history article{grid-template-columns:1fr 1fr}
+  .client-maintenance-history article span{grid-column:1/-1}
+  .accessory-status a{display:flex;align-items:center;justify-content:center;min-height:46px;border:1px solid rgba(114,220,114,.45);padding:.75rem;text-align:center}
+}

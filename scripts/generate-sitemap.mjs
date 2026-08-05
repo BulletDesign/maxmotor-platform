@@ -12,7 +12,6 @@ const site = "https://maxmotor4x4.com";
 const lastmod = new Date().toISOString().slice(0, 10);
 const pages = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
-  { path: "/vitrina", changefreq: "weekly", priority: "0.9" },
   { path: "/mxr", changefreq: "monthly", priority: "0.8" },
   ...context.window.MAXMOTOR_FAMILIES.flatMap((family) => family.products).map((product) => ({
     path: `/fichas/${product.slug}`,

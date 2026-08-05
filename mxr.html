@@ -6,6 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo MXR | Accesorios 4x4 y Equipamiento Premium en Ecuador</title>
+    <link rel="icon" href="/assets/favicon-maxmotor.png" type="image/png" sizes="180x180">
+    <link rel="apple-touch-icon" href="/assets/favicon-maxmotor.png">
     <meta name="description"
         content="Descubre la línea MXR. Fabricación nacional de rollbars, bullbars y barras de tiro. Mejora tu 4x4 con equipamiento extremo y recubrimiento de poliuretano.">
     <meta name="keywords"
@@ -24,6 +26,7 @@
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Teko:wght@500;700&family=Barlow+Condensed:wght@400;600;700;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/type-system.css?v=20260805-1">
 
     <style>
         :root {
@@ -1377,7 +1380,7 @@
 
                     const card = document.createElement('a');
                     card.className = 'product-card';
-                    card.href = `productos/${prod.id.replaceAll('_', '-')}.html`;
+                    card.href = `fichas/${prod.id.replaceAll('_', '-')}.html`;
                     card.setAttribute('aria-label', `Ver ficha y cotizar ${prod.name}`);
                     card.innerHTML = `
                         <div class="card-img-wrap">

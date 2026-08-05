@@ -1,7 +1,11 @@
+import { vehicleBrandOptions } from "./vehicle-brands.js";
+import { setupGuidedTour } from "./guided-tour.js";
+
 const authView = document.querySelector("#auth-view");
 const dashboardView = document.querySelector("#dashboard-view");
 const message = document.querySelector("#form-message");
 const welcomeOffer = new URLSearchParams(location.search).get("offer") === "welcome";
+const registerIntent = new URLSearchParams(location.search).get("tab") === "register";
 
 async function api(path, options = {}) {
   const response = await fetch(path, { credentials: "same-origin", ...options, headers: options.body ? { "content-type": "application/json", ...options.headers } : options.headers });
@@ -22,11 +26,27 @@ function selectView(view) {
   document.querySelectorAll(".client-view").forEach((section) => { section.hidden = section.dataset.view !== view; });
 }
 
+function initializeClientTour() {
+  setupGuidedTour({
+    id: "client",
+    trigger: "#client-tour-button",
+    steps: [
+      { target: "#customer-code", title: "Tu Maxmotor ID", body: "Este codigo identifica tu cuenta en ventas, instalaciones, puntos y soporte. No se puede editar.", before: () => selectView("summary") },
+      { target: "#summary-accessories", title: "Equipamiento activo", body: "Aqui aparecen tus accesorios instalados y el avance hacia su proxima revision." },
+      { target: "#vehicles-list", title: "Bitacora del vehiculo", body: "Cada accesorio conserva sus revisiones, kilometrajes, fechas y acceso directo para agendar.", before: () => selectView("vehicles") },
+      { target: ".loyalty-summary", title: "Traction Points", body: "Consulta saldo, facturas, recompensas disponibles y solicitudes de canje.", before: () => selectView("points") },
+      { target: "#notifications-list", title: "Novedades Maxmotor", body: "Las promociones y avisos permanecen visibles durante 30 dias para que no pierdas una oportunidad.", before: () => selectView("notifications") },
+      { target: ".account-grid", title: "Seguridad de tu cuenta", body: "Desde aqui puedes cambiar correo o contrasena y gestionar la baja de la cuenta.", before: () => selectView("account") }
+    ]
+  });
+}
+
 function progress(item, vehicle) {
   const now = Date.now();
-  const start = new Date(item.installedAt).getTime();
+  const start = new Date(item.lastServiceAt || item.installedAt).getTime();
   const timeProgress = item.nextServiceAt ? (now - start) / (new Date(item.nextServiceAt).getTime() - start) : 0;
-  const kmProgress = item.nextServiceKm && item.nextServiceKm > item.installedKm ? (Number(vehicle.odometerKm || 0) - item.installedKm) / (item.nextServiceKm - item.installedKm) : 0;
+  const startKm = Number(item.lastServiceKm ?? item.installedKm ?? 0);
+  const kmProgress = item.nextServiceKm && item.nextServiceKm > startKm ? (Number(vehicle.odometerKm || 0) - startKm) / (item.nextServiceKm - startKm) : 0;
   return Math.max(0, Math.min(100, Math.round(Math.max(timeProgress, kmProgress) * 100)));
 }
 
@@ -48,13 +68,15 @@ function renderSummaryAccessories(vehicles, installations) {
   }).join("") : '<p class="empty-state">Aun no tienes accesorios instalados. Cuando Maxmotor registre uno, aparecera aqui de inmediato.</p>';
 }
 
-function renderVehicles(vehicles, installations, user) {
+function renderVehicles(vehicles, installations, maintenanceHistory, user) {
   document.querySelector("#vehicles-list").innerHTML = vehicles.length ? vehicles.map((vehicle) => {
     const items = installations.filter((item) => item.vehicleId === vehicle.id);
     const accessories = items.length ? items.map((item) => {
       const { used, due, status } = installationStatus(item, vehicle);
       const text = encodeURIComponent(`Hola Maxmotor. Soy ${user.fullName} (${user.customerCode}). Quiero agendar la revision de ${item.productName} en mi ${vehicle.brand} ${vehicle.model}, placa ${vehicle.plate || "sin placa"}. Estado: ${status}. Proxima revision: ${due}${item.nextServiceKm ? ` o ${item.nextServiceKm} km` : ""}.`);
-      return `<article class="accessory-status"><div><span>${escapeHtml(item.familyName)}</span><strong>${escapeHtml(item.productName)}</strong></div><div class="service-track" role="progressbar" aria-valuenow="${used}" aria-valuemin="0" aria-valuemax="100"><i style="width:${used}%"></i></div><p>${escapeHtml(status)} / ${due}${item.nextServiceKm ? ` / ${Number(item.nextServiceKm).toLocaleString("es-EC")} km` : ""}</p><a href="https://wa.me/593960855932?text=${text}" target="_blank" rel="noopener">Agendar revision por WhatsApp</a></article>`;
+      const history = maintenanceHistory.filter((entry) => entry.installationId === item.id);
+      const historyMarkup = history.length ? `<details class="client-maintenance-history"><summary>Historial de revisiones (${history.length})</summary>${history.map((entry) => `<article><time>${new Date(entry.servicedAt).toLocaleDateString("es-EC")}</time><strong>${Number(entry.odometerKm || 0).toLocaleString("es-EC")} km</strong><span>${escapeHtml(entry.notes || "Mantenimiento completado")}</span></article>`).join("")}</details>` : '<p class="maintenance-empty">Aun no hay revisiones completadas para este accesorio.</p>';
+      return `<article class="accessory-status"><div><span>${escapeHtml(item.familyName)}</span><strong>${escapeHtml(item.productName)}</strong></div><div class="service-track" role="progressbar" aria-valuenow="${used}" aria-valuemin="0" aria-valuemax="100"><i style="width:${used}%"></i></div><p>${escapeHtml(status)} / ${due}${item.nextServiceKm ? ` / ${Number(item.nextServiceKm).toLocaleString("es-EC")} km` : ""}</p>${historyMarkup}<a href="https://wa.me/593960855932?text=${text}" target="_blank" rel="noopener">Agendar revision por WhatsApp</a></article>`;
     }).join("") : '<p class="empty-state">Aun no hay accesorios instalados en este vehiculo.</p>';
     return `<section class="garage-card"><header><div><span>VEHICULO</span><h2>${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</h2></div><strong>${Number(vehicle.odometerKm || 0).toLocaleString("es-EC")} KM</strong></header><p>${vehicle.modelYear || "Ano pendiente"} / ${escapeHtml(vehicle.plate || "Sin placa")} / VIN ${escapeHtml(vehicle.vin || "no registrado")}</p><div class="accessories-stack">${accessories}</div></section>`;
   }).join("") : '<p class="empty-state">No existen vehiculos asociados.</p>';
@@ -95,10 +117,11 @@ async function loadDashboard(user) {
   document.querySelector("#invoice-total").textContent = `USD ${Number((pointsData.invoiceAmountCents || 0) / 100).toLocaleString("es-EC", { minimumFractionDigits: 2 })}`;
   renderSummaryAccessories(vehiclesData.vehicles, vehiclesData.installations || []);
   document.querySelector("#first-installation-prompt").hidden = Boolean(vehiclesData.installations?.length);
-  renderVehicles(vehiclesData.vehicles, vehiclesData.installations || [], user);
+  renderVehicles(vehiclesData.vehicles, vehiclesData.installations || [], vehiclesData.maintenanceHistory || [], user);
   renderMovements(pointsData.movements || []);
   renderRewards(rewardsData.rewards || [], Number(pointsData.balance || 0));
   renderRequests(redemptionsData.redemptions || [], couponsData.coupons || []);
+  initializeClientTour();
 }
 
 document.querySelector("#login-tab").addEventListener("click", () => selectTab("login"));
@@ -110,7 +133,7 @@ document.querySelectorAll("[data-client-view]").forEach((button) => button.addEv
 document.querySelectorAll("[data-open-client-view]").forEach((button) => button.addEventListener("click", () => selectView(button.dataset.openClientView)));
 
 document.querySelector("#login-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; setBusy(form, true); try { await loadDashboard((await api("/api/auth/login", { method: "POST", body: JSON.stringify({ ...Object.fromEntries(new FormData(form)), expectedRole: "customer" }) })).user); } catch (error) { showMessage(error.message); } finally { setBusy(form, false); } });
-document.querySelector("#register-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); const payload = { fullName: values.fullName, nationalId: values.nationalId, phone: values.phone, birthDate: values.birthDate, originProvince: values.originProvince, originCity: values.originCity, email: values.email, password: values.password, welcomeOffer, vehicle: { brand: values.brand, model: values.model, modelYear: values.modelYear, odometerKm: values.odometerKm, plate: values.plate, vin: values.vin } }; setBusy(form, true); try { const result = await api("/api/auth/register", { method: "POST", body: JSON.stringify(payload) }); history.replaceState({}, "", "/portal"); await loadDashboard(result.user); if (result.welcomeCoupon) { selectView("points"); report("#portal-message", `Beneficio activado: ${result.welcomeCoupon} y 100 TP acreditados.`, true); } } catch (error) { showMessage(error.message); } finally { setBusy(form, false); } });
+document.querySelector("#register-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); const payload = { fullName: values.fullName, nationalId: values.nationalId, phone: values.phone, birthDate: values.birthDate, originProvince: values.originProvince, originCanton: values.originCanton, email: values.email, password: values.password, welcomeOffer, vehicle: { brand: values.brand, model: values.model, modelYear: values.modelYear, odometerKm: values.odometerKm, plate: values.plate, vin: values.vin } }; setBusy(form, true); try { const result = await api("/api/auth/register", { method: "POST", body: JSON.stringify(payload) }); history.replaceState({}, "", "/portal"); await loadDashboard(result.user); if (result.welcomeCoupon) { selectView("points"); report("#portal-message", `Beneficio activado: ${result.welcomeCoupon} y 100 TP acreditados.`, true); } } catch (error) { showMessage(error.message); } finally { setBusy(form, false); } });
 document.querySelector("#rewards-grid").addEventListener("click", async (event) => { const button = event.target.closest("[data-reward-id]"); if (!button) return; try { await api("/api/redemptions", { method: "POST", body: JSON.stringify({ rewardId: button.dataset.rewardId }) }); report("#portal-message", "Solicitud enviada. Maxmotor confirmara tu canje.", true); button.disabled = true; const [redemptions, coupons] = await Promise.all([api("/api/redemptions?role=customer"), api("/api/coupons")]); renderRequests(redemptions.redemptions || [], coupons.coupons || []); } catch (error) { report("#portal-message", error.message); } });
 document.querySelector("#notifications-list").addEventListener("click", async (event) => { const button = event.target.closest("[data-mark-read]"); if (!button) return; const card = button.closest("[data-notification-id]"); try { await api(`/api/notifications/${card.dataset.notificationId}`, { method: "PATCH", body: JSON.stringify({ read: true }) }); await loadNotifications(); } catch (error) { button.textContent = error.message; } });
 document.querySelector("#account-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; setBusy(form, true); try { const data = await api("/api/account", { method: "PATCH", body: JSON.stringify(Object.fromEntries(new FormData(form))) }); if (data.signedOut) { alert("Tu clave fue actualizada. Inicia sesion nuevamente."); location.reload(); return; } report("#account-message", "Correo actualizado correctamente.", true); form.elements.currentPassword.value = ""; } catch (error) { report("#account-message", error.message); } finally { setBusy(form, false); } });
@@ -121,6 +144,8 @@ document.querySelector("#logout-button").addEventListener("click", async () => {
 api("/api/auth/me?role=customer").then(({ user }) => { if (user) return loadDashboard(user); }).catch(() => {});
 
 const birthDateInput = document.querySelector("[name='birthDate']");
+document.querySelector("#register-form [name='brand']").innerHTML = vehicleBrandOptions();
 const adultDate = new Date(); adultDate.setFullYear(adultDate.getFullYear() - 18);
 birthDateInput.max = adultDate.toISOString().slice(0, 10);
-if (welcomeOffer) { document.querySelector("#welcome-offer-note").hidden = false; selectTab("register"); }
+if (welcomeOffer) document.querySelector("#welcome-offer-note").hidden = false;
+if (welcomeOffer || registerIntent) selectTab("register");

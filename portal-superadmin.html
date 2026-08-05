@@ -5,12 +5,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <title>Superadmin | Maxmotor</title>
+  <link rel="icon" href="/assets/favicon-maxmotor.png" type="image/png" sizes="180x180">
+  <link rel="apple-touch-icon" href="/assets/favicon-maxmotor.png">
   <meta name="description" content="Panel administrativo privado para inteligencia operativa, catálogo y recompensas Maxmotor.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/portal.css?v=20260804-4">
-  <link rel="stylesheet" href="assets/portal-admin.css?v=20260804-4">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/portal.css?v=20260805-1">
+  <link rel="stylesheet" href="assets/type-system.css?v=20260805-1">
+  <link rel="stylesheet" href="assets/portal-admin.css?v=20260805-1">
+  <link rel="stylesheet" href="assets/guided-tour.css?v=20260805-1">
 </head>
 <body class="admin-body">
   <div class="portal-grid" aria-hidden="true"></div>
@@ -23,7 +27,7 @@
     <section id="super-app" class="admin-app" hidden>
       <aside class="admin-sidebar">
         <img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor 4x4"><p>Superadmin / 24H</p>
-        <nav><button class="admin-nav is-active" data-view="intelligence">Inteligencia</button><button class="admin-nav" data-view="catalog">Catálogo</button><button class="admin-nav" data-view="rewards">Recompensas</button><button class="admin-nav" data-view="redemptions">Canjes</button></nav>
+        <nav><button class="admin-nav is-active" data-view="intelligence">Inteligencia</button><button class="admin-nav" data-view="catalog">Catálogo</button><button class="admin-nav" data-view="rewards">Recompensas</button><button class="admin-nav" data-view="redemptions">Canjes</button><button id="super-tour-button" class="admin-nav tour-replay" type="button">Guia de uso</button></nav>
         <div class="admin-user"><strong id="super-name">—</strong><span>Sesión máxima: 24 horas</span><button id="super-logout">Cerrar sesión</button></div>
       </aside>
       <div class="admin-workspace">
@@ -32,12 +36,13 @@
           <div class="period-filter" role="group" aria-label="Periodo de analisis"><button type="button" data-period="day">Hoy</button><button type="button" data-period="week">Esta semana</button><button class="is-active" type="button" data-period="month">Este mes</button></div>
           <div class="admin-stats super-stats"><article><span>Facturas del periodo</span><strong id="metric-invoices">0</strong></article><article><span>Ventas del periodo</span><strong id="metric-sales">$0</strong></article><article><span>Clientes activos</span><strong id="metric-customers">0</strong></article><article><span>Items de puntos</span><strong id="metric-rewardItems">0</strong></article><article><span>Garantías vencidas</span><strong id="metric-expiredWarranties">0</strong></article><article><span>Garantías extendidas</span><strong id="metric-extendedWarranties">0</strong></article></div>
           <div class="admin-panel"><div class="admin-panel-heading"><h2>Facturas del periodo</h2><span id="super-period-total">Periodo mensual actual</span></div><div id="super-sales-chart" class="sales-chart"></div></div>
+          <div class="admin-panel"><div class="admin-panel-heading"><h2>Detalle del total</h2><span>Solo facturas dentro del periodo seleccionado</span></div><div id="period-invoice-list" class="admin-list"></div></div>
           <div class="leaders-grid"><article class="leader-card"><span>PRODUCTO MAS VENDIDO</span><strong id="top-product">Sin datos</strong><small id="top-product-detail">Esperando operaciones del periodo</small></article><article class="leader-card"><span>VEHICULO MAS SOLICITADO</span><strong id="top-vehicle">Sin datos</strong><small id="top-vehicle-detail">Esperando operaciones del periodo</small></article></div>
           <div class="intelligence-grid"><div class="admin-panel"><div class="admin-panel-heading"><h2>Demanda por familia</h2><span>Unidades instaladas</span></div><div id="family-metrics" class="admin-list"></div></div><div class="admin-panel"><div class="admin-panel-heading"><h2>Vehículo + producto</h2><span>Señal para abastecimiento</span></div><div id="vehicle-product-metrics" class="admin-list"></div></div></div>
           <div class="demographic-grid"><div class="admin-panel"><div class="admin-panel-heading"><h2>Mapa de calor provincial</h2><span>Cuentas creadas en el periodo</span></div><div id="province-heatmap" class="province-heatmap"></div></div><div class="admin-panel"><div class="admin-panel-heading"><h2>Segmentos de edad</h2><span>Nuevos usuarios del periodo</span></div><div id="age-metrics" class="age-bars"></div></div></div>
         </section>
         <section class="admin-view" data-panel="catalog" hidden>
-          <div class="dual-forms"><form id="family-form" class="portal-form admin-card"><p class="eyebrow">FAMILIAS</p><h3>Nueva familia</h3><label>Nombre<input name="name" required></label><button class="primary-action"><span>Crear familia</span><b>→</b></button><div id="family-message" class="form-message" hidden></div></form><form id="product-form" class="portal-form admin-card"><p class="eyebrow">PRODUCTOS</p><h3>Nuevo producto operativo</h3><label>Familia<select name="familyId" required></select></label><label>Producto<input name="name" required></label><div class="field-row"><label>Días revisión<input name="warrantyDays" type="number" min="0"></label><label>Kilómetros revisión<input name="warrantyKm" type="number" min="0"></label></div><button class="primary-action"><span>Crear producto</span><b>→</b></button><div id="product-message" class="form-message" hidden></div></form></div><div class="admin-panel"><div class="admin-panel-heading"><h2>Catálogo para instalaciones</h2></div><div id="product-list" class="admin-list"></div></div>
+          <div class="dual-forms"><form id="family-form" class="portal-form admin-card"><p class="eyebrow">FAMILIAS</p><h3>Nueva familia</h3><label>Nombre<input name="name" required></label><button class="primary-action"><span>Crear familia</span><b>→</b></button><div id="family-message" class="form-message" hidden></div></form><form id="product-form" class="portal-form admin-card"><p class="eyebrow">PRODUCTOS</p><h3>Nuevo producto operativo</h3><label>Familia<select name="familyId" required></select></label><label>Producto<input name="name" required></label><div class="field-row"><label>Cobertura dias<input name="warrantyDays" type="number" min="0"></label><label>Cobertura km<input name="warrantyKm" type="number" min="0"></label></div><div class="field-row"><label>Revision cada dias<input name="serviceDays" type="number" min="0" value="60"></label><label>Revision cada km<input name="serviceKm" type="number" min="0" value="10000"></label></div><button class="primary-action"><span>Crear producto</span><b>→</b></button><div id="product-message" class="form-message" hidden></div></form></div><div class="admin-panel"><div class="admin-panel-heading"><h2>Catálogo para instalaciones</h2></div><div id="product-list" class="admin-list"></div></div>
         </section>
         <section class="admin-view" data-panel="rewards" hidden>
           <div class="operation-grid"><div><p class="eyebrow">TRACTION REWARDS</p><h2>Beneficios con control.</h2><p>Define el valor comercial, los TP requeridos, el pago restante y el límite de unidades.</p></div><form id="reward-form" class="portal-form"><label>Nombre<input name="name" required></label><label>Descripción<input name="description" required></label><div class="field-row"><label>Precio normal USD<input name="price" type="number" min="0" step="0.01" required></label><label>Costo Traction Points<input name="pointsCost" type="number" min="1" required></label></div><div class="field-row"><label>Precio después de TP<input name="cashAfterPoints" type="number" min="0" step="0.01" required></label><label>Límite de unidades<input name="stockLimit" type="number" min="0" value="0" required></label></div><button class="primary-action"><span>Publicar recompensa</span><b>→</b></button><div id="reward-message" class="form-message" hidden></div></form></div><div class="admin-panel"><div class="admin-panel-heading"><h2>Items canjeables</h2></div><div id="reward-list" class="admin-list"></div></div>
@@ -46,6 +51,6 @@
       </div>
     </section>
   </main>
-  <script src="assets/portal-superadmin.js?v=20260804-4" type="module"></script>
+  <script src="assets/portal-superadmin.js?v=20260805-1" type="module"></script>
 </body>
 </html>

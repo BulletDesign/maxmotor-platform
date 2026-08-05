@@ -14,7 +14,7 @@ await import("./build-static.mjs");
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 
-const files = ["_headers", "robots.txt", "sitemap.xml", "index.html", "mxr.html", "vitrina.html", "data.js"];
+const files = ["_headers", "robots.txt", "sitemap.xml", "index.html", "mxr.html", "data.js"];
 const assetFiles = [
   "catalog-service.js",
   "index-app.js",
@@ -23,12 +23,10 @@ const assetFiles = [
   "maxmotor-mxr.css",
   "product-detail.css",
   "product-detail.js",
-  "product-showcase.css",
-  "product-showcase.js",
   "shared-shell.css",
   "site-shell.js",
 ];
-const directories = ["catalog", "productos", "fichas"];
+const directories = ["catalog", "fichas"];
 
 await Promise.all(files.map((file) => cp(join(source, file), join(output, file))));
 await mkdir(join(output, "assets"), { recursive: true });

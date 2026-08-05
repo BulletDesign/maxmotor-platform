@@ -1,3 +1,5 @@
+import { setupGuidedTour } from "./guided-tour.js";
+
 const login=document.querySelector("#super-login");
 const app=document.querySelector("#super-app");
 
@@ -14,6 +16,19 @@ const PROVINCES=["Azuay","Bolívar","Cañar","Carchi","Chimborazo","Cotopaxi","E
 const PERIOD_LABELS={day:"Hoy",week:"Esta semana",month:"Este mes"};
 let activePeriod="month";
 
+function openSuperView(view){document.querySelector(`[data-view="${view}"]`)?.click();}
+function initializeSuperTour(){
+  setupGuidedTour({id:"superadmin",trigger:"#super-tour-button",steps:[
+    {target:".period-filter",title:"Periodo de analisis",body:"Cambia entre hoy, semana y mes. Cada consulta usa limites exactos y excluye facturas futuras.",before:()=>openSuperView("intelligence")},
+    {target:"#period-invoice-list",title:"Total auditable",body:"Este detalle muestra cada factura incluida en el total del periodo, con cliente, fecha y valor."},
+    {target:".leaders-grid",title:"Demanda comercial",body:"Identifica el producto mas vendido y el vehiculo con mas instalaciones para orientar compras a proveedores."},
+    {target:".demographic-grid",title:"Segmentacion",body:"Consulta origen provincial y edades de nuevos usuarios del periodo para planificar publicidad."},
+    {target:"#product-form",title:"Catalogo operativo",body:"Define familias, productos, cobertura e intervalos de mantenimiento usados por los vendedores.",before:()=>openSuperView("catalog")},
+    {target:"#reward-form",title:"Traction Rewards",body:"Publica recompensas con costo en puntos, pago restante y limite disponible.",before:()=>openSuperView("rewards")},
+    {target:"#redemption-list",title:"Control de canjes",body:"Aprueba o rechaza solicitudes; al aprobar se reservan los Traction Points correspondientes.",before:()=>openSuperView("redemptions")}
+  ]});
+}
+
 async function loadMetrics(period=activePeriod){
   activePeriod=period;
   const data=await api(`/api/superadmin/metrics?period=${encodeURIComponent(period)}`);
@@ -22,6 +37,7 @@ async function loadMetrics(period=activePeriod){
   const max=Math.max(...data.chart.map(item=>Number(item.invoices)),1);
   document.querySelector("#super-period-total").textContent=`${PERIOD_LABELS[period]} / ${money(data.stats.salesCents)}`;
   document.querySelector("#super-sales-chart").innerHTML=data.chart.length?data.chart.map(item=>`<div class="chart-column"><span style="height:${Math.max(8,Number(item.invoices)/max*100)}%"></span><b>${item.invoices}</b><small>${safe(period==="day"?item.label:item.label.slice(5))}</small></div>`).join(""):`<p class="empty-state">Sin facturas para ${PERIOD_LABELS[period].toLowerCase()}.</p>`;
+  document.querySelector("#period-invoice-list").innerHTML=(data.invoices||[]).length?data.invoices.map(item=>`<article class="admin-list-row"><strong>${safe(item.invoiceNumber)}</strong><span>${safe(item.customerName)}<br>${safe(item.customerCode)}</span><small>${new Date(item.issuedAt).toLocaleString("es-EC")}</small><em>${money(item.amountCents)}</em></article>`).join(""):'<p class="empty-state">No hay facturas dentro de este periodo.</p>';
   document.querySelector("#family-metrics").innerHTML=data.families.map(item=>`<article class="admin-list-row"><strong>${safe(item.name)}</strong><span>Familia</span><small>Demanda acumulada</small><em>${item.units} unidades</em></article>`).join("")||'<p class="empty-state">Sin instalaciones registradas.</p>';
   document.querySelector("#vehicle-product-metrics").innerHTML=data.vehicleProducts.map(item=>`<article class="admin-list-row"><strong>${safe(item.brand)} ${safe(item.model)}</strong><span>${safe(item.familyName)}</span><small>${safe(item.productName)}</small><em>${item.units} unidades</em></article>`).join("")||'<p class="empty-state">Aun no hay patrones de compra.</p>';
   document.querySelector("#reward-list").innerHTML=data.rewards.map(item=>`<article class="admin-list-row"><strong>${safe(item.name)}</strong><span>${money(item.priceCents)} / ${money(item.cashAfterPointsCents)} + ${Number(item.pointsCost).toLocaleString("es-EC")} TP</span><small>Limite: ${item.stockLimit||"sin limite"}</small><em>${item.requested} usados</em></article>`).join("")||'<p class="empty-state">No hay recompensas creadas.</p>';
@@ -39,7 +55,7 @@ async function loadMetrics(period=activePeriod){
 async function loadCatalog(){
   const catalog=await api("/api/catalog/operational");
   document.querySelector("#product-form [name='familyId']").innerHTML=catalog.families.map(item=>`<option value="${item.id}">${safe(item.name)}</option>`).join("");
-  document.querySelector("#product-list").innerHTML=catalog.products.map(item=>`<article class="admin-list-row"><strong>${safe(item.name)}</strong><span>${safe(item.familyName)}</span><small>${item.warrantyDays||0} dias / ${Number(item.warrantyKm||0).toLocaleString("es-EC")} km</small><em>Activo</em></article>`).join("")||'<p class="empty-state">Crea el primer producto operativo.</p>';
+  document.querySelector("#product-list").innerHTML=catalog.products.map(item=>`<article class="admin-list-row"><strong>${safe(item.name)}</strong><span>${safe(item.familyName)}</span><small>Revision: ${item.serviceDays||0} dias / ${Number(item.serviceKm||0).toLocaleString("es-EC")} km</small><em>Activo</em></article>`).join("")||'<p class="empty-state">Crea el primer producto operativo.</p>';
 }
 
 async function loadRedemptions(){
@@ -51,6 +67,7 @@ async function open(user){
   if(!user||user.role!=="superadmin")throw new Error("Esta cuenta no tiene acceso Superadmin");
   login.hidden=true;app.hidden=false;document.querySelector("#super-name").textContent=user.fullName;
   await Promise.all([loadMetrics(),loadCatalog(),loadRedemptions()]);
+  initializeSuperTour();
 }
 
 document.querySelector("#super-login-form").addEventListener("submit",async event=>{event.preventDefault();try{await open((await api("/api/auth/login",{method:"POST",body:JSON.stringify({...Object.fromEntries(new FormData(event.currentTarget)),expectedRole:"superadmin"})})).user);}catch(error){report("#super-login-message",error.message);}});

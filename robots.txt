@@ -9,6 +9,7 @@ Disallow: /
 
 User-agent: *
 Allow: /
+Allow: /assets/favicon-maxmotor.png
 Disallow: /api/
 Disallow: /admin/
 Disallow: /portal.html

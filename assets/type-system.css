@@ -1,0 +1,9 @@
+:root{
+  --font-display:"Teko",sans-serif;
+  --font-body:"Montserrat",sans-serif;
+  --font-ui:"Barlow Condensed",sans-serif;
+}
+html,body,input,select,textarea{font-family:var(--font-body)}
+h1,h2,h3,h4,h5,h6,.section-title,.mxr-wordmark{font-family:var(--font-display)}
+button,.portal-entry,.footer-nav,.catalog-kicker,.promo-tag,.slide-meta,.eyebrow,label,small{font-family:var(--font-ui)}
+.eyebrow,.media-label span,.photo-credit,.feature-card b,.field label{font-family:var(--font-ui)!important}

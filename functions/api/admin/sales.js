@@ -22,7 +22,7 @@ export async function onRequestPost({ request, env }) {
     const [customer, duplicate, product, vehicle] = await Promise.all([
       env.DB.prepare("SELECT id FROM users WHERE customer_code=?1 AND role='customer' AND status='active'").bind(customerCode).first(),
       env.DB.prepare("SELECT id FROM invoices WHERE invoice_number=?1").bind(invoiceNumber).first(),
-      env.DB.prepare("SELECT p.id,p.name,p.warranty_days warrantyDays,p.warranty_km warrantyKm FROM operational_products p JOIN product_families f ON f.id=p.family_id WHERE p.id=?1 AND p.active=1 AND f.active=1").bind(body.productId).first(),
+      env.DB.prepare("SELECT p.id,p.name,p.service_days serviceDays,p.service_km serviceKm,p.warranty_days warrantyDays,p.warranty_km warrantyKm FROM operational_products p JOIN product_families f ON f.id=p.family_id WHERE p.id=?1 AND p.active=1 AND f.active=1").bind(body.productId).first(),
       env.DB.prepare("SELECT id,user_id userId,odometer_km odometerKm FROM vehicles WHERE id=?1").bind(body.vehicleId).first(),
     ]);
     if (!customer) throw new HttpError(404, "Cliente no encontrado");
@@ -31,8 +31,10 @@ export async function onRequestPost({ request, env }) {
     if (!vehicle || vehicle.userId !== customer.id) throw new HttpError(400, "Vehiculo invalido para este cliente");
 
     const points = pointsForPurchase(amountCents);
-    const nextServiceAt = product.warrantyDays ? new Date(new Date(installedAt).getTime() + product.warrantyDays * 86400000).toISOString() : null;
-    const nextServiceKm = product.warrantyKm ? installedKm + product.warrantyKm : null;
+    const serviceDays = Number(product.serviceDays ?? product.warrantyDays) || 0;
+    const serviceKm = Number(product.serviceKm ?? product.warrantyKm) || 0;
+    const nextServiceAt = serviceDays ? new Date(new Date(installedAt).getTime() + serviceDays * 86400000).toISOString() : null;
+    const nextServiceKm = serviceKm ? installedKm + serviceKm : null;
     const invoiceId = crypto.randomUUID();
     const pointsId = crypto.randomUUID();
     const warrantyId = crypto.randomUUID();

@@ -2,7 +2,7 @@
 
 ## Decision
 
-Google Sheets con Apps Script puede utilizarse como CMS editorial de la vitrina, pero no como base de datos transaccional del portal.
+Google Sheets con Apps Script puede utilizarse como CMS editorial del catalogo publico, pero no como base de datos transaccional del portal.
 
 ## Uso permitido de Sheets
 
@@ -11,7 +11,7 @@ Google Sheets con Apps Script puede utilizarse como CMS editorial de la vitrina,
 - Orden de aparicion, etiquetas e imagenes alojadas en R2.
 - Importacion periodica hacia el catalogo estatico.
 
-El sitio publico no debe consultar Sheets en cada visita. Un proceso de publicacion valida los datos y regenera los HTML; asi la vitrina sigue funcionando aunque Apps Script falle o alcance una cuota.
+El sitio publico no debe consultar Sheets en cada visita. Un proceso de publicacion valida los datos y regenera los HTML; asi el catalogo sigue funcionando aunque Apps Script falle o alcance una cuota.
 
 ## Datos que deben permanecer en Supabase
 
@@ -27,7 +27,7 @@ Estos flujos requieren integridad referencial, transacciones, control de acceso 
 
 1. Ventas actualiza el catalogo editorial en Google Sheets.
 2. Un Apps Script autenticado exporta un JSON validado.
-3. El generador consume ese JSON y crea `vitrina.html` y `productos/*.html`.
+3. El generador consume ese JSON y crea las fichas tecnicas reutilizables en `fichas/*.html`.
 4. El despliegue publica archivos estaticos en Cloudflare.
 5. El portal privado consume Supabase mediante funciones de servidor; las llaves administrativas nunca llegan al navegador.
 

@@ -23,3 +23,19 @@ export async function onRequestPatch({ request, env, params }) {
     return json({ ok: true });
   } catch (error) { return handleError(error); }
 }
+
+export async function onRequestDelete({ request, env, params }) {
+  try {
+    assertSameOrigin(request);
+    const actor = await requireUser(request, env.DB, ["employee", "superadmin"]);
+    const reward = await env.DB.prepare("SELECT id,name FROM rewards WHERE id=?1").bind(params.id).first();
+    if (!reward) throw new HttpError(404, "Recompensa no encontrada");
+    const usage = await env.DB.prepare("SELECT COUNT(*) total FROM redemptions WHERE reward_id=?1").bind(params.id).first();
+    const archived = Number(usage.total || 0) > 0;
+    await env.DB.batch([
+      archived ? env.DB.prepare("UPDATE rewards SET active=0,updated_at=CURRENT_TIMESTAMP WHERE id=?1").bind(params.id) : env.DB.prepare("DELETE FROM rewards WHERE id=?1").bind(params.id),
+      env.DB.prepare("INSERT INTO audit_log(id,actor_user_id,action,entity_type,entity_id,metadata_json) VALUES(?1,?2,'reward.delete','reward',?3,?4)").bind(crypto.randomUUID(), actor.id, params.id, JSON.stringify({ archived, name: reward.name })),
+    ]);
+    return json({ ok: true, archived });
+  } catch (error) { return handleError(error); }
+}
