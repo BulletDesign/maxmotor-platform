@@ -1,6 +1,7 @@
 const authView = document.querySelector("#auth-view");
 const dashboardView = document.querySelector("#dashboard-view");
 const message = document.querySelector("#form-message");
+const welcomeOffer = new URLSearchParams(location.search).get("offer") === "welcome";
 
 async function api(path, options = {}) {
   const response = await fetch(path, { credentials: "same-origin", ...options, headers: options.body ? { "content-type": "application/json", ...options.headers } : options.headers });
@@ -61,7 +62,11 @@ function renderVehicles(vehicles, installations, user) {
 
 function renderMovements(movements) { document.querySelector("#points-movements").innerHTML = movements.length ? movements.map((item) => `<article class="data-row"><strong>${escapeHtml(item.description)}</strong><span>${new Date(item.created_at).toLocaleDateString("es-EC")}</span><em>${item.points > 0 ? "+" : ""}${Number(item.points).toLocaleString("es-EC")} TP</em></article>`).join("") : '<p class="empty-state">Tu primer movimiento aparecera cuando registremos una factura.</p>'; }
 function renderRewards(rewards, balance) { document.querySelector("#rewards-grid").innerHTML = rewards.length ? rewards.map((reward) => `<article class="reward-card"><span>RECOMPENSA</span><h3>${escapeHtml(reward.name)}</h3><p>${escapeHtml(reward.description || "Beneficio exclusivo MiMaxmotor.")}</p><div class="reward-prices"><s>USD ${Number((reward.priceCents || 0) / 100).toFixed(2)}</s><b>USD ${Number((reward.cashAfterPointsCents || 0) / 100).toFixed(2)} +</b></div><strong>${Number(reward.pointsCost).toLocaleString("es-EC")} TP</strong><button type="button" data-reward-id="${reward.id}" ${balance < reward.pointsCost ? "disabled" : ""}>${balance < reward.pointsCost ? "Aun no disponible" : "Solicitar canje"}</button></article>`).join("") : '<p class="empty-state">Pronto publicaremos nuevas recompensas.</p>'; }
-function renderRedemptions(items) { document.querySelector("#redemptions-list").innerHTML = items.length ? items.map((item) => `<article class="data-row"><strong>${escapeHtml(item.name)}</strong><span>${new Date(item.createdAt).toLocaleDateString("es-EC")} / ${Number(item.pointsCost).toLocaleString("es-EC")} TP</span><em>${escapeHtml(item.status)}</em></article>`).join("") : '<p class="empty-state">No tienes solicitudes de canje.</p>'; }
+function renderRequests(redemptions, coupons) {
+  const couponRows = coupons.map((item) => `<article class="data-row coupon-request"><strong>10% OFF / ${escapeHtml(item.code)}</strong><span>${escapeHtml(item.terms)}${item.expiresAt ? `<br>Vigente hasta ${new Date(item.expiresAt).toLocaleDateString("es-EC")}` : ""}</span><em>${escapeHtml(item.status)}</em></article>`);
+  const redemptionRows = redemptions.map((item) => `<article class="data-row"><strong>${escapeHtml(item.name)}</strong><span>${new Date(item.createdAt).toLocaleDateString("es-EC")} / ${Number(item.pointsCost).toLocaleString("es-EC")} TP</span><em>${escapeHtml(item.status)}</em></article>`);
+  document.querySelector("#redemptions-list").innerHTML = [...couponRows, ...redemptionRows].join("") || '<p class="empty-state">No tienes beneficios ni solicitudes activas.</p>';
+}
 
 function renderNotifications(items) {
   const unread = items.filter((item) => !Number(item.isRead)).length;
@@ -81,7 +86,7 @@ async function loadDashboard(user) {
   document.querySelector("#customer-code").textContent = user.customerCode;
   document.querySelector("#summary-customer-code").textContent = user.customerCode;
   document.querySelector("#password-warning").hidden = !Boolean(user.mustChangePassword);
-  const [vehiclesData, pointsData, rewardsData, redemptionsData] = await Promise.all([api("/api/vehicles"), api("/api/points/summary"), api("/api/rewards"), api("/api/redemptions?role=customer"), loadNotifications(), loadAccount()]);
+  const [vehiclesData, pointsData, rewardsData, redemptionsData, couponsData] = await Promise.all([api("/api/vehicles"), api("/api/points/summary"), api("/api/rewards"), api("/api/redemptions?role=customer"), api("/api/coupons"), loadNotifications(), loadAccount()]);
   const vehicle = vehiclesData.vehicles[0];
   document.querySelector("#vehicle-summary").innerHTML = vehicle ? `<strong>${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</strong><span>${vehicle.modelYear || "Ano no registrado"} / ${Number(vehicle.odometerKm || 0).toLocaleString("es-EC")} KM / ${escapeHtml(vehicle.plate || "Sin placa")}</span>` : "<strong>Sin vehiculo</strong><span>Solicita ayuda a un asesor.</span>";
   document.querySelector("#points-balance").textContent = Number(pointsData.balance || 0).toLocaleString("es-EC");
@@ -89,23 +94,24 @@ async function loadDashboard(user) {
   document.querySelector("#invoice-count").textContent = Number(pointsData.invoiceCount || 0).toLocaleString("es-EC");
   document.querySelector("#invoice-total").textContent = `USD ${Number((pointsData.invoiceAmountCents || 0) / 100).toLocaleString("es-EC", { minimumFractionDigits: 2 })}`;
   renderSummaryAccessories(vehiclesData.vehicles, vehiclesData.installations || []);
+  document.querySelector("#first-installation-prompt").hidden = Boolean(vehiclesData.installations?.length);
   renderVehicles(vehiclesData.vehicles, vehiclesData.installations || [], user);
   renderMovements(pointsData.movements || []);
   renderRewards(rewardsData.rewards || [], Number(pointsData.balance || 0));
-  renderRedemptions(redemptionsData.redemptions || []);
+  renderRequests(redemptionsData.redemptions || [], couponsData.coupons || []);
 }
 
 document.querySelector("#login-tab").addEventListener("click", () => selectTab("login"));
 document.querySelector("#register-tab").addEventListener("click", () => selectTab("register"));
-document.querySelector(".next-step").addEventListener("click", () => { if ([...document.querySelector('[data-step="1"]').querySelectorAll("input")].every((field) => field.reportValidity())) showStep(2); });
+document.querySelector(".next-step").addEventListener("click", () => { if ([...document.querySelector('[data-step="1"]').querySelectorAll("[required]")].every((field) => field.reportValidity())) showStep(2); });
 document.querySelector(".previous-step").addEventListener("click", () => showStep(1));
 document.querySelectorAll("[data-normalize]").forEach((input) => input.addEventListener("input", () => { if (input.dataset.normalize === "upper") input.value = input.value.toUpperCase(); if (input.dataset.normalize === "words") input.value = input.value.replace(/(^|\s|[-'])\p{L}/gu, (letter) => letter.toUpperCase()); }));
 document.querySelectorAll("[data-client-view]").forEach((button) => button.addEventListener("click", () => selectView(button.dataset.clientView)));
 document.querySelectorAll("[data-open-client-view]").forEach((button) => button.addEventListener("click", () => selectView(button.dataset.openClientView)));
 
 document.querySelector("#login-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; setBusy(form, true); try { await loadDashboard((await api("/api/auth/login", { method: "POST", body: JSON.stringify({ ...Object.fromEntries(new FormData(form)), expectedRole: "customer" }) })).user); } catch (error) { showMessage(error.message); } finally { setBusy(form, false); } });
-document.querySelector("#register-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); const payload = { fullName: values.fullName, nationalId: values.nationalId, phone: values.phone, email: values.email, password: values.password, vehicle: { brand: values.brand, model: values.model, modelYear: values.modelYear, odometerKm: values.odometerKm, plate: values.plate, vin: values.vin } }; setBusy(form, true); try { await loadDashboard((await api("/api/auth/register", { method: "POST", body: JSON.stringify(payload) })).user); } catch (error) { showMessage(error.message); } finally { setBusy(form, false); } });
-document.querySelector("#rewards-grid").addEventListener("click", async (event) => { const button = event.target.closest("[data-reward-id]"); if (!button) return; try { await api("/api/redemptions", { method: "POST", body: JSON.stringify({ rewardId: button.dataset.rewardId }) }); report("#portal-message", "Solicitud enviada. Maxmotor confirmara tu canje.", true); button.disabled = true; const data = await api("/api/redemptions?role=customer"); renderRedemptions(data.redemptions || []); } catch (error) { report("#portal-message", error.message); } });
+document.querySelector("#register-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); const payload = { fullName: values.fullName, nationalId: values.nationalId, phone: values.phone, birthDate: values.birthDate, originProvince: values.originProvince, originCity: values.originCity, email: values.email, password: values.password, welcomeOffer, vehicle: { brand: values.brand, model: values.model, modelYear: values.modelYear, odometerKm: values.odometerKm, plate: values.plate, vin: values.vin } }; setBusy(form, true); try { const result = await api("/api/auth/register", { method: "POST", body: JSON.stringify(payload) }); history.replaceState({}, "", "/portal"); await loadDashboard(result.user); if (result.welcomeCoupon) { selectView("points"); report("#portal-message", `Beneficio activado: ${result.welcomeCoupon} y 100 TP acreditados.`, true); } } catch (error) { showMessage(error.message); } finally { setBusy(form, false); } });
+document.querySelector("#rewards-grid").addEventListener("click", async (event) => { const button = event.target.closest("[data-reward-id]"); if (!button) return; try { await api("/api/redemptions", { method: "POST", body: JSON.stringify({ rewardId: button.dataset.rewardId }) }); report("#portal-message", "Solicitud enviada. Maxmotor confirmara tu canje.", true); button.disabled = true; const [redemptions, coupons] = await Promise.all([api("/api/redemptions?role=customer"), api("/api/coupons")]); renderRequests(redemptions.redemptions || [], coupons.coupons || []); } catch (error) { report("#portal-message", error.message); } });
 document.querySelector("#notifications-list").addEventListener("click", async (event) => { const button = event.target.closest("[data-mark-read]"); if (!button) return; const card = button.closest("[data-notification-id]"); try { await api(`/api/notifications/${card.dataset.notificationId}`, { method: "PATCH", body: JSON.stringify({ read: true }) }); await loadNotifications(); } catch (error) { button.textContent = error.message; } });
 document.querySelector("#account-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; setBusy(form, true); try { const data = await api("/api/account", { method: "PATCH", body: JSON.stringify(Object.fromEntries(new FormData(form))) }); if (data.signedOut) { alert("Tu clave fue actualizada. Inicia sesion nuevamente."); location.reload(); return; } report("#account-message", "Correo actualizado correctamente.", true); form.elements.currentPassword.value = ""; } catch (error) { report("#account-message", error.message); } finally { setBusy(form, false); } });
 document.querySelector("#open-delete-account").addEventListener("click", () => document.querySelector("#delete-account-dialog").showModal());
@@ -113,3 +119,8 @@ document.querySelector("#cancel-delete-account").addEventListener("click", () =>
 document.querySelector("#delete-account-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; setBusy(form, true); try { await api("/api/account", { method: "DELETE", body: JSON.stringify(Object.fromEntries(new FormData(form))) }); alert("Tu cuenta y sus datos fueron eliminados."); location.reload(); } catch (error) { report("#delete-account-message", error.message); setBusy(form, false); } });
 document.querySelector("#logout-button").addEventListener("click", async () => { await api("/api/auth/logout?role=customer", { method: "POST" }); dashboardView.hidden = true; authView.hidden = false; selectTab("login"); });
 api("/api/auth/me?role=customer").then(({ user }) => { if (user) return loadDashboard(user); }).catch(() => {});
+
+const birthDateInput = document.querySelector("[name='birthDate']");
+const adultDate = new Date(); adultDate.setFullYear(adultDate.getFullYear() - 18);
+birthDateInput.max = adultDate.toISOString().slice(0, 10);
+if (welcomeOffer) { document.querySelector("#welcome-offer-note").hidden = false; selectTab("register"); }

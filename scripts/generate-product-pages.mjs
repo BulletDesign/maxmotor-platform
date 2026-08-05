@@ -26,7 +26,7 @@ function head({ title, description, canonical, assetPrefix = "" }) {
   <meta property="og:url" content="${canonical}">
   <link rel="stylesheet" href="${assetPrefix}assets/shared-shell.css">
   <link rel="stylesheet" href="${assetPrefix}assets/product-showcase.css">
-  <script src="${assetPrefix}assets/site-shell.js?v=20260804-3"></script>
+  <script src="${assetPrefix}assets/site-shell.js?v=20260804-4"></script>
 </head>`;
 }
 

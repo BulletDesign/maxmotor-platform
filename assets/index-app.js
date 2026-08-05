@@ -65,37 +65,13 @@
         scrollObserver.observe(el);
       });
 
-      if (typeof FORM_CONFIG !== 'undefined') {
-        const form = document.getElementById('discountForm');
-        if (form) form.action = FORM_CONFIG.url;
-        document.getElementById('nombre').name = FORM_CONFIG.ids.nombre;
-        document.getElementById('telefono').name = FORM_CONFIG.ids.telefono;
-        document.getElementById('auto-popup').name = FORM_CONFIG.ids.auto;
-        document.getElementById('cuponHidden').name = FORM_CONFIG.ids.cupon;
-      }
-
-      const selectAuto = document.getElementById('auto-popup');
-      if (selectAuto && typeof datosVehiculos !== 'undefined') {
-        Object.keys(datosVehiculos).forEach(marca => {
-          const opt = document.createElement('option');
-          opt.value = marca; opt.textContent = marca; selectAuto.appendChild(opt);
-        });
-      }
-
-      const cuponGuardado = localStorage.getItem('mxr_coupon_code');
-      if (cuponGuardado) {
-        document.getElementById('discountForm').style.display = 'none';
-        document.getElementById('coupon-result').style.display = 'block';
-        document.getElementById('final-code').innerText = cuponGuardado;
-        document.getElementById('floating-btn').innerHTML = "&#127999;&#65039; VER MI CUPÓN";
-        document.getElementById('floating-btn').style.display = 'block';
-      } else {
-        setTimeout(() => {
-          if (document.getElementById('floating-btn').style.display !== 'block' && document.getElementById('offer-popup').style.display !== 'flex') {
-            togglePopup();
-          }
-        }, 45000);
-      }
+      const offerLink = document.getElementById('offer-register-link');
+      offerLink?.addEventListener('click', () => localStorage.setItem('mxr_welcome_offer_opened', new Date().toISOString()));
+      setOfferOpen(false, false);
+      setTimeout(() => {
+        const popup = document.getElementById('offer-popup');
+        if (popup && popup.getAttribute('aria-hidden') !== 'false' && !sessionStorage.getItem('mxr_offer_seen_session')) setOfferOpen(true);
+      }, 18000);
 
     });
 
@@ -111,31 +87,24 @@
       }, { passive: true });
     }
 
-    function togglePopup() {
+    function setOfferOpen(opening, markSeen = true) {
       const popup = document.getElementById('offer-popup');
       const floatBtn = document.getElementById('floating-btn');
-      if (popup.style.display === 'none' || popup.style.display === '') { popup.style.display = 'flex'; floatBtn.style.display = 'none'; }
-      else { popup.style.display = 'none'; floatBtn.style.display = 'block'; }
+      if (!popup || !floatBtn) return;
+      popup.style.display = opening ? 'flex' : 'none';
+      popup.setAttribute('aria-hidden', String(!opening));
+      floatBtn.style.display = opening ? 'none' : 'block';
+      document.body.style.overflow = opening ? 'hidden' : '';
+      if (!opening && markSeen) sessionStorage.setItem('mxr_offer_seen_session', '1');
     }
 
-    function generarCupon(e) {
-      e.preventDefault();
-      if (localStorage.getItem('mxr_coupon_code')) { alert("Ya has generado un cupón anteriormente."); return; }
-      const form = document.getElementById('discountForm'); const btn = document.getElementById('btn-submit'); const loading = document.getElementById('loading');
-      btn.disabled = true; btn.innerText = "Procesando...";
-      const randomCode = Math.floor(1000 + Math.random() * 9000);
-      const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
-      const couponCode = `MXR10-${months[new Date().getMonth()]}-${randomCode}`;
-      document.getElementById('cuponHidden').value = couponCode;
-      form.style.display = 'none'; loading.style.display = 'block';
-      localStorage.setItem('mxr_coupon_code', couponCode);
-      form.submit();
-      setTimeout(() => {
-        loading.style.display = 'none'; document.getElementById('coupon-result').style.display = 'block';
-        document.getElementById('final-code').innerText = couponCode;
-        document.getElementById('floating-btn').innerHTML = "&#127999;&#65039; VER MI CUPÓN";
-      }, 1500);
+    function togglePopup() {
+      const popup = document.getElementById('offer-popup');
+      setOfferOpen(popup?.getAttribute('aria-hidden') !== 'false');
     }
+
+    document.getElementById('offer-popup')?.addEventListener('click', event => { if (event.target.id === 'offer-popup') togglePopup(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && document.getElementById('offer-popup')?.style.display === 'flex') togglePopup(); });
 
     function imgError(imgEl) {
       imgEl.onerror = null;

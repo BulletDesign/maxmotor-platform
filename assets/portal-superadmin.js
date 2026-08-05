@@ -10,17 +10,30 @@ async function api(path,options={}){
 function safe(value){const node=document.createElement("span");node.textContent=String(value??"");return node.innerHTML;}
 function report(id,text,ok=false){const node=document.querySelector(id);node.textContent=text;node.classList.toggle("is-success",ok);node.hidden=!text;}
 function money(cents){return `USD ${Number((cents||0)/100).toLocaleString("es-EC",{minimumFractionDigits:2})}`;}
+const PROVINCES=["Azuay","Bolívar","Cañar","Carchi","Chimborazo","Cotopaxi","El Oro","Esmeraldas","Galápagos","Guayas","Imbabura","Loja","Los Ríos","Manabí","Morona Santiago","Napo","Orellana","Pastaza","Pichincha","Santa Elena","Santo Domingo de los Tsáchilas","Sucumbíos","Tungurahua","Zamora Chinchipe"];
+const PERIOD_LABELS={day:"Hoy",week:"Esta semana",month:"Este mes"};
+let activePeriod="month";
 
-async function loadMetrics(){
-  const data=await api("/api/superadmin/metrics");
+async function loadMetrics(period=activePeriod){
+  activePeriod=period;
+  const data=await api(`/api/superadmin/metrics?period=${encodeURIComponent(period)}`);
   const values={...data.stats,sales:money(data.stats.salesCents)};
   Object.entries(values).forEach(([key,value])=>{const node=document.querySelector(`#metric-${key}`);if(node)node.textContent=typeof value==="number"?value.toLocaleString("es-EC"):value;});
-  const max=Math.max(...data.monthly.map(item=>Number(item.invoices)),1);
-  document.querySelector("#super-month-total").textContent=money(data.stats.salesCents);
-  document.querySelector("#super-sales-chart").innerHTML=data.monthly.length?data.monthly.map(item=>`<div class="chart-column"><span style="height:${Math.max(8,Number(item.invoices)/max*100)}%"></span><b>${item.invoices}</b><small>${String(item.day).padStart(2,"0")}</small></div>`).join(""):'<p class="empty-state">Sin facturas este mes.</p>';
+  const max=Math.max(...data.chart.map(item=>Number(item.invoices)),1);
+  document.querySelector("#super-period-total").textContent=`${PERIOD_LABELS[period]} / ${money(data.stats.salesCents)}`;
+  document.querySelector("#super-sales-chart").innerHTML=data.chart.length?data.chart.map(item=>`<div class="chart-column"><span style="height:${Math.max(8,Number(item.invoices)/max*100)}%"></span><b>${item.invoices}</b><small>${safe(period==="day"?item.label:item.label.slice(5))}</small></div>`).join(""):`<p class="empty-state">Sin facturas para ${PERIOD_LABELS[period].toLowerCase()}.</p>`;
   document.querySelector("#family-metrics").innerHTML=data.families.map(item=>`<article class="admin-list-row"><strong>${safe(item.name)}</strong><span>Familia</span><small>Demanda acumulada</small><em>${item.units} unidades</em></article>`).join("")||'<p class="empty-state">Sin instalaciones registradas.</p>';
   document.querySelector("#vehicle-product-metrics").innerHTML=data.vehicleProducts.map(item=>`<article class="admin-list-row"><strong>${safe(item.brand)} ${safe(item.model)}</strong><span>${safe(item.familyName)}</span><small>${safe(item.productName)}</small><em>${item.units} unidades</em></article>`).join("")||'<p class="empty-state">Aun no hay patrones de compra.</p>';
   document.querySelector("#reward-list").innerHTML=data.rewards.map(item=>`<article class="admin-list-row"><strong>${safe(item.name)}</strong><span>${money(item.priceCents)} / ${money(item.cashAfterPointsCents)} + ${Number(item.pointsCost).toLocaleString("es-EC")} TP</span><small>Limite: ${item.stockLimit||"sin limite"}</small><em>${item.requested} usados</em></article>`).join("")||'<p class="empty-state">No hay recompensas creadas.</p>';
+  const topProduct=data.topProducts[0];const topVehicle=data.topVehicles[0];
+  document.querySelector("#top-product").textContent=topProduct?.name||"Sin datos";
+  document.querySelector("#top-product-detail").textContent=topProduct?`${topProduct.familyName} / ${topProduct.units} unidad(es)`:"Esperando operaciones del periodo";
+  document.querySelector("#top-vehicle").textContent=topVehicle?`${topVehicle.brand} ${topVehicle.model}`:"Sin datos";
+  document.querySelector("#top-vehicle-detail").textContent=topVehicle?`${topVehicle.units} instalacion(es) vinculadas`:"Esperando operaciones del periodo";
+  const provinceCounts=new Map(data.provinces.map(item=>[item.province,Number(item.users)]));const provinceMax=Math.max(...provinceCounts.values(),1);
+  document.querySelector("#province-heatmap").innerHTML=PROVINCES.map(province=>{const users=provinceCounts.get(province)||0;const heat=users?(.12+(users/provinceMax)*.68).toFixed(2):.025;return `<article class="province-cell" style="--heat:${heat}"><strong>${safe(province)}</strong><span>${users}</span></article>`;}).join("");
+  const ageCounts=new Map(data.ages.map(item=>[item.ageRange,Number(item.users)]));const ageMax=Math.max(...ageCounts.values(),1);
+  document.querySelector("#age-metrics").innerHTML=["18-24","25-34","35-44","45-54","55+"].map(range=>{const users=ageCounts.get(range)||0;return `<article class="age-bar"><span>${range}</span><i style="width:${users?Math.max(8,users/ageMax*100):0}%"></i><b>${users}</b></article>`;}).join("");
 }
 
 async function loadCatalog(){
@@ -42,6 +55,7 @@ async function open(user){
 
 document.querySelector("#super-login-form").addEventListener("submit",async event=>{event.preventDefault();try{await open((await api("/api/auth/login",{method:"POST",body:JSON.stringify({...Object.fromEntries(new FormData(event.currentTarget)),expectedRole:"superadmin"})})).user);}catch(error){report("#super-login-message",error.message);}});
 document.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>{document.querySelectorAll("[data-view]").forEach(item=>item.classList.toggle("is-active",item===button));document.querySelectorAll("[data-panel]").forEach(panel=>{panel.hidden=panel.dataset.panel!==button.dataset.view;});document.querySelector("#super-title").textContent=button.textContent;}));
+document.querySelectorAll("[data-period]").forEach(button=>button.addEventListener("click",async()=>{document.querySelectorAll("[data-period]").forEach(item=>item.classList.toggle("is-active",item===button));button.disabled=true;try{await loadMetrics(button.dataset.period);}finally{button.disabled=false;}}));
 document.querySelector("#family-form").addEventListener("submit",async event=>{event.preventDefault();try{await api("/api/catalog/families",{method:"POST",body:JSON.stringify(Object.fromEntries(new FormData(event.currentTarget)))});report("#family-message","Familia creada.",true);event.currentTarget.reset();await loadCatalog();}catch(error){report("#family-message",error.message);}});
 document.querySelector("#product-form").addEventListener("submit",async event=>{event.preventDefault();const values=Object.fromEntries(new FormData(event.currentTarget));try{await api("/api/catalog/operational",{method:"POST",body:JSON.stringify(values)});report("#product-message","Producto creado.",true);event.currentTarget.reset();await Promise.all([loadCatalog(),loadMetrics()]);}catch(error){report("#product-message",error.message);}});
 document.querySelector("#reward-form").addEventListener("submit",async event=>{event.preventDefault();const values=Object.fromEntries(new FormData(event.currentTarget));try{await api("/api/rewards",{method:"POST",body:JSON.stringify({...values,pointsCost:Number(values.pointsCost),stockLimit:Number(values.stockLimit),price:Number(values.price),cashAfterPoints:Number(values.cashAfterPoints)})});report("#reward-message","Recompensa publicada.",true);event.currentTarget.reset();await loadMetrics();}catch(error){report("#reward-message",error.message);}});

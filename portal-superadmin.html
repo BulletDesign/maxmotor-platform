@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/portal.css?v=20260804-2">
-  <link rel="stylesheet" href="assets/portal-admin.css?v=20260804-2">
+  <link rel="stylesheet" href="assets/portal.css?v=20260804-4">
+  <link rel="stylesheet" href="assets/portal-admin.css?v=20260804-4">
 </head>
 <body class="admin-body">
   <div class="portal-grid" aria-hidden="true"></div>
@@ -29,9 +29,12 @@
       <div class="admin-workspace">
         <header><div><p class="eyebrow">CONTROL ADMINISTRATIVO</p><h1 id="super-title">Inteligencia</h1></div><span class="live-pill">D1 EN LÍNEA</span></header>
         <section class="admin-view" data-panel="intelligence">
-          <div class="admin-stats super-stats"><article><span>Facturas del mes</span><strong id="metric-invoices">0</strong></article><article><span>Ventas del mes</span><strong id="metric-sales">$0</strong></article><article><span>Clientes activos</span><strong id="metric-customers">0</strong></article><article><span>Items de puntos</span><strong id="metric-rewardItems">0</strong></article><article><span>Garantías vencidas</span><strong id="metric-expiredWarranties">0</strong></article><article><span>Garantías extendidas</span><strong id="metric-extendedWarranties">0</strong></article></div>
-          <div class="admin-panel"><div class="admin-panel-heading"><h2>Facturas del periodo</h2><span id="super-month-total">Periodo mensual actual</span></div><div id="super-sales-chart" class="sales-chart"></div></div>
+          <div class="period-filter" role="group" aria-label="Periodo de analisis"><button type="button" data-period="day">Hoy</button><button type="button" data-period="week">Esta semana</button><button class="is-active" type="button" data-period="month">Este mes</button></div>
+          <div class="admin-stats super-stats"><article><span>Facturas del periodo</span><strong id="metric-invoices">0</strong></article><article><span>Ventas del periodo</span><strong id="metric-sales">$0</strong></article><article><span>Clientes activos</span><strong id="metric-customers">0</strong></article><article><span>Items de puntos</span><strong id="metric-rewardItems">0</strong></article><article><span>Garantías vencidas</span><strong id="metric-expiredWarranties">0</strong></article><article><span>Garantías extendidas</span><strong id="metric-extendedWarranties">0</strong></article></div>
+          <div class="admin-panel"><div class="admin-panel-heading"><h2>Facturas del periodo</h2><span id="super-period-total">Periodo mensual actual</span></div><div id="super-sales-chart" class="sales-chart"></div></div>
+          <div class="leaders-grid"><article class="leader-card"><span>PRODUCTO MAS VENDIDO</span><strong id="top-product">Sin datos</strong><small id="top-product-detail">Esperando operaciones del periodo</small></article><article class="leader-card"><span>VEHICULO MAS SOLICITADO</span><strong id="top-vehicle">Sin datos</strong><small id="top-vehicle-detail">Esperando operaciones del periodo</small></article></div>
           <div class="intelligence-grid"><div class="admin-panel"><div class="admin-panel-heading"><h2>Demanda por familia</h2><span>Unidades instaladas</span></div><div id="family-metrics" class="admin-list"></div></div><div class="admin-panel"><div class="admin-panel-heading"><h2>Vehículo + producto</h2><span>Señal para abastecimiento</span></div><div id="vehicle-product-metrics" class="admin-list"></div></div></div>
+          <div class="demographic-grid"><div class="admin-panel"><div class="admin-panel-heading"><h2>Mapa de calor provincial</h2><span>Cuentas creadas en el periodo</span></div><div id="province-heatmap" class="province-heatmap"></div></div><div class="admin-panel"><div class="admin-panel-heading"><h2>Segmentos de edad</h2><span>Nuevos usuarios del periodo</span></div><div id="age-metrics" class="age-bars"></div></div></div>
         </section>
         <section class="admin-view" data-panel="catalog" hidden>
           <div class="dual-forms"><form id="family-form" class="portal-form admin-card"><p class="eyebrow">FAMILIAS</p><h3>Nueva familia</h3><label>Nombre<input name="name" required></label><button class="primary-action"><span>Crear familia</span><b>→</b></button><div id="family-message" class="form-message" hidden></div></form><form id="product-form" class="portal-form admin-card"><p class="eyebrow">PRODUCTOS</p><h3>Nuevo producto operativo</h3><label>Familia<select name="familyId" required></select></label><label>Producto<input name="name" required></label><div class="field-row"><label>Días revisión<input name="warrantyDays" type="number" min="0"></label><label>Kilómetros revisión<input name="warrantyKm" type="number" min="0"></label></div><button class="primary-action"><span>Crear producto</span><b>→</b></button><div id="product-message" class="form-message" hidden></div></form></div><div class="admin-panel"><div class="admin-panel-heading"><h2>Catálogo para instalaciones</h2></div><div id="product-list" class="admin-list"></div></div>
@@ -43,6 +46,6 @@
       </div>
     </section>
   </main>
-  <script src="assets/portal-superadmin.js?v=20260804-2" type="module"></script>
+  <script src="assets/portal-superadmin.js?v=20260804-4" type="module"></script>
 </body>
 </html>

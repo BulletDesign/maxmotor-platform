@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Maxmotor 4x4 | Equipamiento 4x4, Accesorios para Camionetas, Recubrimiento de Poliuretano en Ecuador, Quito, Guayaquil, Cuenca y Ambato</title>
   <link rel="icon" href="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo_16x16.png" type="image/png">
   <link rel="apple-touch-icon" href="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/maxmotor_icon_sin_fondo.png">
@@ -108,9 +108,9 @@
 
   <link rel="stylesheet" href="assets/index-legacy.css">
   </style>
-  <link rel="stylesheet" href="assets/maxmotor-mxr.css?v=20260804-3">
-  <link rel="stylesheet" href="assets/shared-shell.css?v=20260804-3">
-  <script src="assets/site-shell.js?v=20260804-3"></script>
+  <link rel="stylesheet" href="assets/maxmotor-mxr.css?v=20260804-4">
+  <link rel="stylesheet" href="assets/shared-shell.css?v=20260804-4">
+  <script src="assets/site-shell.js?v=20260804-4"></script>
 </head>
 
 <body>
@@ -287,49 +287,30 @@
 
   <maxmotor-footer></maxmotor-footer>
 
-  <div id="floating-btn" class="floating-offer" onclick="togglePopup()">&#127991; 10% OFF</div>
+  <button id="floating-btn" class="floating-offer" type="button" onclick="togglePopup()">MI CUENTA + 10% OFF</button>
 
-  <div id="offer-popup" class="popup-overlay" style="display:none;">
+  <div id="offer-popup" class="popup-overlay" style="display:none;" aria-hidden="true">
     <div class="popup-content">
       <div class="popup-header">
-        <span class="close-btn" onclick="togglePopup()">&times;</span>
+        <button class="close-btn" type="button" onclick="togglePopup()" aria-label="Cerrar beneficio">&times;</button>
         <img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" class="popup-logo"
           alt="MXR">
-        <h3 class="popup-title-big">10% OFF</h3>
-        <p class="popup-subtitle">EN TU PRIMERA COMPRA</p>
+        <p class="popup-kicker">BIENVENIDA MIMAXMOTOR</p>
+        <h3 class="popup-title-big">Crea tu cuenta.<br>Activa tu ruta.</h3>
+        <p class="popup-subtitle">10% OFF EN PRODUCTOS SELECCIONADOS</p>
       </div>
       <div class="popup-body">
-        <form id="discountForm" onsubmit="generarCupon(event)" method="POST" target="coupon_iframe">
-          <p style="color:#666; margin-bottom:20px; font-size: 0.9rem;">Regístrate para obtener tu código único.</p>
-          <input type="text" id="nombre" placeholder="Tu Nombre" required>
-          <input type="tel" id="telefono" placeholder="WhatsApp (sin 0, ej: 991234567)" required>
-          <select id="auto-popup" required>
-            <option value="" disabled selected>Selecciona tu Marca</option>
-          </select>
-          <input type="hidden" id="cuponHidden" value="">
-          <small style="display:block; margin-top:10px; color:var(--accent); font-weight:600;">Tip: Ahorra dinero con
-            envío directo e instalación propia &#128161;</small>
-          <button type="submit" id="btn-submit">OBTENER CUPÓN</button>
-        </form>
-        <div id="loading" style="display:none; padding:20px;">
-          <i class="fa-solid fa-circle-notch fa-spin" style="font-size:2rem; color:var(--accent);"></i>
-          <p style="margin-top:10px;">Generando código...</p>
-        </div>
-        <div id="coupon-result" class="coupon-display-area">
-          <i class="fa-solid fa-check-circle success-icon"></i>
-          <h3>¡Felicidades!</h3>
-          <p>Tu código de descuento es:</p>
-          <div class="coupon-code-box" id="final-code"></div>
-          <p style="font-size:0.8rem; color:#999;">Toma una captura y preséntalo en WhatsApp al comprar.</p>
-        </div>
+        <p class="popup-copy">Regístrate por primera vez y el código quedará guardado directamente en <strong>Mis solicitudes</strong> dentro de tu cuenta.</p>
+        <div class="popup-benefits"><article><strong>10%</strong><span>OFF en productos seleccionados</span></article><article><strong>100 TP</strong><span>La acreditación generada por USD 30 en compras</span></article></div>
+        <a id="offer-register-link" class="popup-claim" href="/portal?offer=welcome">Crear cuenta y activar beneficio <b>→</b></a>
+        <small class="popup-terms">Válido para nuevos registros. Un beneficio por persona. Aplican productos seleccionados y disponibilidad.</small>
       </div>
     </div>
   </div>
 
-  <iframe name="coupon_iframe" id="coupon_iframe" style="display:none;"></iframe>
   <script src="data.js"></script>
 
-  <script src="assets/index-app.js"></script>
+  <script src="assets/index-app.js?v=20260804-4"></script>
   <script src="catalog/families.js?v=20260803-5"></script>
   <script src="catalog/catalog-settings.js"></script>
   <script src="assets/catalog-service.js"></script>

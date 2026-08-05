@@ -18,7 +18,7 @@
   const footer = `
     <footer class="shared-footer">
       <div class="shared-footer__grid">
-        <div class="shared-footer__brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor 4x4"><p>Equipamiento e ingenieria para camionetas, SUV y proyectos off-road.</p></div>
+        <div class="shared-footer__brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor 4x4"><p>Equipamiento e ingenieria para camionetas, SUV y proyectos off-road.</p><div class="footer-actions"><a class="footer-action footer-action--primary" href="https://wa.me/593960855932?text=Hola%20Maxmotor%204x4%2C%20necesito%20asesoria." target="_blank" rel="noopener">Contactar por WhatsApp</a><a class="footer-action" href="https://maxmotor-platform.pages.dev/portal">Mi Maxmotor</a></div></div>
         <nav class="footer-nav" aria-label="Navegacion del pie"><small>NAVEGACION</small><a href="${rootPrefix}index.html">Inicio</a><a href="${rootPrefix}index.html#main-catalog">Accesorios 4x4</a><a href="${rootPrefix}vitrina.html">Vitrina</a><a href="${rootPrefix}mxr.html">Linea MXR</a></nav>
         <div class="footer-locations"><small>SUCURSALES</small><p><b>Ambato</b><br>Av. Atahualpa 18-0202<br><a href="tel:+593960855932">096 085 5932</a></p><p><b>Quito</b><br>De Las Hiedras 428, Torre Oxford<br><a href="tel:+593987986672">098 798 6672</a></p></div>
       </div>

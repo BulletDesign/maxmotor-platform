@@ -19,6 +19,7 @@ export async function deleteCustomerData(db, customerId, actorId = null) {
 
   await db.batch([
     db.prepare("DELETE FROM notification_reads WHERE user_id=?1").bind(customerId),
+    db.prepare("DELETE FROM coupons WHERE user_id=?1").bind(customerId),
     db.prepare("DELETE FROM warranty_events WHERE installation_id IN (SELECT id FROM installations WHERE user_id=?1)").bind(customerId),
     db.prepare("DELETE FROM installations WHERE user_id=?1").bind(customerId),
     db.prepare("DELETE FROM warranties WHERE user_id=?1").bind(customerId),

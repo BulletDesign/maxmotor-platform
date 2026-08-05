@@ -28,3 +28,11 @@ test("every mutating API route enforces same-origin requests", async () => {
     if (/onRequest(?:Post|Patch|Delete)/.test(source)) assert.match(source, /assertSameOrigin\(request\)/, file);
   }
 });
+
+test("the employee sale route persists every linked commercial record", async () => {
+  const source = await readFile(fileURLToPath(new URL("../functions/api/admin/sales.js", import.meta.url)), "utf8");
+  for (const table of ["invoices", "points_ledger", "warranties", "installations", "audit_log"]) {
+    assert.match(source, new RegExp(`INSERT INTO ${table}\\b`), `sales.js must persist ${table}`);
+  }
+  assert.match(source, /requireUser\(request, env\.DB, \["employee", "superadmin"\]\)/);
+});
