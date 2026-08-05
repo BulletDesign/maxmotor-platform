@@ -6,12 +6,12 @@ import test from "node:test";
 import { assertSameOrigin, HttpError } from "../functions/_lib/http.js";
 
 test("accepts only an explicit same-origin mutation", () => {
-  const valid = new Request("https://maxmotor-platform.pages.dev/api/account", { method: "PATCH", headers: { origin: "https://maxmotor-platform.pages.dev" } });
+  const valid = new Request("https://maxmotor4x4.com/api/account", { method: "PATCH", headers: { origin: "https://maxmotor4x4.com" } });
   assert.doesNotThrow(() => assertSameOrigin(valid));
 
   for (const origin of [null, "https://attacker.example"]) {
     const headers = origin ? { origin } : {};
-    const request = new Request("https://maxmotor-platform.pages.dev/api/account", { method: "PATCH", headers });
+    const request = new Request("https://maxmotor4x4.com/api/account", { method: "PATCH", headers });
     assert.throws(() => assertSameOrigin(request), (error) => error instanceof HttpError && error.status === 403);
   }
 });
