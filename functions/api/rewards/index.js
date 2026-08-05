@@ -1,5 +1,44 @@
 import { requireUser } from "../../_lib/auth.js";
-import { assertSameOrigin,handleError,HttpError,json,readJson } from "../../_lib/http.js";
+import { assertSameOrigin, handleError, HttpError, json, readJson } from "../../_lib/http.js";
 
-export async function onRequestGet({request,env}){try{const manage=new URL(request.url).searchParams.get("manage")==="1";await requireUser(request,env.DB,manage?["employee","superadmin"]:[]);const where=manage?"":"WHERE r.active=1";const having=manage?"":"HAVING r.stock_limit=0 OR reserved<r.stock_limit";const result=await env.DB.prepare(`SELECT r.id,r.name,r.description,r.points_cost pointsCost,r.price_cents priceCents,r.cash_after_points_cents cashAfterPointsCents,r.stock_limit stockLimit,r.active,COUNT(rd.id) reserved FROM rewards r LEFT JOIN redemptions rd ON rd.reward_id=r.id AND rd.status IN ('requested','approved','delivered') ${where} GROUP BY r.id ${having} ORDER BY r.active DESC,r.points_cost`).all();return json({rewards:result.results||[]});}catch(error){return handleError(error);}}
-export async function onRequestPost({request,env}){try{assertSameOrigin(request);const actor=await requireUser(request,env.DB,["employee","superadmin"]);const body=await readJson(request);const name=String(body.name||"").trim();const pointsCost=Number(body.pointsCost);const stockLimit=Number(body.stockLimit);const priceCents=Math.round(Number(body.price||0)*100);const cashAfterPointsCents=Math.round(Number(body.cashAfterPoints||0)*100);if(!name||!Number.isInteger(pointsCost)||pointsCost<=0||!Number.isInteger(stockLimit)||stockLimit<0||priceCents<0||cashAfterPointsCents<0)throw new HttpError(400,"Recompensa invalida");const id=crypto.randomUUID();await env.DB.batch([env.DB.prepare("INSERT INTO rewards(id,name,description,points_cost,stock_limit,price_cents,cash_after_points_cents,created_by) VALUES(?1,?2,?3,?4,?5,?6,?7,?8)").bind(id,name,String(body.description||"").trim(),pointsCost,stockLimit,priceCents,cashAfterPointsCents,actor.id),env.DB.prepare("INSERT INTO audit_log(id,actor_user_id,action,entity_type,entity_id,metadata_json) VALUES(?1,?2,'reward.create','reward',?3,?4)").bind(crypto.randomUUID(),actor.id,id,JSON.stringify({pointsCost,stockLimit,priceCents,cashAfterPointsCents}))]);return json({id},201);}catch(error){return handleError(error);}}
+async function validateReward(db, body) {
+  const name = String(body.name || "").trim();
+  const pointsCost = Number(body.pointsCost);
+  const stockLimit = Number(body.stockLimit);
+  const priceCents = Math.round(Number(body.price || 0) * 100);
+  const cashAfterPointsCents = Math.round(Number(body.cashAfterPoints || 0) * 100);
+  const fulfillmentType = body.fulfillmentType === "install" ? "install" : "sale";
+  const productId = fulfillmentType === "install" ? String(body.productId || "") : null;
+  if (!name || !Number.isInteger(pointsCost) || pointsCost <= 0 || !Number.isInteger(stockLimit) || stockLimit < 0 || priceCents < 0 || cashAfterPointsCents < 0) throw new HttpError(400, "Recompensa invalida");
+  if (cashAfterPointsCents > priceCents) throw new HttpError(400, "El precio con puntos no puede superar el precio original");
+  if (fulfillmentType === "install") {
+    const product = await db.prepare("SELECT id FROM operational_products WHERE id=?1 AND active=1").bind(productId).first();
+    if (!product) throw new HttpError(400, "Selecciona un producto activo para instalar");
+  }
+  return { name, description: String(body.description || "").trim(), pointsCost, stockLimit, priceCents, cashAfterPointsCents, fulfillmentType, productId };
+}
+
+export async function onRequestGet({ request, env }) {
+  try {
+    const manage = new URL(request.url).searchParams.get("manage") === "1";
+    await requireUser(request, env.DB, manage ? ["employee", "superadmin"] : []);
+    const where = manage ? "" : "WHERE r.active=1";
+    const having = manage ? "" : "HAVING r.stock_limit=0 OR reserved<r.stock_limit";
+    const result = await env.DB.prepare(`SELECT r.id,r.name,r.description,r.points_cost pointsCost,r.price_cents priceCents,r.cash_after_points_cents cashAfterPointsCents,r.stock_limit stockLimit,r.fulfillment_type fulfillmentType,r.product_id productId,r.active,COUNT(rd.id) reserved FROM rewards r LEFT JOIN redemptions rd ON rd.reward_id=r.id AND rd.status IN ('requested','pending_delivery','claimed') ${where} GROUP BY r.id ${having} ORDER BY r.active DESC,r.points_cost`).all();
+    return json({ rewards: result.results || [] });
+  } catch (error) { return handleError(error); }
+}
+
+export async function onRequestPost({ request, env }) {
+  try {
+    assertSameOrigin(request);
+    const actor = await requireUser(request, env.DB, ["employee", "superadmin"]);
+    const values = await validateReward(env.DB, await readJson(request));
+    const id = crypto.randomUUID();
+    await env.DB.batch([
+      env.DB.prepare("INSERT INTO rewards(id,name,description,points_cost,stock_limit,price_cents,cash_after_points_cents,fulfillment_type,product_id,created_by) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)").bind(id, values.name, values.description, values.pointsCost, values.stockLimit, values.priceCents, values.cashAfterPointsCents, values.fulfillmentType, values.productId, actor.id),
+      env.DB.prepare("INSERT INTO audit_log(id,actor_user_id,action,entity_type,entity_id,metadata_json) VALUES(?1,?2,'reward.create','reward',?3,?4)").bind(crypto.randomUUID(), actor.id, id, JSON.stringify(values)),
+    ]);
+    return json({ id }, 201);
+  } catch (error) { return handleError(error); }
+}

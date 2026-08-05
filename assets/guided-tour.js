@@ -59,11 +59,11 @@ export function setupGuidedTour({ id, steps, trigger, autoStart = true }) {
     await render();
   }
 
-  closeButton.addEventListener("click", () => close());
-  overlay.querySelector(".guided-tour-shade").addEventListener("click", () => close());
+  closeButton.addEventListener("click", () => close(true));
+  overlay.querySelector(".guided-tour-shade").addEventListener("click", () => close(true));
   backButton.addEventListener("click", async () => { if (index > 0) { index -= 1; await render(); } });
   nextButton.addEventListener("click", async () => { if (index === steps.length - 1) { close(true); return; } index += 1; await render(); });
-  document.addEventListener("keydown", (event) => { if (!overlay.hidden && event.key === "Escape") close(); });
+  document.addEventListener("keydown", (event) => { if (!overlay.hidden && event.key === "Escape") close(true); });
   document.querySelector(trigger)?.addEventListener("click", start);
   if (autoStart && localStorage.getItem(storageKey) !== "completed") setTimeout(start, 700);
 }

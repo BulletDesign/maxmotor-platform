@@ -10,7 +10,7 @@ export async function onRequestGet({ request, env }) {
       env.DB.prepare("SELECT COUNT(*) total FROM warranties WHERE status='active'").first(),
       env.DB.prepare("SELECT COUNT(*) total,COALESCE(SUM(amount_cents),0) amountCents FROM invoices WHERE strftime('%Y-%m',issued_at)=strftime('%Y-%m','now')").first(),
       env.DB.prepare("SELECT COUNT(*) total FROM users WHERE role='customer' AND strftime('%Y-%m',created_at)=strftime('%Y-%m','now')").first(),
-      env.DB.prepare("SELECT COUNT(*) total FROM redemptions WHERE status='requested'").first(),
+      env.DB.prepare("SELECT COUNT(*) total FROM redemptions WHERE status IN ('requested','pending_delivery')").first(),
       env.DB.prepare("SELECT CAST(strftime('%d',issued_at) AS INTEGER) day,COUNT(*) invoices,COALESCE(SUM(amount_cents),0) amountCents FROM invoices WHERE strftime('%Y-%m',issued_at)=strftime('%Y-%m','now') GROUP BY day ORDER BY day").all(),
       env.DB.prepare("SELECT action,entity_type AS entityType,created_at AS createdAt FROM audit_log ORDER BY created_at DESC LIMIT 8").all()
     ]);

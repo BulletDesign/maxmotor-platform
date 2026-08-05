@@ -61,3 +61,14 @@
   .maintenance-history>div span{grid-column:1/-1}
   .installation-actions button{flex:1 1 100%}
 }
+.admin-toast-region{position:fixed;z-index:10000;top:1rem;right:1rem;display:grid;width:min(420px,calc(100vw - 2rem));gap:.65rem;pointer-events:none}
+.admin-toast{display:grid;grid-template-columns:1fr auto;gap:.25rem 1rem;padding:1rem 1.1rem;border:1px solid rgba(230,65,50,.7);box-shadow:0 18px 55px rgba(0,0,0,.48);color:#f3f1eb;background:#111310;opacity:0;transform:translateY(-14px);transition:opacity .2s ease,transform .2s ease;pointer-events:auto}
+.admin-toast.is-visible{opacity:1;transform:none}.admin-toast.is-leaving{opacity:0;transform:translateY(-8px)}
+.admin-toast.is-success{border-color:rgba(114,220,114,.65);box-shadow:inset 4px 0 #72dc72,0 18px 55px rgba(0,0,0,.48)}
+.admin-toast.is-error{box-shadow:inset 4px 0 #e64132,0 18px 55px rgba(0,0,0,.48)}
+.admin-toast>span{grid-column:1/-1;color:#e64132;font:800 .62rem var(--font-body);letter-spacing:.12em}.admin-toast.is-success>span{color:#72dc72}
+.admin-toast p{margin:.15rem 0 0;font-size:.75rem;line-height:1.5}.admin-toast button{align-self:center;border:0;color:#fff;background:transparent;font-size:1.4rem;cursor:pointer}
+.warranty-choice{padding:.85rem;border:1px solid rgba(230,65,50,.34);background:rgba(230,65,50,.05)}
+.redemption-actions select{min-width:190px;border:1px solid var(--portal-line);padding:.65rem;color:#fff;background:#080907}
+@media(max-width:620px){.admin-toast-region{top:.65rem;right:.65rem;width:calc(100vw - 1.3rem)}.redemption-actions{display:grid;width:100%}.redemption-actions select,.redemption-actions button{width:100%}}
+.redemption-actions button[data-status="pending_delivery"],.redemption-actions button[data-status="claimed"]{border-color:#4c8f55;color:var(--portal-green)}
