@@ -72,3 +72,4 @@
 .redemption-actions select{min-width:190px;border:1px solid var(--portal-line);padding:.65rem;color:#fff;background:#080907}
 @media(max-width:620px){.admin-toast-region{top:.65rem;right:.65rem;width:calc(100vw - 1.3rem)}.redemption-actions{display:grid;width:100%}.redemption-actions select,.redemption-actions button{width:100%}}
 .redemption-actions button[data-status="pending_delivery"],.redemption-actions button[data-status="claimed"]{border-color:#4c8f55;color:var(--portal-green)}
+@media(max-width:580px){.admin-login{grid-template-columns:minmax(0,1fr)}.admin-login>*{min-width:0}.admin-login-copy h1{overflow-wrap:anywhere}}
