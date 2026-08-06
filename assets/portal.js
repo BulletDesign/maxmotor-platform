@@ -192,8 +192,7 @@ birthDateInput.max = adultDate.toISOString().slice(0, 10);
 const welcomeOfferNote = document.querySelector("#welcome-offer-note");
 if (welcomePointsActive || welcomeOffer) {
   welcomeOfferNote.hidden = false;
-  welcomeOfferNote.querySelector("span").textContent = welcomeOffer
-    ? "Recibiras 100 TP de bienvenida y 10% OFF en productos seleccionados al completar tu registro."
-    : "Regístrate hasta el 31 de diciembre de 2026 y recibe 100 TP de bienvenida.";
+  welcomeOfferNote.querySelector("span").textContent =
+    "Recibiras 100 TP de bienvenida y 10% OFF en productos seleccionados al completar tu registro.";
 }
 if (welcomeOffer || registerIntent) selectTab("register");

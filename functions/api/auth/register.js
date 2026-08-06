@@ -20,7 +20,7 @@ export async function onRequestPost({ request, env }) {
     const birthDate = String(body.birthDate || "").trim();
     const originProvince = String(body.originProvince || "").trim();
     const welcomePoints = isWelcomePointsEligible() ? WELCOME_POINTS_AMOUNT : 0;
-    const wantsWelcomeCoupon = body.welcomeOffer === true && welcomePoints > 0;
+    const wantsWelcomeCoupon = welcomePoints > 0;
     const vehicle = body.vehicle || {};
     if (!/^\S+@\S+\.\S+$/.test(email)) throw new HttpError(400, "Correo invalido");
     if (fullName.length < 3) throw new HttpError(400, "Nombre requerido");
