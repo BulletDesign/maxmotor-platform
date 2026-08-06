@@ -37,16 +37,17 @@ function syncProductTrackingForm(form) {
   timeField.querySelector("input").required = !timeField.hidden;
   mileageField.querySelector("input").required = !mileageField.hidden;
 }
-function syncSaleCoverage(form) {
-  const product = form.elements.productId.selectedOptions[0];
+function syncSaleItemCoverage(item) {
+  const form = item.closest("form");
+  const product = item.querySelector("[name='productId']").selectedOptions[0];
   const coverageAvailable = product?.dataset.coverage === "1";
   const trackingMode = coverageAvailable ? product?.dataset.tracking || "none" : "none";
-  const coverageSelect = form.elements.appliesWarranty;
-  const hint = form.querySelector(".coverage-hint");
+  const coverageSelect = item.querySelector("[name='appliesWarranty']");
+  const hint = item.querySelector(".coverage-hint");
   if (!coverageAvailable) coverageSelect.value = "no";
   coverageSelect.disabled = !coverageAvailable;
   hint.textContent = coverageAvailable ? `Seguimiento configurado: ${trackingLabels[trackingMode] || trackingMode}.` : "Este producto solo admite garantia limitada.";
-  const details = form.querySelector(".warranty-details");
+  const details = item.querySelector(".warranty-details");
   const showDetails = coverageAvailable && coverageSelect.value === "yes" && trackingMode !== "none";
   details.hidden = !showDetails;
   const timeField = details.querySelector("[data-warranty-time]");
@@ -54,6 +55,47 @@ function syncSaleCoverage(form) {
   timeField.hidden = !showDetails || !["time", "both"].includes(trackingMode);
   mileageField.hidden = !showDetails || !["mileage", "both"].includes(trackingMode);
   if (!showDetails) details.querySelectorAll("input").forEach((input) => { input.value = ""; });
+  const vehicle = form.elements.vehicleId.selectedOptions[0];
+  mileageField.querySelector("input").placeholder = vehicle?.dataset.km || "0";
+}
+function saleItemMarkup() {
+  const options = operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map(productOption).join("");
+  return `<article class="sale-item" data-sale-item><header><strong>Accesorio <span data-sale-item-number></span></strong><button type="button" data-remove-sale-item>Quitar</button></header><label>Producto vendido<select name="productId" required>${options}</select></label><label class="warranty-choice"><span>Tipo de cobertura</span><select name="appliesWarranty" required><option value="yes">Cobertura con seguimiento</option><option value="no">Garantia limitada</option></select><small class="coverage-hint">El catalogo define los seguimientos disponibles.</small></label><div class="field-row warranty-details"><label data-warranty-time>Fecha de instalacion <small>Opcional</small><input name="installedAt" type="date"></label><label data-warranty-mileage>Kilometraje <small>Opcional</small><input name="installedKm" type="number" min="0"></label></div></article>`;
+}
+function renumberSaleItems(form) {
+  const items = [...form.querySelectorAll("[data-sale-item]")];
+  items.forEach((item, index) => {
+    item.querySelector("[data-sale-item-number]").textContent = String(index + 1).padStart(2, "0");
+    item.querySelector("[data-remove-sale-item]").disabled = items.length === 1;
+  });
+}
+function addSaleItem(form, values = {}) {
+  const container = form.querySelector("[data-sale-items]");
+  if (container.children.length >= 25) return setMessage(form.querySelector(".form-message") || fileMessage, "Maximo 25 accesorios por factura.");
+  container.insertAdjacentHTML("beforeend", saleItemMarkup());
+  const item = container.lastElementChild;
+  if (values.productId) item.querySelector("[name='productId']").value = values.productId;
+  item.querySelector("[name='appliesWarranty']").value = values.appliesWarranty === false ? "no" : "yes";
+  item.querySelector("[name='installedAt']").value = values.installedAt || "";
+  item.querySelector("[name='installedKm']").value = values.installedKm ?? "";
+  syncSaleItemCoverage(item);
+  renumberSaleItems(form);
+}
+function resetSaleItems(form) {
+  form.querySelector("[data-sale-items]").innerHTML = "";
+  addSaleItem(form);
+}
+function refreshSaleItems(form) {
+  const items = [...form.querySelectorAll("[data-sale-item]")];
+  if (!items.length) return addSaleItem(form);
+  const options = operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map(productOption).join("");
+  items.forEach((item) => {
+    const select = item.querySelector("[name='productId']");
+    const selected = select.value;
+    select.innerHTML = options;
+    if ([...select.options].some((option) => option.value === selected)) select.value = selected;
+    syncSaleItemCoverage(item);
+  });
 }
 function openAdminView(view) { document.querySelector(`[data-admin-view="${view}"]`)?.click(); }
 function initializeAdminTour() {
@@ -63,7 +105,7 @@ function initializeAdminTour() {
     steps: [
       { target: ".admin-stats", title: "Resumen operativo", body: "Revisa facturas del mes, nuevos clientes, canjes pendientes y actividad auditada.", before: () => openAdminView("overview") },
       { target: "#customers-browser", title: "Ficha completa del cliente", body: "Busca por Maxmotor ID, nombre, correo, telefono o placa. Desde la ficha se administran vehiculos, ventas, puntos y mantenimientos.", before: () => openAdminView("customers") },
-      { target: "#award-points-form", title: "Venta completa", body: "Acreditar puntos tambien registra factura, vehiculo, producto, instalacion y garantia. No uses ajustes manuales para una venta.", before: () => openAdminView("points") },
+      { target: "#award-points-form", title: "Factura multiaccesorio", body: "Registra una sola factura y agrega todos los accesorios instalados. Cada item conserva su propia cobertura y puedes decidir si la venta acumula TP.", before: () => openAdminView("points") },
       { target: ".catalog-explainer", title: "Catalogo operativo", body: "Las familias ordenan productos y permiten medir demanda; cada producto define sus intervalos de mantenimiento.", before: () => openAdminView("catalog") },
       { target: ".rewards-management", title: "Recompensas", body: "Publica, edita, limita o elimina beneficios canjeables con Traction Points.", before: () => openAdminView("rewards") },
       { target: "#redemption-list", title: "Canjes", body: "Aprueba, rechaza y marca como entregadas las solicitudes realizadas por clientes.", before: () => openAdminView("redemptions") },
@@ -90,7 +132,7 @@ async function loadCatalog() {
   document.querySelector("#family-list").innerHTML = catalogFamilies.length ? catalogFamilies.map((item) => `<article class="admin-list-row"><strong>${escapeHtml(item.name)}</strong><span>Familia operativa</span><small>${Number(item.active) ? "Visible" : "Inactiva"}</small><button type="button" data-edit-family="${item.id}">Editar</button></article>`).join("") : '<p class="empty-state">No hay familias creadas.</p>';
   document.querySelector("#product-list").innerHTML = operationalCatalog.length ? operationalCatalog.map((item) => `<article class="admin-list-row"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.familyName)}</span><small>${Number(item.coverageAvailable) ? `${trackingLabels[item.trackingMode] || item.trackingMode}${item.serviceDays ? ` / ${item.serviceDays} dias` : ""}${item.serviceKm ? ` / ${Number(item.serviceKm).toLocaleString("es-EC")} km` : ""}` : "Garantia limitada"}</small><button type="button" data-edit-product="${item.id}">${Number(item.active) ? "Editar" : "Inactivo / Editar"}</button></article>`).join("") : '<p class="empty-state">No hay productos creados.</p>';
   const options = operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map(productOption).join("");
-  document.querySelectorAll(".sale-form [name='productId']").forEach((select) => { select.innerHTML = options; syncSaleCoverage(select.closest("form")); });
+  document.querySelectorAll(".sale-form").forEach((form) => refreshSaleItems(form));
   const rewardProduct = document.querySelector("#reward-form [name='productId']");
   if (rewardProduct) rewardProduct.innerHTML = `<option value="">Selecciona un producto</option>${options}`;
 }
@@ -133,11 +175,9 @@ async function openCustomerFile(id) {
   document.querySelector("#file-points").textContent = `${Number(customer.points || 0).toLocaleString("es-EC")} TP`;
   const editForm = document.querySelector("#customer-edit-form");
   editForm.elements.id.value = customer.id; editForm.elements.fullName.value = customer.fullName; editForm.elements.email.value = customer.email; editForm.elements.phone.value = customer.phone || "";
-  const invoiceForm = document.querySelector("#customer-invoice-form"); invoiceForm.elements.customerCode.value = customer.customerCode; invoiceForm.elements.issuedAt.value = new Date().toISOString().slice(0, 10); invoiceForm.elements.installedAt.value = "";
+  const invoiceForm = document.querySelector("#customer-invoice-form"); invoiceForm.elements.customerCode.value = customer.customerCode; invoiceForm.elements.issuedAt.value = new Date().toISOString().slice(0, 10); invoiceForm.elements.awardPoints.checked = true;
   invoiceForm.elements.vehicleId.innerHTML = vehicles.map((vehicle) => `<option value="${vehicle.id}" data-km="${vehicle.odometerKm || 0}">${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)} - ${escapeHtml(vehicle.plate || "sin placa")}</option>`).join("");
-  invoiceForm.elements.productId.innerHTML = operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map(productOption).join("");
-  invoiceForm.elements.installedKm.value = vehicles[0]?.odometerKm || 0;
-  syncSaleCoverage(invoiceForm);
+  resetSaleItems(invoiceForm);
   document.querySelector("#file-vehicles").innerHTML = vehicles.length ? vehicles.map((vehicle) => `<article class="admin-list-row"><strong>${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</strong><span>${vehicle.modelYear || "Ano pendiente"} / ${escapeHtml(vehicle.plate || "Sin placa")}</span><small>VIN ${escapeHtml(vehicle.vin || "no registrado")} / ${Number(vehicle.odometerKm || 0).toLocaleString("es-EC")} km</small><button type="button" data-delete-vehicle="${vehicle.id}">Eliminar vehiculo</button></article>`).join("") : '<p class="empty-state">Este cliente no tiene vehiculos vinculados.</p>';
   const maintenanceByInstallation = new Map();
   (data.maintenanceHistory || []).forEach((event) => maintenanceByInstallation.set(event.installationId, [...(maintenanceByInstallation.get(event.installationId) || []), event]));
@@ -167,7 +207,8 @@ async function openAdmin(user) {
   await Promise.all([loadOverview(), loadCustomers(""), loadCatalog(), loadRewards(), loadRedemptions(), loadNotifications()]);
   const awardForm = document.querySelector("#award-points-form");
   awardForm.elements.issuedAt.value = new Date().toISOString().slice(0, 10);
-  awardForm.elements.installedAt.value = "";
+  awardForm.elements.awardPoints.checked = true;
+  refreshSaleItems(awardForm);
   initializeAdminTour();
 }
 
@@ -178,12 +219,25 @@ let searchTimer;
 document.querySelector("#customer-search").addEventListener("input", (event) => { clearTimeout(searchTimer); searchTimer = setTimeout(() => loadCustomers(event.target.value), 250); });
 document.querySelector("#customers-table").addEventListener("click", (event) => { const row = event.target.closest("[data-customer-id]"); if (row) openCustomerFile(row.dataset.customerId).catch((error) => setMessage(fileMessage, error.message)); });
 document.querySelector("#close-customer-file").addEventListener("click", () => { document.querySelector("#customer-file").hidden = true; document.querySelector("#customers-browser").hidden = false; activeCustomerId = null; });
-document.querySelectorAll(".sale-form [name='vehicleId']").forEach((select) => select.addEventListener("change", (event) => { const form = event.target.closest("form"); if (form.elements.appliesWarranty.value === "yes" && !form.elements.installedKm.value) form.elements.installedKm.placeholder = event.target.selectedOptions[0]?.dataset.km || 0; }));
-document.querySelectorAll(".sale-form [name='productId']").forEach((select) => select.addEventListener("change", () => syncSaleCoverage(select.closest("form"))));
-document.querySelectorAll(".sale-form [name='appliesWarranty']").forEach((select) => select.addEventListener("change", () => syncSaleCoverage(select.closest("form"))));
+document.addEventListener("click", (event) => {
+  const addButton = event.target.closest("[data-add-sale-item]");
+  if (addButton) return addSaleItem(addButton.closest("form"));
+  const removeButton = event.target.closest("[data-remove-sale-item]");
+  if (!removeButton) return;
+  const form = removeButton.closest("form");
+  if (form.querySelectorAll("[data-sale-item]").length <= 1) return;
+  removeButton.closest("[data-sale-item]").remove();
+  renumberSaleItems(form);
+});
+document.addEventListener("change", (event) => {
+  const form = event.target.closest(".sale-form");
+  if (!form) return;
+  if (event.target.matches("[name='vehicleId']")) form.querySelectorAll("[data-sale-item]").forEach(syncSaleItemCoverage);
+  if (event.target.matches("[name='productId'],[name='appliesWarranty']")) syncSaleItemCoverage(event.target.closest("[data-sale-item]"));
+});
 
 document.querySelector("#customer-edit-form").addEventListener("submit", async (event) => { event.preventDefault(); const values = Object.fromEntries(new FormData(event.currentTarget)); try { await api(`/api/admin/customers/${values.id}`, { method: "PATCH", body: JSON.stringify(values) }); setMessage(fileMessage, "Ficha actualizada correctamente.", true); await Promise.all([openCustomerFile(values.id), loadCustomers("")]); } catch (error) { setMessage(fileMessage, error.message); } });
-document.querySelector("#customer-invoice-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); try { const data = await api("/api/admin/sales", { method: "POST", body: JSON.stringify(salePayload(values)) }); setMessage(fileMessage, `Venta completa: ${Number(data.points).toLocaleString("es-EC")} TP, instalacion y garantia registradas.`, true); form.elements.invoiceNumber.value = ""; form.elements.amount.value = ""; await Promise.all([openCustomerFile(activeCustomerId), loadOverview()]); } catch (error) { setMessage(fileMessage, error.message); } });
+document.querySelector("#customer-invoice-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; try { const data = await api("/api/admin/sales", { method: "POST", body: JSON.stringify(salePayload(form)) }); const pointsText = data.awardPoints ? `${Number(data.points).toLocaleString("es-EC")} TP acreditados` : "sin TP por descuento"; setMessage(fileMessage, `Factura registrada: ${data.itemCount} accesorio(s) y ${pointsText}.`, true); form.elements.invoiceNumber.value = ""; form.elements.amount.value = ""; await Promise.all([openCustomerFile(activeCustomerId), loadOverview()]); } catch (error) { setMessage(fileMessage, error.message); } });
 document.querySelector("#vehicle-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; try { await api(`/api/admin/customers/${activeCustomerId}/vehicles`, { method: "POST", body: JSON.stringify(Object.fromEntries(new FormData(form))) }); setMessage(fileMessage, "Vehiculo vinculado correctamente.", true); form.reset(); await Promise.all([openCustomerFile(activeCustomerId), loadCustomers("")]); } catch (error) { setMessage(fileMessage, error.message); } });
 document.querySelector("#file-vehicles").addEventListener("click", async (event) => { const button = event.target.closest("[data-delete-vehicle]"); if (!button || prompt("Escribe ELIMINAR VEHICULO para confirmar") !== "ELIMINAR VEHICULO") return; try { await api(`/api/admin/vehicles/${button.dataset.deleteVehicle}`, { method: "DELETE", body: JSON.stringify({ customerId: activeCustomerId, confirmation: "ELIMINAR VEHICULO" }) }); setMessage(fileMessage, "Vehiculo, instalaciones y garantias eliminados. Los puntos se conservaron.", true); await Promise.all([openCustomerFile(activeCustomerId), loadCustomers("")]); } catch (error) { setMessage(fileMessage, error.message); } });
 document.querySelector("#suspend-customer").addEventListener("click", async () => { if (!activeCustomerId || !confirm("Suspender el acceso de este cliente? Su historial se conservara.")) return; try { const form = document.querySelector("#customer-edit-form"); await api(`/api/admin/customers/${activeCustomerId}`, { method: "PATCH", body: JSON.stringify({ fullName: form.elements.fullName.value, email: form.elements.email.value, phone: form.elements.phone.value, status: "suspended" }) }); setMessage(fileMessage, "Cuenta suspendida y sesiones cerradas.", true); await loadCustomers(""); } catch (error) { setMessage(fileMessage, error.message); } });
@@ -243,8 +297,16 @@ document.querySelector("#maintenance-form").addEventListener("submit", async (ev
 document.querySelector("#cancel-extension").addEventListener("click", () => { document.querySelector("#warranty-extension-form").hidden = true; });
 document.querySelector("#warranty-extension-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); try { await api(`/api/admin/installations/${values.installationId}`, { method: "PATCH", body: JSON.stringify({ additionalDays: Number(values.additionalDays), notes: values.notes }) }); setMessage(fileMessage, "Extension pagada de garantia registrada.", true); form.hidden = true; form.reset(); await openCustomerFile(activeCustomerId); } catch (error) { setMessage(fileMessage, error.message); } });
 
-function salePayload(values) {
-  return { customerCode: values.customerCode, invoiceNumber: values.invoiceNumber, amountCents: Math.round(Number(values.amount) * 100), issuedAt: new Date(`${values.issuedAt}T12:00:00`).toISOString(), vehicleId: values.vehicleId, productId: values.productId, appliesWarranty: values.appliesWarranty === "yes", installedAt: values.installedAt ? new Date(`${values.installedAt}T12:00:00`).toISOString() : null, installedKm: values.installedKm === "" ? null : Number(values.installedKm) };
+function salePayload(form) {
+  const values = Object.fromEntries(new FormData(form));
+  const items = [...form.querySelectorAll("[data-sale-item]")].map((item) => {
+    const productId = item.querySelector("[name='productId']").value;
+    const appliesWarranty = item.querySelector("[name='appliesWarranty']").value === "yes";
+    const installedAt = item.querySelector("[name='installedAt']").value;
+    const installedKm = item.querySelector("[name='installedKm']").value;
+    return { productId, appliesWarranty, installedAt: installedAt ? new Date(`${installedAt}T12:00:00`).toISOString() : null, installedKm: installedKm === "" ? null : Number(installedKm) };
+  });
+  return { customerCode: values.customerCode, invoiceNumber: values.invoiceNumber, amountCents: Math.round(Number(values.amount) * 100), issuedAt: new Date(`${values.issuedAt}T12:00:00`).toISOString(), vehicleId: values.vehicleId, awardPoints: form.elements.awardPoints.checked, items };
 }
 
 async function loadAwardCustomer(customerCode) {
@@ -259,15 +321,14 @@ async function loadAwardCustomer(customerCode) {
   const detail = await api(`/api/admin/customers/${customer.id}`);
   form.elements.vehicleId.innerHTML = detail.vehicles.map((vehicle) => `<option value="${vehicle.id}" data-km="${vehicle.odometerKm || 0}">${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)} - ${escapeHtml(vehicle.plate || "sin placa")}</option>`).join("");
   form.elements.vehicleId.disabled = detail.vehicles.length === 0;
-  form.elements.installedKm.placeholder = detail.vehicles[0]?.odometerKm || 0;
-  syncSaleCoverage(form);
+  form.querySelectorAll("[data-sale-item]").forEach(syncSaleItemCoverage);
   status.textContent = `${customer.fullName} / ${detail.vehicles.length} vehiculo(s)`; status.classList.add("is-ready");
 }
 
 let awardLookupTimer;
 document.querySelector("#award-points-form [name='customerCode']").addEventListener("input", (event) => { clearTimeout(awardLookupTimer); const status = document.querySelector("#award-customer-status"); status.textContent = "Ingresa el Maxmotor ID para cargar sus vehiculos."; status.classList.remove("is-ready"); document.querySelector("#award-points-form [name='vehicleId']").disabled = true; awardLookupTimer = setTimeout(() => loadAwardCustomer(event.target.value).catch((error) => { status.textContent = error.message; }), 350); });
 
-document.querySelector("#award-points-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); report("#points-message", ""); try { const data = await api("/api/admin/sales", { method: "POST", body: JSON.stringify(salePayload(values)) }); report("#points-message", `Operacion completa: ${Number(data.points).toLocaleString("es-EC")} TP y ${data.coverageType === "limited" ? "garantia limitada" : "garantia completa"}.`, true); const customerCode = values.customerCode; form.reset(); form.elements.customerCode.value = customerCode; form.elements.issuedAt.value = new Date().toISOString().slice(0, 10); await Promise.all([loadAwardCustomer(customerCode), loadOverview(), loadCustomers("")]); } catch (error) { report("#points-message", error.message); } });
+document.querySelector("#award-points-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const customerCode = form.elements.customerCode.value; report("#points-message", ""); try { const data = await api("/api/admin/sales", { method: "POST", body: JSON.stringify(salePayload(form)) }); const pointsText = data.awardPoints ? `${Number(data.points).toLocaleString("es-EC")} TP acreditados` : "TP no acreditados"; report("#points-message", `Factura completa: ${data.itemCount} accesorio(s), ${pointsText}.`, true); form.reset(); form.elements.customerCode.value = customerCode; form.elements.awardPoints.checked = true; form.elements.issuedAt.value = new Date().toISOString().slice(0, 10); resetSaleItems(form); await Promise.all([loadAwardCustomer(customerCode), loadOverview(), loadCustomers("")]); } catch (error) { report("#points-message", error.message); } });
 
 document.querySelector("#family-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const id = form.elements.id.value; try { await api(id ? `/api/catalog/families/${id}` : "/api/catalog/families", { method: id ? "PATCH" : "POST", body: JSON.stringify({ name: form.elements.name.value, active: form.elements.active.checked }) }); report("#family-message", id ? "Familia actualizada." : "Familia creada.", true); resetManagedForm(form); await loadCatalog(); } catch (error) { report("#family-message", error.message); } });
 document.querySelector("#product-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); const id = values.id; const coverageAvailable = form.elements.coverageAvailable.value === "yes"; try { await api(id ? `/api/catalog/operational/${id}` : "/api/catalog/operational", { method: id ? "PATCH" : "POST", body: JSON.stringify({ ...values, coverageAvailable, trackingMode: coverageAvailable ? form.elements.trackingMode.value : "none", active: form.elements.active.checked }) }); report("#product-message", id ? "Producto actualizado." : "Producto creado.", true); resetManagedForm(form); syncProductTrackingForm(form); await loadCatalog(); if (activeCustomerId) await openCustomerFile(activeCustomerId); } catch (error) { report("#product-message", error.message); } });

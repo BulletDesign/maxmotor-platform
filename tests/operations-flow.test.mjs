@@ -12,10 +12,14 @@ test("uses the auditable redemption delivery workflow", async () => {
   assert.match(route, /'refund'/);
 });
 
-test("sale registration supports full and limited coverage without manual TP", async () => {
+test("sale registration supports multiple coverage items and optional invoice points", async () => {
   const route = await readFile(new URL("../functions/api/admin/sales.js", import.meta.url), "utf8");
-  assert.match(route, /body\.appliesWarranty === true/);
+  assert.match(route, /Array\.isArray\(body\.items\)/);
+  assert.match(route, /MAX_ITEMS_PER_INVOICE/);
+  assert.match(route, /item\.appliesWarranty/);
   assert.match(route, /appliesWarranty \? "full" : "limited"/);
+  assert.match(route, /body\.awardPoints !== false/);
+  assert.match(route, /points_enabled/);
   assert.match(route, /if \(points > 0\)/);
   await assert.rejects(access(new URL("../functions/api/admin/points/adjust.js", import.meta.url)));
 });

@@ -35,4 +35,6 @@ test("the employee sale route persists every linked commercial record", async ()
     assert.match(source, new RegExp(`INSERT INTO ${table}\\b`), `sales.js must persist ${table}`);
   }
   assert.match(source, /requireUser\(request, env\.DB, \["employee", "superadmin"\]\)/);
+  assert.match(source, /await env\.DB\.batch\(statements\)/);
+  assert.match(source, /sale\.install\.multi/);
 });
