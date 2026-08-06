@@ -155,10 +155,16 @@ document.addEventListener("keydown", (event) => {
 
 function initMaxmotorIntro() {
   const loader = document.getElementById("intro-loader");
-  if (!loader) return;
+  if (!loader) {
+    window.dispatchEvent(new CustomEvent("maxmotor:intro-complete"));
+    return;
+  }
   const duration = matchMedia("(prefers-reduced-motion: reduce)").matches ? 100 : 1250;
   window.setTimeout(() => loader.classList.add("is-leaving"), duration);
-  window.setTimeout(() => loader.classList.add("is-hidden"), duration + 700);
+  window.setTimeout(() => {
+    loader.classList.add("is-hidden");
+    window.dispatchEvent(new CustomEvent("maxmotor:intro-complete"));
+  }, duration + 700);
 }
 
 function initMaxmotorHero() {

@@ -54,13 +54,21 @@ function syncSaleItemCoverage(item) {
   const mileageField = details.querySelector("[data-warranty-mileage]");
   timeField.hidden = !showDetails || !["time", "both"].includes(trackingMode);
   mileageField.hidden = !showDetails || !["mileage", "both"].includes(trackingMode);
+  timeField.querySelector("input").required = !timeField.hidden;
+  mileageField.querySelector("input").required = !mileageField.hidden;
   if (!showDetails) details.querySelectorAll("input").forEach((input) => { input.value = ""; });
   const vehicle = form.elements.vehicleId.selectedOptions[0];
   mileageField.querySelector("input").placeholder = vehicle?.dataset.km || "0";
+  syncSaleItemSummary(item);
+}
+function syncSaleItemSummary(item) {
+  const product = item.querySelector("[name='productId']")?.selectedOptions[0];
+  const label = item.querySelector("[data-sale-item-label]");
+  if (label) label.textContent = product?.value ? product.textContent : "Producto por seleccionar";
 }
 function saleItemMarkup() {
   const options = operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map(productOption).join("");
-  return `<article class="sale-item" data-sale-item><header><strong>Accesorio <span data-sale-item-number></span></strong><button type="button" data-remove-sale-item>Quitar</button></header><label>Producto vendido<select name="productId" required>${options}</select></label><label class="warranty-choice"><span>Tipo de cobertura</span><select name="appliesWarranty" required><option value="yes">Cobertura con seguimiento</option><option value="no">Garantia limitada</option></select><small class="coverage-hint">El catalogo define los seguimientos disponibles.</small></label><div class="field-row warranty-details"><label data-warranty-time>Fecha de instalacion <small>Opcional</small><input name="installedAt" type="date"></label><label data-warranty-mileage>Kilometraje <small>Opcional</small><input name="installedKm" type="number" min="0"></label></div></article>`;
+  return `<details class="sale-item" data-sale-item open><summary><span>Accesorio <b data-sale-item-number></b></span><strong data-sale-item-label>Producto por seleccionar</strong><em>Editar</em></summary><div class="sale-item-body"><button class="sale-item-remove" type="button" data-remove-sale-item>Quitar accesorio</button><label>Producto vendido<select name="productId" required><option value="">Selecciona un accesorio</option>${options}</select></label><label class="warranty-choice"><span>Tipo de cobertura</span><select name="appliesWarranty" required><option value="yes">Cobertura con seguimiento</option><option value="no">Garantia limitada</option></select><small class="coverage-hint">El catalogo define los seguimientos disponibles.</small></label><div class="field-row warranty-details"><label data-warranty-time>Fecha de instalacion<input name="installedAt" type="date"></label><label data-warranty-mileage>Kilometraje<input name="installedKm" type="number" min="0"></label></div></div></details>`;
 }
 function renumberSaleItems(form) {
   const items = [...form.querySelectorAll("[data-sale-item]")];
@@ -72,6 +80,7 @@ function renumberSaleItems(form) {
 function addSaleItem(form, values = {}) {
   const container = form.querySelector("[data-sale-items]");
   if (container.children.length >= 25) return setMessage(form.querySelector(".form-message") || fileMessage, "Maximo 25 accesorios por factura.");
+  container.querySelectorAll("[data-sale-item]").forEach((item) => { item.open = false; });
   container.insertAdjacentHTML("beforeend", saleItemMarkup());
   const item = container.lastElementChild;
   if (values.productId) item.querySelector("[name='productId']").value = values.productId;
@@ -80,6 +89,7 @@ function addSaleItem(form, values = {}) {
   item.querySelector("[name='installedKm']").value = values.installedKm ?? "";
   syncSaleItemCoverage(item);
   renumberSaleItems(form);
+  if (container.children.length > 1) item.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 function resetSaleItems(form) {
   form.querySelector("[data-sale-items]").innerHTML = "";
@@ -88,7 +98,7 @@ function resetSaleItems(form) {
 function refreshSaleItems(form) {
   const items = [...form.querySelectorAll("[data-sale-item]")];
   if (!items.length) return addSaleItem(form);
-  const options = operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map(productOption).join("");
+  const options = `<option value="">Selecciona un accesorio</option>${operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map(productOption).join("")}`;
   items.forEach((item) => {
     const select = item.querySelector("[name='productId']");
     const selected = select.value;
@@ -143,9 +153,14 @@ async function loadRewards() {
   document.querySelector("#reward-list").innerHTML = rewardsCatalog.length ? rewardsCatalog.map((item) => `<article class="admin-list-row"><strong>${escapeHtml(item.name)}</strong><span>${money(item.priceCents)} / ${money(item.cashAfterPointsCents)} + ${Number(item.pointsCost).toLocaleString("es-EC")} TP</span><small>${item.fulfillmentType === "install" ? "Instalacion en vehiculo" : "Venta sin instalacion"} / Limite ${item.stockLimit || "sin limite"} / ${item.reserved || 0} reservados</small><div class="row-actions"><button type="button" data-edit-reward="${item.id}">${Number(item.active) ? "Editar" : "Inactiva / Editar"}</button><button class="danger-inline" type="button" data-delete-reward="${item.id}">Eliminar definitivamente</button></div></article>`).join("") : '<p class="empty-state">No hay recompensas publicadas.</p>';
 }
 
-async function loadRedemptions() {
-  const data = await api("/api/redemptions?role=employee");
+async function loadRedemptions(code = "") {
+  const [data, couponData] = await Promise.all([api("/api/redemptions?role=employee"), api(`/api/coupons?role=employee${code ? `&code=${encodeURIComponent(code)}` : ""}`)]);
   const statusLabel = { requested: "Solicitado", pending_delivery: "Por entregar", rejected: "Rechazado", claimed: "Reclamado", cancelled: "Cancelado" };
+  const couponStatus = { available: "Disponible", requested: "Solicitado", accepted: "Aceptado", redeemed: "Redimido", rejected: "Rechazado", expired: "Vencido", void: "Anulado" };
+  document.querySelector("#coupon-redemption-list").innerHTML = couponData.coupons.length ? couponData.coupons.map((item) => {
+    const actions = ["available", "requested"].includes(item.status) ? `<div class="redemption-actions"><button type="button" data-coupon-id="${item.id}" data-status="accepted">Aceptar 10% OFF</button><button type="button" data-coupon-id="${item.id}" data-status="rejected">Rechazar</button></div>` : item.status === "accepted" ? `<div class="redemption-actions"><button type="button" data-coupon-id="${item.id}" data-status="redeemed">Marcar redimido</button><button type="button" data-coupon-id="${item.id}" data-status="rejected">Rechazar</button></div>` : `<em>${couponStatus[item.status] || escapeHtml(item.status)}</em>`;
+    return `<article class="admin-list-row coupon-admin-row"><strong>${escapeHtml(item.code)}<small>${escapeHtml(item.customerCode)}</small></strong><span>${escapeHtml(item.fullName)}<br>${item.discountPercent}% OFF</span><small>${couponStatus[item.status] || escapeHtml(item.status)} / ${item.requestedAt ? new Date(item.requestedAt).toLocaleString("es-EC") : "Presentado por codigo"}</small>${actions}</article>`;
+  }).join("") : `<p class="empty-state">${code ? "No existe un cupon con ese codigo." : "No existen solicitudes de descuento."}</p>`;
   document.querySelector("#redemption-list").innerHTML = data.redemptions.length ? data.redemptions.map((item) => {
     const vehicles = (data.vehicles || []).filter((vehicle) => vehicle.userId === item.userId);
     const vehicleSelect = item.fulfillmentType === "install" ? `<select data-redemption-vehicle aria-label="Vehiculo para instalar">${vehicles.map((vehicle) => `<option value="${vehicle.id}">${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)} / ${escapeHtml(vehicle.plate || "sin placa")}</option>`).join("")}</select>` : "";
@@ -235,6 +250,7 @@ document.addEventListener("change", (event) => {
   if (event.target.matches("[name='vehicleId']")) form.querySelectorAll("[data-sale-item]").forEach(syncSaleItemCoverage);
   if (event.target.matches("[name='productId'],[name='appliesWarranty']")) syncSaleItemCoverage(event.target.closest("[data-sale-item]"));
 });
+document.addEventListener("wheel", (event) => { const select = event.target.closest?.(".sale-form select"); if (select && document.activeElement === select) select.blur(); }, { passive: true });
 
 document.querySelector("#customer-edit-form").addEventListener("submit", async (event) => { event.preventDefault(); const values = Object.fromEntries(new FormData(event.currentTarget)); try { await api(`/api/admin/customers/${values.id}`, { method: "PATCH", body: JSON.stringify(values) }); setMessage(fileMessage, "Ficha actualizada correctamente.", true); await Promise.all([openCustomerFile(values.id), loadCustomers("")]); } catch (error) { setMessage(fileMessage, error.message); } });
 document.querySelector("#customer-invoice-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; try { const data = await api("/api/admin/sales", { method: "POST", body: JSON.stringify(salePayload(form)) }); const pointsText = data.awardPoints ? `${Number(data.points).toLocaleString("es-EC")} TP acreditados` : "sin TP por descuento"; setMessage(fileMessage, `Factura registrada: ${data.itemCount} accesorio(s) y ${pointsText}.`, true); form.elements.invoiceNumber.value = ""; form.elements.amount.value = ""; await Promise.all([openCustomerFile(activeCustomerId), loadOverview()]); } catch (error) { setMessage(fileMessage, error.message); } });
@@ -355,6 +371,9 @@ document.querySelector("#reward-list").addEventListener("click", async (event) =
 document.querySelectorAll("[data-cancel-form]").forEach((button) => button.addEventListener("click", () => { const form = document.querySelector(`#${button.dataset.cancelForm}`); resetManagedForm(form); if (form.id === "product-form") syncProductTrackingForm(form); }));
 
 document.querySelector("#redemption-list").addEventListener("click", async (event) => { const button = event.target.closest("[data-redemption-id]"); if (!button) return; const row = button.closest(".admin-list-row"); const vehicleId = row.querySelector("[data-redemption-vehicle]")?.value; try { await api(`/api/redemptions/${button.dataset.redemptionId}`, { method: "PATCH", body: JSON.stringify({ status: button.dataset.status, vehicleId }) }); report("#redemption-message", button.dataset.status === "pending_delivery" ? "Canje aceptado y puesto por entregar." : button.dataset.status === "claimed" ? "Canje marcado como reclamado." : "Estado del canje actualizado.", true); await Promise.all([loadRedemptions(), loadRewards(), loadOverview()]); } catch (error) { report("#redemption-message", error.message); } });
+document.querySelector("#coupon-lookup-form").addEventListener("submit", async (event) => { event.preventDefault(); const code = event.currentTarget.elements.code.value.trim().toUpperCase(); if (!code) return loadRedemptions(); try { await loadRedemptions(code); } catch (error) { report("#redemption-message", error.message); } });
+document.querySelector("[data-clear-coupon-search]").addEventListener("click", () => { const form = document.querySelector("#coupon-lookup-form"); form.reset(); loadRedemptions().catch((error) => report("#redemption-message", error.message)); });
+document.querySelector("#coupon-redemption-list").addEventListener("click", async (event) => { const button = event.target.closest("[data-coupon-id]"); if (!button) return; try { await api(`/api/coupons/${button.dataset.couponId}`, { method: "PATCH", body: JSON.stringify({ status: button.dataset.status }) }); const label = button.dataset.status === "accepted" ? "Cupon aceptado. El cliente ya puede ver la confirmacion." : button.dataset.status === "redeemed" ? "Cupon marcado como redimido." : "Cupon rechazado."; report("#redemption-message", label, true); const code = document.querySelector("#coupon-lookup-form").elements.code.value.trim(); await loadRedemptions(code); } catch (error) { report("#redemption-message", error.message); } });
 document.querySelector("#notification-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; try { await api("/api/notifications", { method: "POST", body: JSON.stringify(Object.fromEntries(new FormData(form))) }); report("#notification-message", "Aviso publicado para todos los clientes durante 30 dias.", true); form.reset(); await loadNotifications(); } catch (error) { report("#notification-message", error.message); } });
 document.querySelector("#notification-list").addEventListener("click", async (event) => { const button = event.target.closest("[data-delete-notification]"); if (!button || !confirm("Eliminar esta notificacion para todos los clientes?")) return; try { await api(`/api/notifications/${button.dataset.deleteNotification}`, { method: "DELETE" }); report("#notification-message", "Notificacion eliminada.", true); await loadNotifications(); } catch (error) { report("#notification-message", error.message); } });
 

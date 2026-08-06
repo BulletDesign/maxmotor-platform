@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/portal.css?v=20260805-7">
+  <link rel="stylesheet" href="assets/portal.css?v=20260806-1">
   <link rel="stylesheet" href="assets/type-system.css?v=20260805-2">
   <link rel="stylesheet" href="assets/guided-tour.css?v=20260805-3">
 </head>
@@ -72,10 +72,7 @@
               <legend>Primero, tú</legend>
               <p>Crea una identidad segura para tu bitácora Maxmotor.</p>
               <label>Nombre completo<input name="fullName" autocomplete="name" autocapitalize="words" data-normalize="words" minlength="3" required></label>
-              <div class="field-row">
-                <label>Cédula<input name="nationalId" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required></label>
-                <label>Teléfono<input name="phone" type="tel" autocomplete="tel" required></label>
-              </div>
+              <label>Teléfono<input name="phone" type="tel" autocomplete="tel" required></label>
               <div class="field-row">
                 <label>Fecha de nacimiento<input name="birthDate" type="date" autocomplete="bday" required></label>
                 <label>Provincia de origen<select name="originProvince" required><option value="">Selecciona una provincia</option><option>Azuay</option><option>Bolívar</option><option>Cañar</option><option>Carchi</option><option>Chimborazo</option><option>Cotopaxi</option><option>El Oro</option><option>Esmeraldas</option><option>Galápagos</option><option>Guayas</option><option>Imbabura</option><option>Loja</option><option>Los Ríos</option><option>Manabí</option><option>Morona Santiago</option><option>Napo</option><option>Orellana</option><option>Pastaza</option><option>Pichincha</option><option>Santa Elena</option><option>Santo Domingo de los Tsáchilas</option><option>Sucumbíos</option><option>Tungurahua</option><option>Zamora Chinchipe</option></select></label>
@@ -94,12 +91,9 @@
               </div>
               <div class="field-row">
                 <label>Año<input name="modelYear" type="number" inputmode="numeric" min="1950" max="2030"></label>
-                <label>Kilometraje<input name="odometerKm" type="number" inputmode="numeric" min="0" value="0"></label>
-              </div>
-              <div class="field-row">
                 <label>Placa<input name="plate" autocomplete="off" autocapitalize="characters" data-normalize="upper"></label>
-                <label>VIN<input name="vin" autocomplete="off" autocapitalize="characters" data-normalize="upper" maxlength="17"></label>
               </div>
+              <p class="form-note">El kilometraje y VIN solo se solicitarán después si un accesorio necesita seguimiento técnico.</p>
               <label class="consent"><input name="consent" type="checkbox" required><span>Acepto el tratamiento de datos para operar el portal, garantías y programa de puntos.</span></label>
               <div class="form-actions"><button class="text-action previous-step" type="button">← Volver</button><button class="primary-action" type="submit"><span>Crear mi cuenta</span><b aria-hidden="true">→</b></button></div>
             </fieldset>
@@ -141,6 +135,6 @@
     </section>
   </main>
   <dialog id="delete-account-dialog" class="portal-dialog"><form id="delete-account-form" class="portal-form" method="dialog"><p class="eyebrow">CONFIRMACION FINAL</p><h2>Esta accion no se puede deshacer.</h2><p>Ingresa tu contrasena y escribe <strong>ELIMINAR</strong>.</p><label>Contrasena actual<input name="currentPassword" type="password" autocomplete="current-password" required></label><label>Confirmacion<input name="confirmation" autocomplete="off" pattern="ELIMINAR" required></label><div class="dialog-actions"><button id="cancel-delete-account" class="text-action" type="button">Cancelar</button><button class="danger-action" type="submit">Eliminar definitivamente</button></div><div id="delete-account-message" class="form-message inline-message" hidden></div></form></dialog>
-  <script src="assets/portal.js?v=20260805-7" type="module"></script>
+  <script src="assets/portal.js?v=20260806-1" type="module"></script>
 </body>
 </html>

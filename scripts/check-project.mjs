@@ -43,7 +43,7 @@ for (const privatePath of ["/api/", "/portal", "/MiMaxmotor", "/portal-maxmotor"
 }
 
 const home = await readFile(join(dist, "index.html"), "utf8");
-if (!home.includes('href="/MiMaxmotor?tab=register"')) errors.push("Falta el CTA de registro MiMaxmotor en el index");
+if (!/href="\/MiMaxmotor\?tab=register(?:&amp;offer=welcome)?"/.test(home)) errors.push("Falta el CTA de registro MiMaxmotor en el index");
 if (!home.includes('rel="canonical" href="https://maxmotor4x4.com/"')) errors.push("Canonical de produccion ausente en el index");
 
 if (errors.length) {

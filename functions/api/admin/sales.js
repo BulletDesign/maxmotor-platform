@@ -20,6 +20,8 @@ function normalizeItems(body) {
 function installationRecord(item, product, vehicle, issuedAt) {
   const appliesWarranty = item.appliesWarranty && Boolean(Number(product.coverageAvailable)) && TRACKING_MODES.has(product.trackingMode);
   const trackingMode = appliesWarranty ? product.trackingMode : "none";
+  if (appliesWarranty && ["time", "both"].includes(trackingMode) && !item.installedAt) throw new HttpError(400, `Fecha de instalacion requerida para ${product.name}`);
+  if (appliesWarranty && ["mileage", "both"].includes(trackingMode) && item.installedKm === null) throw new HttpError(400, `Kilometraje requerido para ${product.name}`);
   const installedAt = appliesWarranty && item.installedAt ? item.installedAt : issuedAt;
   const installedKm = appliesWarranty && ["mileage", "both"].includes(trackingMode) && item.installedKm !== null
     ? item.installedKm
