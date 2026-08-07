@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Maxmotor Stories / Tools Not Toys</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--black:#070908;--panel:#111411;--cream:#f4f0e7;--muted:#b5b3aa;--red:#df493a;--green:#67d977;--yellow:#efc744}
+    *{box-sizing:border-box}html,body{margin:0;background:#111}body{font-family:Montserrat,sans-serif}.story{position:relative;display:none;width:1080px;height:1920px;overflow:hidden;color:var(--cream);background:var(--black)}.story.is-active{display:block}.story:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:180px 180px}.photo{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;filter:saturate(.72) contrast(1.08)}.shade{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(5,7,5,.18) 0%,rgba(5,7,5,.08) 35%,rgba(5,7,5,.94) 72%,#070908 100%)}.shade--left{background:linear-gradient(90deg,rgba(5,7,5,.96) 0%,rgba(5,7,5,.72) 49%,rgba(5,7,5,.2) 100%),linear-gradient(180deg,transparent 55%,#070908 100%)}.story__inner{position:relative;z-index:3;display:flex;flex-direction:column;height:100%;padding:76px 74px 72px}.brand{display:flex;align-items:center;justify-content:space-between;gap:36px}.brand img{width:330px;height:132px;object-fit:contain;object-position:left center;filter:drop-shadow(0 8px 20px rgba(0,0,0,.7))}.slogan{text-align:right;font:800 29px/1 "Barlow Condensed",sans-serif;letter-spacing:.16em;color:var(--cream)}.slogan span{display:block;margin-top:9px;color:var(--red);font-size:17px;letter-spacing:.28em}.index{margin-top:98px;color:var(--red);font:800 27px/1 "Barlow Condensed",sans-serif;letter-spacing:.22em}.headline{max-width:930px;margin:22px 0 0;font:700 162px/.78 Teko,sans-serif;letter-spacing:-.02em;text-transform:uppercase;text-shadow:0 9px 30px rgba(0,0,0,.45)}.headline em{display:block;color:transparent;-webkit-text-stroke:3px var(--cream);font-style:normal}.headline .red{color:var(--red);-webkit-text-stroke:0}.push{margin-top:auto}.subhead{max-width:850px;margin:0 0 34px;font:500 37px/1.3 Montserrat,sans-serif;color:#dedbd2}.benefits{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(244,240,231,.28);background:rgba(7,9,8,.7)}.benefits div{min-height:145px;padding:26px 30px;border-right:1px solid rgba(244,240,231,.18);border-bottom:1px solid rgba(244,240,231,.18)}.benefits div:nth-child(2n){border-right:0}.benefits strong{display:block;color:var(--red);font:800 28px "Barlow Condensed",sans-serif}.benefits span{display:block;margin-top:8px;font-size:23px;line-height:1.3}.cta{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:38px;padding:27px 31px;background:var(--red);color:#fff}.cta strong{font:800 32px "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.06em}.cta b{font:800 30px "Barlow Condensed",sans-serif;letter-spacing:.03em}.credit{margin-top:18px;color:#85877f;font-size:14px}.points-hero{margin-top:auto;padding-bottom:24px}.metric{display:flex;align-items:flex-end;gap:25px;margin-top:45px}.metric strong{font:700 280px/.62 Teko,sans-serif;color:var(--red)}.metric span{max-width:330px;padding-bottom:4px;font:700 44px/.9 "Barlow Condensed",sans-serif;text-transform:uppercase}.formula{display:grid;grid-template-columns:repeat(3,1fr);margin-top:55px;border-top:1px solid rgba(244,240,231,.35);border-bottom:1px solid rgba(244,240,231,.35)}.formula div{padding:28px 20px;border-right:1px solid rgba(244,240,231,.25)}.formula div:last-child{border-right:0}.formula strong{display:block;color:var(--red);font:700 54px/1 Teko,sans-serif}.formula span{font:600 19px/1.35 Montserrat,sans-serif}.steps{display:grid;gap:1px;margin-top:auto;background:rgba(244,240,231,.25);border:1px solid rgba(244,240,231,.25)}.step{display:grid;grid-template-columns:105px 1fr;gap:24px;align-items:center;min-height:175px;padding:24px 34px;background:rgba(7,9,8,.84)}.step b{color:var(--red);font:700 70px/1 Teko,sans-serif}.step strong{display:block;font:800 30px "Barlow Condensed",sans-serif;text-transform:uppercase}.step span{display:block;margin-top:7px;color:var(--muted);font-size:20px;line-height:1.35}.reward .story__inner{padding-bottom:66px}.reward .index{margin-top:75px}.reward .headline{max-width:830px;font-size:142px}.reward-card{margin-top:auto;border:1px solid rgba(244,240,231,.3);background:rgba(7,9,8,.86);backdrop-filter:blur(8px)}.reward-top{display:flex;align-items:end;justify-content:space-between;gap:25px;padding:28px 34px;border-bottom:1px solid rgba(244,240,231,.22)}.reward-top span{font:800 25px "Barlow Condensed",sans-serif;letter-spacing:.14em;color:var(--red)}.reward-top b{font:700 70px/.8 Teko,sans-serif;color:var(--cream)}.prices{display:grid;grid-template-columns:1fr 1.45fr}.price{padding:28px 34px;border-right:1px solid rgba(244,240,231,.2)}.price:last-child{border:0;background:rgba(103,217,119,.08)}.price small{display:block;color:var(--muted);font:700 18px "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.08em}.price s,.price strong{display:block;margin-top:5px;font:700 54px/1 Teko,sans-serif}.price strong{color:var(--green);font-size:66px}.saving{display:flex;align-items:center;justify-content:space-between;gap:25px;padding:24px 34px;background:var(--green);color:#081008}.saving strong{font:800 31px "Barlow Condensed",sans-serif;text-transform:uppercase}.saving b{font:800 36px "Barlow Condensed",sans-serif}.terms{margin-top:16px;color:#aaa;font-size:14px}.reward .cta{margin-top:27px}.mark{position:absolute;right:-55px;top:530px;z-index:2;width:380px;height:380px;border:2px solid rgba(223,73,58,.26);border-radius:50%}.mark:before,.mark:after{content:"";position:absolute;background:rgba(223,73,58,.24)}.mark:before{left:50%;top:-95px;width:2px;height:570px}.mark:after{top:50%;left:-95px;width:570px;height:2px}
+    /* Export-safe 9:16 composition: all copy and calls to action stay inside 1080x1920. */
+    .shade{background:linear-gradient(180deg,rgba(5,7,5,.2) 0%,rgba(5,7,5,.12) 30%,rgba(5,7,5,.95) 67%,#070908 100%)}
+    .shade--left{background:linear-gradient(90deg,rgba(5,7,5,.96) 0%,rgba(5,7,5,.72) 49%,rgba(5,7,5,.2) 100%),linear-gradient(180deg,transparent 48%,#070908 100%)}
+    .story__inner{padding:58px 68px 54px}
+    .brand img{width:285px;height:112px}
+    .slogan{font-size:27px}.slogan span{font-size:16px}
+    .index{margin-top:58px;font-size:25px}
+    .headline{max-width:944px;margin-top:18px;font-size:132px;line-height:.8;letter-spacing:-.018em}
+    .subhead{margin-bottom:24px;font-size:31px;line-height:1.28}
+    .benefits div{min-height:112px;padding:18px 24px}
+    .benefits strong{font-size:25px}.benefits span{margin-top:5px;font-size:20px;line-height:1.25}
+    .cta{margin-top:26px;padding:24px 27px}.cta strong{font-size:29px}.cta b{font-size:27px}
+    .credit{margin-top:12px;font-size:13px}
+    .points-hero{padding-bottom:0}.metric{margin-top:30px}.metric strong{font-size:230px}.metric span{max-width:350px;font-size:39px;line-height:.92}
+    .formula{margin-top:38px}.formula div{padding:23px 17px}.formula strong{font-size:46px}.formula span{font-size:17px;line-height:1.3}
+    .step{grid-template-columns:88px 1fr;gap:20px;min-height:135px;padding:18px 27px}
+    .step b{font-size:62px}.step strong{font-size:27px}.step span{margin-top:5px;font-size:18px;line-height:1.3}
+    .reward .story__inner{padding-bottom:50px}.reward .index{margin-top:50px}.reward .headline{max-width:900px;font-size:122px}
+  </style>
+</head>
+<body>
+  <section class="story" data-slide="1">
+    <img class="photo" src="https://images.pexels.com/photos/12138568/pexels-photo-12138568.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="">
+    <div class="shade"></div><div class="mark"></div>
+    <div class="story__inner">
+      <header class="brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor"><div class="slogan">TOOLS NOT TOYS<span>MAXMOTOR 4X4</span></div></header>
+      <p class="index">MI MAXMOTOR / 01</p>
+      <h1 class="headline">TU 4X4.<em>BAJO CONTROL.</em></h1>
+      <div class="push">
+        <p class="subhead">Tu vehículo, sus accesorios, garantías y beneficios en una sola cuenta.</p>
+        <div class="benefits"><div><strong>01</strong><span>Historial de accesorios</span></div><div><strong>02</strong><span>Garantías y revisiones</span></div><div><strong>03</strong><span>Traction Points</span></div><div><strong>04</strong><span>Recompensas exclusivas</span></div></div>
+        <div class="cta"><strong>Crea tu cuenta</strong><b>MAXMOTOR4X4.COM</b></div>
+        <p class="credit">Foto contextual: Ryan Leeper / Pexels</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="story" data-slide="2">
+    <img class="photo" src="https://images.pexels.com/photos/5628354/pexels-photo-5628354.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="">
+    <div class="shade shade--left"></div><div class="mark"></div>
+    <div class="story__inner">
+      <header class="brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor"><div class="slogan">TOOLS NOT TOYS<span>TRACTION POINTS</span></div></header>
+      <p class="index">SISTEMA DE PUNTOS / 02</p>
+      <h1 class="headline">COMPRA.<br><span class="red">ACUMULA.</span><br>CANJEA.</h1>
+      <div class="points-hero">
+        <div class="metric"><strong>1,5%</strong><span>de tus compras vuelve en Traction Points</span></div>
+        <div class="formula"><div><strong>COMPRA</strong><span>Equipa tu 4x4</span></div><div><strong>ACUMULA</strong><span>Registra tu factura</span></div><div><strong>CANJEA</strong><span>Desbloquea beneficios</span></div></div>
+        <div class="cta"><strong>Revisa tu saldo</strong><b>MAXMOTOR4X4.COM</b></div>
+        <p class="credit">Foto contextual: Erik Mclean / Pexels</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="story" data-slide="3">
+    <img class="photo" src="https://images.pexels.com/photos/30139881/pexels-photo-30139881.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="">
+    <div class="shade"></div>
+    <div class="story__inner">
+      <header class="brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor"><div class="slogan">TOOLS NOT TOYS<span>MI MAXMOTOR</span></div></header>
+      <p class="index">CÓMO OBTENER TP / 03</p>
+      <h1 class="headline">TU COMPRA.<em>TUS PUNTOS.</em></h1>
+      <div class="steps">
+        <div class="step"><b>01</b><div><strong>Equipa tu 4x4</strong><span>Compra accesorios o servicios participantes en Maxmotor.</span></div></div>
+        <div class="step"><b>02</b><div><strong>Entrega tu Maxmotor ID</strong><span>El asesor registra la factura y los productos de la compra.</span></div></div>
+        <div class="step"><b>03</b><div><strong>Recibe tus Traction Points</strong><span>El 1,5% vuelve a tu cuenta automáticamente.</span></div></div>
+        <div class="step"><b>04</b><div><strong>Canjea beneficios</strong><span>Solicita recompensas desde tu portal Mi Maxmotor.</span></div></div>
+      </div>
+      <div class="cta"><strong>Empieza a acumular</strong><b>MAXMOTOR4X4.COM</b></div>
+      <p class="credit">Foto contextual: Stephen Leonardi / Pexels</p>
+    </div>
+  </section>
+
+  <section class="story reward" data-slide="4">
+    <img class="photo" src="https://images.pexels.com/photos/35331201/pexels-photo-35331201.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="">
+    <div class="shade"></div><div class="mark"></div>
+    <div class="story__inner">
+      <header class="brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor"><div class="slogan">TOOLS NOT TOYS<span>TRACTION REWARD</span></div></header>
+      <p class="index">RECOMPENSA / 01</p>
+      <h1 class="headline">ASEGURA<br><span class="red">TU CARGA.</span></h1>
+      <div class="reward-card"><div class="reward-top"><span>SEGURO DE COMPUERTA</span><b>650 TP</b></div><div class="prices"><div class="price"><small>Precio original</small><s>USD 78,00</s></div><div class="price"><small>Con Traction Points pagas</small><strong>USD 29,99</strong></div></div><div class="saving"><strong>Tu ahorro</strong><b>USD 48,01</b></div></div>
+      <p class="terms">650 TP + USD 29,99. Canje sujeto a aprobación y disponibilidad.</p>
+      <div class="cta"><strong>Solicita tu canje</strong><b>MAXMOTOR4X4.COM</b></div>
+      <p class="credit">Foto contextual: Iridescentlenz / Pexels</p>
+    </div>
+  </section>
+
+  <section class="story reward" data-slide="5">
+    <img class="photo" src="https://images.pexels.com/photos/18278713/pexels-photo-18278713.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="">
+    <div class="shade"></div><div class="mark"></div>
+    <div class="story__inner">
+      <header class="brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor"><div class="slogan">TOOLS NOT TOYS<span>TRACTION REWARD</span></div></header>
+      <p class="index">RECOMPENSA / 02</p>
+      <h1 class="headline">SAL DEL<br><span class="red">TERRENO.</span></h1>
+      <div class="reward-card"><div class="reward-top"><span>RAMPAS DE TRACCIÓN</span><b>1.500 TP</b></div><div class="prices"><div class="price"><small>Precio original</small><s>USD 138,00</s></div><div class="price"><small>Con Traction Points pagas</small><strong>USD 85,00</strong></div></div><div class="saving"><strong>Tu ahorro</strong><b>USD 53,00</b></div></div>
+      <p class="terms">1.500 TP + USD 85,00. Canje sujeto a aprobación y disponibilidad.</p>
+      <div class="cta"><strong>Solicita tu canje</strong><b>MAXMOTOR4X4.COM</b></div>
+      <p class="credit">Foto contextual: Semih Kukcu / Pexels</p>
+    </div>
+  </section>
+
+  <section class="story reward" data-slide="6">
+    <img class="photo" src="https://images.pexels.com/photos/37183532/pexels-photo-37183532.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="">
+    <div class="shade"></div><div class="mark"></div>
+    <div class="story__inner">
+      <header class="brand"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png" alt="Maxmotor"><div class="slogan">TOOLS NOT TOYS<span>TRACTION REWARD</span></div></header>
+      <p class="index">RECOMPENSA / 03</p>
+      <h1 class="headline">DOMINA<br><span class="red">EL EXTERIOR.</span></h1>
+      <div class="reward-card"><div class="reward-top"><span>TOLDO 180° UNIVERSAL</span><b>2.250 TP</b></div><div class="prices"><div class="price"><small>Precio original</small><s>USD 220,00</s></div><div class="price"><small>Con Traction Points pagas</small><strong>USD 180,00</strong></div></div><div class="saving"><strong>Tu ahorro</strong><b>USD 40,00</b></div></div>
+      <p class="terms">2.250 TP + USD 180,00. Canje sujeto a aprobación y disponibilidad.</p>
+      <div class="cta"><strong>Solicita tu canje</strong><b>MAXMOTOR4X4.COM</b></div>
+      <p class="credit">Foto contextual: Stephen Leonardi / Pexels</p>
+    </div>
+  </section>
+  <script>
+    const slide = new URLSearchParams(location.search).get('slide') || '1';
+    document.querySelector(`[data-slide="${slide}"]`)?.classList.add('is-active');
+  </script>
+</body>
+</html>
