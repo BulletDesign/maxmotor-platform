@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Maxmotor CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Montserrat:wght@400;500;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#090b0a;--panel:#121512;--line:#2b302c;--cream:#f4f1e9;--muted:#aaa99f;--red:#dc493a;--green:#63d477;--yellow:#efc447}
+    *{box-sizing:border-box}html{background:var(--ink);color:var(--cream);font-family:Montserrat,sans-serif}body{margin:0;min-height:100vh;background:radial-gradient(circle at 90% -10%,rgba(220,73,58,.2),transparent 35%),linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),var(--ink);background-size:auto,72px 72px,72px 72px,auto}
+    button,input,select,textarea{font:inherit}.shell{width:min(920px,100%);margin:auto;padding:18px 16px 96px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0 22px;border-bottom:1px solid var(--line)}.brand{font:600 31px/1 Teko,sans-serif;letter-spacing:.04em;text-transform:uppercase}.brand span{color:var(--red)}.actor{font:700 13px/1.2 "Barlow Condensed",sans-serif;color:var(--muted);text-transform:uppercase;text-align:right}.eyebrow{margin:26px 0 2px;color:var(--red);font:700 14px/1 "Barlow Condensed",sans-serif;letter-spacing:.18em}.title{margin:0;font:600 clamp(40px,8vw,66px)/.9 Teko,sans-serif;text-transform:uppercase}.lead{margin:10px 0 22px;color:var(--muted);font-size:14px;line-height:1.55}.tabs{display:grid;grid-template-columns:1fr 1fr;position:sticky;top:0;z-index:4;background:rgba(9,11,10,.94);backdrop-filter:blur(12px);padding:10px 0}.tab{border:1px solid var(--line);background:var(--panel);color:var(--muted);min-height:48px;font:700 17px "Barlow Condensed",sans-serif;text-transform:uppercase}.tab[aria-selected=true]{background:var(--red);border-color:var(--red);color:#fff}.panel{display:none;padding-top:18px}.panel.active{display:block}.card{border:1px solid var(--line);background:rgba(18,21,18,.96);padding:18px;margin-bottom:14px}.section-title{margin:0 0 15px;font:600 28px/1 Teko,sans-serif;text-transform:uppercase}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:grid;gap:7px}.field.wide{grid-column:1/-1}.field label{font:700 13px "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.07em;color:#c6c7bf}.field input,.field select,.field textarea{width:100%;min-height:51px;border:1px solid #333834;border-radius:0;background:#090b0a;color:var(--cream);padding:13px 14px;outline:none}.field textarea{min-height:92px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);box-shadow:0 0 0 2px rgba(220,73,58,.16)}.phone-row{display:grid;grid-template-columns:1fr auto}.phone-row button{border:0;background:#272c28;color:#fff;padding:0 18px;font:700 14px "Barlow Condensed",sans-serif}.hint{color:var(--muted);font-size:11px;line-height:1.4}.consent{display:flex;gap:11px;align-items:flex-start;padding:13px;border:1px solid var(--line);font-size:12px;line-height:1.45}.consent input{width:20px;height:20px;accent-color:var(--red);flex:0 0 auto}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.primary,.secondary{border:0;min-height:55px;padding:12px 15px;font:700 17px "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.03em}.primary{background:var(--red);color:#fff}.secondary{background:#252a26;color:#fff;border:1px solid #3a403b}.primary:disabled,.secondary:disabled{opacity:.45}.existing{display:none;border-left:3px solid var(--yellow);background:rgba(239,196,71,.08);padding:11px 13px;margin-top:8px;color:#e7dfc7;font-size:12px}.existing.show{display:block}.search{display:grid;grid-template-columns:1fr auto;margin-bottom:14px}.search input{min-height:54px;background:#0b0d0c;border:1px solid var(--line);color:#fff;padding:0 15px}.search button{border:0;background:var(--red);color:#fff;padding:0 20px;font:700 16px "Barlow Condensed",sans-serif}.results{display:grid;gap:10px}.result{border:1px solid var(--line);background:var(--panel);padding:15px;text-align:left;color:var(--cream)}.result:hover,.result.selected{border-color:var(--red)}.result-head{display:flex;justify-content:space-between;gap:10px}.result h3{margin:0;font:600 23px/1 Teko,sans-serif;text-transform:uppercase}.badge{align-self:start;padding:5px 8px;background:#292e2a;color:#ddd;font:700 12px "Barlow Condensed",sans-serif;text-transform:uppercase}.badge.vendido{background:rgba(99,212,119,.18);color:var(--green)}.badge.perdido{background:rgba(220,73,58,.18);color:#ff8478}.result p{margin:8px 0 0;color:var(--muted);font-size:12px}.empty{padding:28px;border:1px dashed var(--line);color:var(--muted);text-align:center}.toast{position:fixed;left:50%;bottom:18px;z-index:20;width:min(520px,calc(100% - 28px));transform:translate(-50%,120px);opacity:0;background:#f4f1e9;color:#111;padding:15px 18px;border-left:5px solid var(--green);box-shadow:0 18px 50px #000;transition:.25s}.toast.show{transform:translate(-50%,0);opacity:1}.toast.error{border-color:var(--red)}.loading{position:fixed;inset:0;z-index:30;display:none;place-items:center;background:rgba(0,0,0,.7);font:600 28px Teko,sans-serif;text-transform:uppercase;letter-spacing:.08em}.loading.show{display:grid}.hidden{display:none!important}
+    .wide{grid-column:1/-1}
+    @media(max-width:620px){.shell{padding:12px 12px 86px}.topbar{padding-top:max(10px,env(safe-area-inset-top))}.brand{font-size:27px}.actor{max-width:145px;font-size:11px}.eyebrow{margin-top:20px}.title{font-size:46px}.lead{margin-bottom:14px}.tabs{margin:0 -12px;padding:8px 12px}.card{padding:14px}.grid{grid-template-columns:1fr;gap:12px}.wide,.field.wide{grid-column:auto}.actions{grid-template-columns:1fr}.primary,.secondary{min-height:58px}.result-head{align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar"><div class="brand">Maxmotor <span>CRM</span></div><div class="actor" id="actor">Verificando acceso...</div></header>
+    <p class="eyebrow">CONTROL COMERCIAL / 01</p>
+    <h1 class="title">Un contacto.<br>Veinte segundos.</h1>
+    <p class="lead">Registra la oportunidad mientras hablas con el cliente. La fecha, el asesor y el próximo seguimiento se calculan solos.</p>
+
+    <nav class="tabs" aria-label="Funciones del CRM">
+      <button class="tab" type="button" data-tab="new" aria-selected="true">Nuevo contacto</button>
+      <button class="tab" type="button" data-tab="update" aria-selected="false">Actualizar estado</button>
+    </nav>
+
+    <section class="panel active" id="panel-new">
+      <form id="lead-form" novalidate>
+        <div class="card">
+          <h2 class="section-title">Cliente</h2>
+          <div class="grid">
+            <div class="field wide"><label for="phone">Número de teléfono *</label><div class="phone-row"><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0987986672" required><button type="button" id="lookup-phone">Buscar</button></div><div class="existing" id="existing-client"></div></div>
+            <div class="field"><label for="name">Nombre *</label><input id="name" name="name" autocomplete="name" placeholder="Nombre del cliente" required></div>
+            <div class="field"><label for="province">Provincia de residencia *</label><select id="province" name="province" required></select></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Vehículo y producto</h2>
+          <div class="grid">
+            <div class="field"><label for="brand">Marca *</label><select id="brand" name="brand" required></select></div>
+            <div class="field"><label for="model">Modelo *</label><input id="model" name="model" placeholder="Poer, Hilux, Ranger..." required></div>
+            <div class="field"><label for="year">Año</label><input id="year" name="year" type="number" inputmode="numeric" min="1980" max="2035" placeholder="2025"></div>
+            <div class="field"><label for="family">Familia *</label><select id="family" name="family" required></select></div>
+            <div class="field wide"><label for="product">Producto de interés *</label><input id="product" name="product" placeholder="Ej. Tapa rígida de balde 4 partes" required></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Seguimiento</h2>
+          <div class="grid">
+            <div class="field"><label for="source">¿De dónde nos conoció? *</label><select id="source" name="source" required></select></div>
+            <div class="field"><label for="status">Estado *</label><select id="status" name="status" required></select></div>
+            <div class="field hidden" id="proforma-field"><label for="proforma">Número de proforma *</label><input id="proforma" name="proforma" placeholder="PRO-000123"></div>
+            <div class="field hidden" id="lost-field"><label for="lostReason">Motivo de pérdida *</label><input id="lostReason" name="lostReason" placeholder="Precio, sin stock, no responde..."></div>
+            <div class="field wide"><label for="notes">Nota rápida</label><textarea id="notes" name="notes" placeholder="Necesidad, versión del vehículo, fecha prometida..."></textarea></div>
+            <label class="consent wide"><input id="whatsappConsent" name="whatsappConsent" type="checkbox"><span>El cliente acepta recibir promociones de Maxmotor por WhatsApp. No marcar sin autorización expresa.</span></label>
+          </div>
+          <div class="actions"><button class="primary" type="submit" data-mode="new">Guardar y nuevo</button><button class="secondary" type="submit" data-mode="whatsapp">Guardar y abrir WhatsApp</button></div>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel" id="panel-update">
+      <div class="search"><input id="search-query" type="search" placeholder="Teléfono, nombre, proforma o ID"><button id="search-button" type="button">Buscar</button></div>
+      <div class="results" id="results"><div class="empty">Busca un cliente para actualizar su estado.</div></div>
+      <form id="update-form" class="card hidden">
+        <h2 class="section-title" id="update-title">Actualizar oportunidad</h2>
+        <input id="update-id" type="hidden">
+        <div class="grid">
+          <div class="field"><label for="update-status">Nuevo estado *</label><select id="update-status" required></select></div>
+          <div class="field hidden" id="update-proforma-field"><label for="update-proforma">Número de proforma *</label><input id="update-proforma"></div>
+          <div class="field hidden" id="update-lost-field"><label for="update-lost">Motivo de pérdida *</label><input id="update-lost"></div>
+          <div class="field wide"><label for="update-note">Nota</label><textarea id="update-note" placeholder="Resultado del seguimiento"></textarea></div>
+        </div>
+        <div class="actions"><button class="primary" type="submit">Guardar cambio</button><button class="secondary" id="cancel-update" type="button">Cancelar</button></div>
+      </form>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+  <div class="loading show" id="loading">Cargando CRM...</div>
+
+  <script>
+    const state = { catalogs: {}, submitMode: 'new', whatsappWindow: null };
+    const $ = selector => document.querySelector(selector);
+    const $$ = selector => [...document.querySelectorAll(selector)];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      google.script.run.withSuccessHandler(boot).withFailureHandler(showError).getBootstrap();
+      $$('.tab').forEach(button => button.addEventListener('click', () => selectTab(button.dataset.tab)));
+      $('#lookup-phone').addEventListener('click', lookupPhone);
+      $('#phone').addEventListener('blur', () => { if ($('#phone').value.length >= 9) lookupPhone(); });
+      $('#status').addEventListener('change', () => toggleConditionalFields(''));
+      $('#update-status').addEventListener('change', () => toggleConditionalFields('update-'));
+      $('#lead-form').addEventListener('submit', submitLead);
+      $('#lead-form').querySelectorAll('button[type=submit]').forEach(button => button.addEventListener('click', () => state.submitMode = button.dataset.mode));
+      $('#search-button').addEventListener('click', search);
+      $('#search-query').addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); search(); } });
+      $('#update-form').addEventListener('submit', submitUpdate);
+      $('#cancel-update').addEventListener('click', closeUpdate);
+    });
+
+    function boot(payload) {
+      state.catalogs = payload.catalogs;
+      $('#actor').textContent = payload.actor.name + ' / ' + payload.actor.email;
+      fillSelect('#province', 'PROVINCIA', 'Selecciona provincia');
+      fillSelect('#brand', 'MARCA', 'Selecciona marca');
+      fillSelect('#family', 'FAMILIA', 'Selecciona familia');
+      fillSelect('#source', 'CANAL', 'Selecciona canal');
+      fillSelect('#status', 'ESTADO', 'Selecciona estado');
+      fillSelect('#update-status', 'ESTADO', 'Selecciona estado');
+      $('#status').value = 'Contactado';
+      $('#loading').classList.remove('show');
+    }
+
+    function fillSelect(selector, catalog, placeholder) {
+      const select = $(selector);
+      select.innerHTML = `<option value="">${escapeHtml(placeholder)}</option>` + (state.catalogs[catalog] || []).map(value => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join('');
+    }
+
+    function selectTab(name) {
+      $$('.tab').forEach(button => button.setAttribute('aria-selected', String(button.dataset.tab === name)));
+      $$('.panel').forEach(panel => panel.classList.toggle('active', panel.id === `panel-${name}`));
+    }
+
+    function lookupPhone() {
+      const phone = $('#phone').value;
+      if (phone.replace(/\D/g, '').length < 9) return;
+      google.script.run.withSuccessHandler(client => {
+        const box = $('#existing-client');
+        if (!client) { box.classList.remove('show'); box.textContent = ''; return; }
+        $('#name').value = client.name || '';
+        $('#province').value = client.province || '';
+        $('#whatsappConsent').checked = client.whatsappConsent === true;
+        box.textContent = `Cliente existente ${client.id}. Los datos se completaron automáticamente; se creará una nueva oportunidad.`;
+        box.classList.add('show');
+      }).withFailureHandler(showError).findClientByPhone(phone);
+    }
+
+    function toggleConditionalFields(prefix) {
+      const status = $(`#${prefix}status`).value;
+      $(`#${prefix}proforma-field`).classList.toggle('hidden', !['Cotizado', 'Vendido'].includes(status));
+      $(`#${prefix}lost-field`).classList.toggle('hidden', status !== 'Perdido');
+      $(`#${prefix}proforma`).required = ['Cotizado', 'Vendido'].includes(status);
+      const lostInput = prefix ? $('#update-lost') : $('#lostReason');
+      lostInput.required = status === 'Perdido';
+    }
+
+    function submitLead(event) {
+      event.preventDefault();
+      if (!event.currentTarget.reportValidity()) return;
+      const payload = Object.fromEntries(new FormData(event.currentTarget).entries());
+      payload.whatsappConsent = $('#whatsappConsent').checked;
+      if (state.submitMode === 'whatsapp') state.whatsappWindow = window.open('about:blank', '_blank');
+      setLoading(true, 'Guardando...');
+      google.script.run.withSuccessHandler(result => {
+        setLoading(false);
+        showToast(`Guardado ${result.opportunityId}`);
+        if (state.whatsappWindow) { state.whatsappWindow.location = result.whatsAppUrl; state.whatsappWindow = null; }
+        resetLeadForm();
+      }).withFailureHandler(error => {
+        if (state.whatsappWindow) state.whatsappWindow.close();
+        state.whatsappWindow = null;
+        showError(error);
+      }).saveOpportunity(payload);
+    }
+
+    function resetLeadForm() {
+      $('#lead-form').reset();
+      $('#status').value = 'Contactado';
+      $('#existing-client').classList.remove('show');
+      toggleConditionalFields('');
+      $('#phone').focus();
+    }
+
+    function search() {
+      const query = $('#search-query').value.trim();
+      if (query.length < 2) return showToast('Escribe al menos 2 caracteres.', true);
+      setLoading(true, 'Buscando...');
+      google.script.run.withSuccessHandler(renderResults).withFailureHandler(showError).searchOpportunities(query);
+    }
+
+    function renderResults(results) {
+      setLoading(false);
+      const container = $('#results');
+      if (!results.length) { container.innerHTML = '<div class="empty">No encontramos oportunidades con esa búsqueda.</div>'; return; }
+      container.innerHTML = results.map(item => `<button class="result" type="button" data-id="${escapeHtml(item.id)}"><div class="result-head"><h3>${escapeHtml(item.clientName)}</h3><span class="badge ${escapeHtml(item.status.toLowerCase())}">${escapeHtml(item.status)}</span></div><p>${escapeHtml(item.id)} · ${escapeHtml(item.vehicle)} · ${escapeHtml(item.product)}</p><p>${escapeHtml(item.phone)}${item.proforma ? ' · Proforma ' + escapeHtml(item.proforma) : ''}</p></button>`).join('');
+      container.querySelectorAll('.result').forEach((button, index) => button.addEventListener('click', () => openUpdate(results[index], button)));
+    }
+
+    function openUpdate(item, button) {
+      $$('.result').forEach(result => result.classList.remove('selected'));
+      button.classList.add('selected');
+      $('#update-id').value = item.id;
+      $('#update-title').textContent = `${item.clientName} / ${item.id}`;
+      $('#update-status').value = item.status;
+      $('#update-proforma').value = item.proforma || '';
+      $('#update-lost').value = '';
+      $('#update-note').value = '';
+      toggleConditionalFields('update-');
+      $('#update-form').classList.remove('hidden');
+      $('#update-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function closeUpdate() {
+      $('#update-form').classList.add('hidden');
+      $$('.result').forEach(result => result.classList.remove('selected'));
+    }
+
+    function submitUpdate(event) {
+      event.preventDefault();
+      if (!event.currentTarget.reportValidity()) return;
+      const payload = { id: $('#update-id').value, status: $('#update-status').value, proforma: $('#update-proforma').value, lostReason: $('#update-lost').value, note: $('#update-note').value };
+      setLoading(true, 'Actualizando...');
+      google.script.run.withSuccessHandler(result => {
+        setLoading(false);
+        showToast(`${result.id} actualizado a ${result.status}`);
+        closeUpdate();
+        search();
+      }).withFailureHandler(showError).updateOpportunity(payload);
+    }
+
+    function setLoading(show, text) { $('#loading').textContent = text || 'Cargando...'; $('#loading').classList.toggle('show', show); }
+    function showError(error) { setLoading(false); showToast(error && error.message ? error.message : String(error), true); }
+    function showToast(message, error) { const toast = $('#toast'); toast.textContent = message; toast.classList.toggle('error', Boolean(error)); toast.classList.add('show'); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove('show'), 4300); }
+    function escapeHtml(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character])); }
+  </script>
+</body>
+</html>
