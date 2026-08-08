@@ -15,7 +15,7 @@ async function walk(directory) {
   return files.flat();
 }
 
-for (const required of ["index.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "fichas/tapas-balde-camionetas.html", "assets/mimaxmotor-qr.svg", "robots.txt", "sitemap.xml", "_headers"]) {
+for (const required of ["index.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "fichas/tapas-balde-camionetas.html", "assets/mimaxmotor-qr.svg", "robots.txt", "sitemap.xml", "_headers"]) {
   try { await access(join(dist, required)); } catch { errors.push(`Falta ${required} en dist`); }
 }
 
@@ -49,6 +49,15 @@ const robots = await readFile(join(dist, "robots.txt"), "utf8");
 if (!robots.includes("Sitemap: https://maxmotor4x4.com/sitemap.xml")) errors.push("robots.txt no referencia el sitemap de produccion");
 for (const privatePath of ["/api/", "/portal", "/MiMaxmotor", "/portal-maxmotor", "/portal-superadmin", "/console"]) {
   if (!robots.includes(`Disallow: ${privatePath}`)) errors.push(`robots.txt no bloquea ${privatePath}`);
+}
+
+const publicInventory = JSON.parse(await readFile(join(dist, "catalog/inventory-compatible.json"), "utf8"));
+const fitmentTerms = /\b(DMAX|D MAX|HILUX|REVO|VIGO|POER|SINOTRUK|RANGER|F150|FRONTIER|NAVARA|NP300|L200|TRITON|BT ?50|WINGLE|JAC|T6|T8|T9|AMAROK|T60|T90|LANDTREK|TASMAN|RAM|HUNTER|COLORADO|SILVERADO)\b/i;
+for (const [vehicle, items] of Object.entries(publicInventory.vehicles || {})) {
+  for (const item of items) {
+    if (Object.keys(item).sort().join(",") !== "category,name") errors.push(`Campos internos publicados para ${vehicle}`);
+    if (fitmentTerms.test(item.name) || /\b(?:19|20)\d{2}\b|\//.test(item.name)) errors.push(`Compatibilidad interna publicada para ${vehicle}: ${item.name}`);
+  }
 }
 
 const home = await readFile(join(dist, "index.html"), "utf8");

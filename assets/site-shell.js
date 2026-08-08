@@ -1,5 +1,5 @@
 (function () {
-  const rootPrefix = /\/(productos|fichas)\//.test(location.pathname) ? "../" : "";
+  const rootPrefix = /\/(productos|fichas|camionetas)(?:\/|$)/.test(location.pathname) ? "../" : "";
   const header = `
     <div id="main-header-wrapper">
       <div class="top-banner"><div class="marquee-container"><span class="marquee-content">ENVIOS A TODO EL PAIS &nbsp;•&nbsp; ASESORIA TECNICA PERSONALIZADA &nbsp;•&nbsp; INSTALACION PROFESIONAL &nbsp;•&nbsp; ENVIOS A TODO EL PAIS</span></div></div>
