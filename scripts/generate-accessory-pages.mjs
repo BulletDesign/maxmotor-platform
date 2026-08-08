@@ -1,4 +1,4 @@
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import vm from "node:vm";
 
@@ -32,7 +32,7 @@ for (const family of families) {
   <link rel="stylesheet" href="assets/shared-shell.css?v=20260805-2">
   <link rel="stylesheet" href="assets/product-detail.css?v=20260805-2">
   <link rel="stylesheet" href="assets/type-system.css?v=20260805-2">
-  <script src="assets/site-shell.js?v=20260805-3"></script>
+  <script src="assets/site-shell.js?v=20260808-1"></script>
   <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "Product", name: product.name, description: product.summary, image: product.image, brand: { "@type": "Brand", name: product.marca || "Maxmotor 4x4" }, url: `https://maxmotor4x4.com/fichas/${product.slug}` })}</script>
 </head>
 <body>
@@ -47,4 +47,9 @@ for (const family of families) {
   }
 }
 
-console.log(`Generated accessory pages for ${families.flatMap(family => family.products).length} catalog products`);
+await Promise.all([
+  cp(resolve(root, "seo-pages/tapas-balde-camionetas.html"), resolve(output, "tapas-balde-camionetas.html")),
+  cp(resolve(root, "seo-pages/tapa-balde-dmax.html"), resolve(output, "tapa-balde-dmax.html")),
+]);
+
+console.log(`Generated accessory pages for ${families.flatMap(family => family.products).length} catalog products plus 2 SEO landings`);
