@@ -66,11 +66,14 @@
       });
 
       const offerLink = document.getElementById('offer-register-link');
-      offerLink?.addEventListener('click', () => localStorage.setItem('mxr_welcome_offer_opened', new Date().toISOString()));
+      offerLink?.addEventListener('click', () => {
+        localStorage.setItem('mxr_welcome_offer_opened', new Date().toISOString());
+        localStorage.setItem('mxr_offer_dismissed_v1', new Date().toISOString());
+      });
       setOfferOpen(false, false);
       const openOfferAfterIntro = () => {
         const popup = document.getElementById('offer-popup');
-        if (popup && popup.getAttribute('aria-hidden') !== 'false' && !sessionStorage.getItem('mxr_offer_seen_session')) setOfferOpen(true);
+        if (popup && popup.getAttribute('aria-hidden') !== 'false' && !localStorage.getItem('mxr_offer_dismissed_v1')) setOfferOpen(true);
       };
       window.addEventListener('maxmotor:intro-complete', openOfferAfterIntro, { once: true });
       if (document.getElementById('intro-loader')?.classList.contains('is-hidden')) openOfferAfterIntro();
@@ -97,7 +100,7 @@
       popup.setAttribute('aria-hidden', String(!opening));
       floatBtn.style.display = opening ? 'none' : 'block';
       document.body.style.overflow = opening ? 'hidden' : '';
-      if (!opening && markSeen) sessionStorage.setItem('mxr_offer_seen_session', '1');
+      if (!opening && markSeen) localStorage.setItem('mxr_offer_dismissed_v1', new Date().toISOString());
     }
 
     function togglePopup() {

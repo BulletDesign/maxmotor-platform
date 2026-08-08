@@ -10,6 +10,7 @@ let operationalCatalog = [];
 let catalogFamilies = [];
 let rewardsCatalog = [];
 let activeCustomerId = null;
+let onboardedCustomerId = null;
 
 async function api(path, options = {}) {
   const response = await fetch(path, { credentials: "same-origin", ...options, headers: options.body ? { "content-type": "application/json", ...options.headers } : options.headers });
@@ -114,6 +115,7 @@ function initializeAdminTour() {
     trigger: "#admin-tour-button",
     steps: [
       { target: ".admin-stats", title: "Resumen operativo", body: "Revisa facturas del mes, nuevos clientes, canjes pendientes y actividad auditada.", before: () => openAdminView("overview") },
+      { target: "#customer-onboarding-form", title: "Ingreso de clientes", body: "Crea la cuenta, genera credenciales temporales y abre el mensaje de bienvenida en WhatsApp. Despues continua a la factura y los accesorios.", before: () => openAdminView("onboarding") },
       { target: "#customers-browser", title: "Ficha completa del cliente", body: "Busca por Maxmotor ID, nombre, correo, telefono o placa. Desde la ficha se administran vehiculos, ventas, puntos y mantenimientos.", before: () => openAdminView("customers") },
       { target: "#award-points-form", title: "Factura multiaccesorio", body: "Registra una sola factura y agrega todos los accesorios instalados. Cada item conserva su propia cobertura y puedes decidir si la venta acumula TP.", before: () => openAdminView("points") },
       { target: ".catalog-explainer", title: "Catalogo operativo", body: "Las familias ordenan productos y permiten medir demanda; cada producto define sus intervalos de mantenimiento.", before: () => openAdminView("catalog") },
@@ -219,6 +221,7 @@ async function openAdmin(user) {
   document.querySelector("#admin-name").textContent = user.fullName;
   document.querySelector("#admin-role").textContent = "Empleado Maxmotor";
   document.querySelector("#vehicle-form [name='brand']").innerHTML = vehicleBrandOptions();
+  document.querySelector("#customer-onboarding-form [name='brand']").innerHTML = vehicleBrandOptions();
   await Promise.all([loadOverview(), loadCustomers(""), loadCatalog(), loadRewards(), loadRedemptions(), loadNotifications()]);
   const awardForm = document.querySelector("#award-points-form");
   awardForm.elements.issuedAt.value = new Date().toISOString().slice(0, 10);
@@ -229,6 +232,65 @@ async function openAdmin(user) {
 
 document.querySelector("#admin-login-form").addEventListener("submit", async (event) => { event.preventDefault(); try { await openAdmin((await api("/api/auth/login", { method: "POST", body: JSON.stringify({ ...Object.fromEntries(new FormData(event.currentTarget)), expectedRole: "employee" }) })).user); } catch (error) { setMessage(loginMessage, error.message); } });
 document.querySelectorAll("[data-admin-view]").forEach((button) => button.addEventListener("click", () => { const view = button.dataset.adminView; document.querySelectorAll("[data-admin-view]").forEach((item) => item.classList.toggle("is-active", item === button)); document.querySelectorAll(".admin-view").forEach((section) => { section.hidden = section.dataset.view !== view; }); document.querySelector("#admin-title").textContent = button.textContent; }));
+
+document.querySelector("#customer-onboarding-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const submitButton = form.querySelector("button[type='submit']");
+  const values = Object.fromEntries(new FormData(form));
+  onboardedCustomerId = null;
+  document.querySelector("#onboarding-result").hidden = true;
+  document.querySelector("#onboarding-password").textContent = "";
+  const whatsappWindow = window.open("about:blank", "maxmotor-onboarding-whatsapp");
+  submitButton.disabled = true;
+  report("#onboarding-message", "Creando cuenta y credenciales...");
+  try {
+    const data = await api("/api/admin/customers", {
+      method: "POST",
+      body: JSON.stringify({
+        fullName: values.fullName,
+        email: values.email,
+        phone: values.phone,
+        originProvince: values.originProvince,
+        accountConsent: form.elements.accountConsent.checked,
+        marketingConsent: form.elements.marketingConsent.checked,
+        vehicle: { brand: values.brand, model: values.model, modelYear: values.modelYear, plate: values.plate },
+      }),
+    });
+    onboardedCustomerId = data.customer.id;
+    document.querySelector("#onboarding-customer-name").textContent = data.customer.fullName;
+    document.querySelector("#onboarding-customer-code").textContent = data.customer.customerCode;
+    document.querySelector("#onboarding-login").textContent = data.credentials.login;
+    document.querySelector("#onboarding-password").textContent = data.credentials.temporaryPassword;
+    document.querySelector("#onboarding-benefit").textContent = data.welcomePoints > 0
+      ? `${Number(data.welcomePoints).toLocaleString("es-EC")} TP de bienvenida${data.welcomeCoupon ? ` + cupon 10% OFF ${data.welcomeCoupon}` : ""}`
+      : "Cuenta Mi Maxmotor activa";
+    document.querySelector("#onboarding-whatsapp").href = data.whatsappUrl;
+    document.querySelector("#onboarding-result").hidden = false;
+    report("#onboarding-message", "Cuenta creada. WhatsApp esta listo; confirma el envio y continua con los accesorios.", true);
+    form.reset();
+    if (whatsappWindow) whatsappWindow.location.href = data.whatsappUrl;
+    document.querySelector("#onboarding-result").scrollIntoView({ behavior: "smooth", block: "start" });
+    await Promise.all([loadCustomers(""), loadOverview()]);
+  } catch (error) {
+    whatsappWindow?.close();
+    report("#onboarding-message", error.message);
+  } finally {
+    submitButton.disabled = false;
+  }
+});
+
+document.querySelector("#continue-onboarding-sale").addEventListener("click", async () => {
+  if (!onboardedCustomerId) return;
+  openAdminView("customers");
+  try {
+    await openCustomerFile(onboardedCustomerId);
+    document.querySelector("#onboarding-result").hidden = true;
+    document.querySelector("#onboarding-password").textContent = "";
+    onboardedCustomerId = null;
+    document.querySelector("#customer-invoice-form").scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) { setMessage(fileMessage, error.message); }
+});
 
 let searchTimer;
 document.querySelector("#customer-search").addEventListener("input", (event) => { clearTimeout(searchTimer); searchTimer = setTimeout(() => loadCustomers(event.target.value), 250); });

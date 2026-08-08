@@ -15,8 +15,10 @@ test("coupon requests use an auditable advisor workflow", async () => {
 
 test("new registrations omit national ID, VIN and odometer", async () => {
   const route = await readFile(fileURLToPath(new URL("../functions/api/auth/register.js", import.meta.url)), "utf8");
+  const identity = await readFile(fileURLToPath(new URL("../functions/_lib/customer-identity.js", import.meta.url)), "utf8");
   assert.doesNotMatch(route, /body\.nationalId/);
   assert.match(route, /national_id,birth_date[\s\S]*NULL,\?8/);
   assert.match(route, /plate,vin,odometer_km[\s\S]*\?6,NULL,NULL/);
-  assert.match(route, /MM-\$\{digits\}/);
+  assert.match(route, /createFriendlyCustomerCode\(env\.DB\)/);
+  assert.match(identity, /MM-\$\{digits\}/);
 });

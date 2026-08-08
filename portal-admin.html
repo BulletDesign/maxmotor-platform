@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/portal.css?v=20260805-3">
   <link rel="stylesheet" href="assets/type-system.css?v=20260805-3">
-  <link rel="stylesheet" href="assets/portal-admin.css?v=20260806-2">
+  <link rel="stylesheet" href="assets/portal-admin.css?v=20260807-1">
   <link rel="stylesheet" href="assets/guided-tour.css?v=20260805-3">
 </head>
 <body class="admin-body">
@@ -31,6 +31,7 @@
         <p>Portal Maxmotor</p>
         <nav>
           <button class="admin-nav is-active" data-admin-view="overview">Resumen</button>
+          <button class="admin-nav" data-admin-view="onboarding">Ingreso de clientes</button>
           <button class="admin-nav" data-admin-view="customers">Clientes</button>
           <button class="admin-nav" data-admin-view="points">Instalar accesorios</button>
           <button class="admin-nav" data-admin-view="catalog">Catalogo</button>
@@ -49,6 +50,19 @@
           <div class="admin-stats"><article><span>Facturas del mes</span><strong id="stat-invoices">0</strong></article><article><span>Nuevos clientes</span><strong id="stat-newCustomers">0</strong></article><article><span>Canjes pendientes</span><strong id="stat-redemptions">0</strong></article></div>
           <div class="admin-panel"><div class="admin-panel-heading"><h2>Facturas por dia</h2><span id="month-sales-total">USD 0</span></div><div id="sales-chart" class="sales-chart"></div></div>
           <div class="admin-panel"><div class="admin-panel-heading"><h2>Actividad reciente</h2><span>Auditoria del sistema</span></div><div id="recent-activity" class="admin-list"></div></div>
+        </section>
+
+        <section class="admin-view" data-view="onboarding" hidden>
+          <div class="section-heading"><p class="eyebrow">ALTA ASISTIDA / MIMAXMOTOR</p><h1>Ingreso de clientes.</h1><p>Crea la cuenta desde mostrador, registra el vehiculo y continua directamente con la factura y los accesorios instalados.</p></div>
+          <div class="onboarding-layout">
+            <form id="customer-onboarding-form" class="portal-form onboarding-form">
+              <fieldset><legend><span>01</span> Datos personales</legend><div class="field-row"><label>Nombre completo<input name="fullName" data-normalize="words" autocomplete="name" required></label><label>Celular con WhatsApp<input name="phone" inputmode="tel" autocomplete="tel" placeholder="0987654321" required></label></div><div class="field-row"><label>Correo electronico<input name="email" type="email" autocomplete="email" required></label><label>Provincia<select name="originProvince" required><option value="">Selecciona una provincia</option><option>Azuay</option><option>Bolivar</option><option>Canar</option><option>Carchi</option><option>Chimborazo</option><option>Cotopaxi</option><option>El Oro</option><option>Esmeraldas</option><option>Galapagos</option><option>Guayas</option><option>Imbabura</option><option>Loja</option><option>Los Rios</option><option>Manabi</option><option>Morona Santiago</option><option>Napo</option><option>Orellana</option><option>Pastaza</option><option>Pichincha</option><option>Santa Elena</option><option>Santo Domingo de los Tsachilas</option><option>Sucumbios</option><option>Tungurahua</option><option>Zamora Chinchipe</option></select></label></div><p class="form-note">No se solicita fecha de nacimiento ni contrasena. El sistema genera una clave temporal segura.</p></fieldset>
+              <fieldset><legend><span>02</span> Vehiculo inicial</legend><div class="field-row"><label>Marca<select name="brand" required><option value="">Selecciona una marca</option></select></label><label>Modelo<input name="model" data-normalize="words" required></label></div><div class="field-row"><label>Ano<input name="modelYear" type="number" min="1950" max="2030"></label><label>Placa<input name="plate" data-normalize="upper" autocomplete="off"></label></div><p class="form-note">VIN y kilometraje se completan posteriormente solo cuando el accesorio o la garantia lo requieran.</p></fieldset>
+              <fieldset><legend><span>03</span> Autorizacion</legend><label class="points-choice"><input name="accountConsent" type="checkbox" required><span><strong>Cuenta autorizada</strong><small>Confirmo que el cliente autorizo la creacion de su cuenta Mi Maxmotor y el tratamiento de estos datos.</small></span></label><label class="points-choice"><input name="marketingConsent" type="checkbox" required><span><strong>WhatsApp autorizado</strong><small>Confirmo que el cliente autorizo recibir sus credenciales y novedades de Mi Maxmotor por WhatsApp.</small></span></label></fieldset>
+              <button class="primary-action" type="submit"><span>Crear cuenta y preparar WhatsApp</span><b>&rarr;</b></button><div id="onboarding-message" class="form-message inline-message" role="status" hidden></div>
+            </form>
+            <aside id="onboarding-result" class="onboarding-result" hidden><p class="panel-index">CUENTA CREADA</p><h2 id="onboarding-customer-name">-</h2><div class="credential-grid"><p><span>Maxmotor ID</span><strong id="onboarding-customer-code">-</strong></p><p><span>Usuario</span><strong id="onboarding-login">-</strong></p><p><span>Contrasena temporal</span><strong id="onboarding-password">-</strong></p></div><p id="onboarding-benefit" class="onboarding-benefit"></p><p class="credential-warning">Estas credenciales solo se muestran en este momento. La contrasena se guarda cifrada y no puede consultarse despues.</p><a id="onboarding-whatsapp" class="primary-action whatsapp-action" href="#" target="_blank" rel="noopener"><span>Abrir mensaje en WhatsApp</span><b>&rarr;</b></a><button id="continue-onboarding-sale" class="secondary-action" type="button">Continuar a factura y accesorios</button></aside>
+          </div>
         </section>
 
         <section class="admin-view" data-view="customers" hidden>
@@ -81,6 +95,6 @@
       </div>
     </section>
   </main>
-  <script src="assets/portal-admin.js?v=20260806-2" type="module"></script>
+  <script src="assets/portal-admin.js?v=20260807-1" type="module"></script>
 </body>
 </html>
