@@ -1,5 +1,6 @@
 import { access, readFile, readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
+import { ECUADOR_PICKUPS } from "../catalog/pickups.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const dist = join(root, "dist");
@@ -14,7 +15,7 @@ async function walk(directory) {
   return files.flat();
 }
 
-for (const required of ["index.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "fichas/tapas-balde-camionetas.html", "fichas/tapa-balde-dmax.html", "assets/mimaxmotor-qr.svg", "robots.txt", "sitemap.xml", "_headers"]) {
+for (const required of ["index.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "fichas/tapas-balde-camionetas.html", "fichas/tapa-balde-dmax.html", "assets/mimaxmotor-qr.svg", "robots.txt", "sitemap.xml", "_headers"]) {
   try { await access(join(dist, required)); } catch { errors.push(`Falta ${required} en dist`); }
 }
 
@@ -37,6 +38,12 @@ if (urls.some((url) => !url.startsWith("https://maxmotor4x4.com/"))) errors.push
 if (urls.some((url) => /\/(?:api|portal|admin|mimaxmotor|console)(?:\/|$)/i.test(new URL(url).pathname))) errors.push("El sitemap contiene rutas privadas");
 if (!urls.includes("https://maxmotor4x4.com/fichas/tapas-balde-camionetas")) errors.push("La categoria de tapas de balde no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/fichas/tapa-balde-dmax")) errors.push("La landing D-Max no esta en el sitemap");
+if (!urls.includes("https://maxmotor4x4.com/camionetas")) errors.push("El hub de camionetas no esta en el sitemap");
+for (const pickup of ECUADOR_PICKUPS) {
+  const path = `camionetas/${pickup.slug}.html`;
+  try { await access(join(dist, path)); } catch { errors.push(`Falta ${path} en dist`); }
+  if (!urls.includes(`https://maxmotor4x4.com/camionetas/${pickup.slug}`)) errors.push(`Falta ${pickup.slug} en el sitemap`);
+}
 
 const robots = await readFile(join(dist, "robots.txt"), "utf8");
 if (!robots.includes("Sitemap: https://maxmotor4x4.com/sitemap.xml")) errors.push("robots.txt no referencia el sitemap de produccion");
@@ -48,6 +55,7 @@ const home = await readFile(join(dist, "index.html"), "utf8");
 if (!/href="\/MiMaxmotor\?tab=register(?:&amp;offer=welcome)?"/.test(home)) errors.push("Falta el CTA de registro MiMaxmotor en el index");
 if (!home.includes('rel="canonical" href="https://maxmotor4x4.com/"')) errors.push("Canonical de produccion ausente en el index");
 if (!home.includes('href="/fichas/tapa-balde-dmax"')) errors.push("Falta el enlace interno a la landing D-Max");
+if (!home.includes('href="/camionetas"')) errors.push("Falta el enlace interno al hub de camionetas");
 
 if (errors.length) {
   console.error(errors.join("\n"));

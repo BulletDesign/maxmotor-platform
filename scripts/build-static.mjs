@@ -7,6 +7,7 @@ const output = join(root, "dist");
 if (basename(output) !== "dist" || !output.startsWith(root)) throw new Error("Unsafe output directory");
 
 execFileSync(process.execPath, [join(root, "scripts", "generate-accessory-pages.mjs")], { cwd: root, stdio: "inherit" });
+execFileSync(process.execPath, [join(root, "scripts", "generate-vehicle-pages.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-sitemap.mjs")], { cwd: root, stdio: "inherit" });
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
@@ -20,7 +21,7 @@ const files = [
   "mxr.html",
   "data.js",
 ];
-const directories = ["assets", "catalog", "fichas"];
+const directories = ["assets", "catalog", "fichas", "camionetas"];
 
 await Promise.all(files.map((file) => cp(join(root, file), join(output, file))));
 await cp(join(root, "portal.html"), join(output, "MiMaxmotor.html"));
