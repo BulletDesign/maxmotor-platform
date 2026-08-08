@@ -17,7 +17,6 @@ const pages = [
   { path: "/camionetas", changefreq: "weekly", priority: "0.9" },
   ...ECUADOR_PICKUPS.map((pickup) => ({ path: `/camionetas/${pickup.slug}`, changefreq: "monthly", priority: "0.8" })),
   { path: "/fichas/tapas-balde-camionetas", changefreq: "weekly", priority: "0.9" },
-  { path: "/fichas/tapa-balde-dmax", changefreq: "weekly", priority: "0.9" },
   ...context.window.MAXMOTOR_FAMILIES.flatMap((family) => family.products).map((product) => ({
     path: `/fichas/${product.slug}`,
     changefreq: "monthly",

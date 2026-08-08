@@ -47,9 +47,6 @@ for (const family of families) {
   }
 }
 
-await Promise.all([
-  cp(resolve(root, "seo-pages/tapas-balde-camionetas.html"), resolve(output, "tapas-balde-camionetas.html")),
-  cp(resolve(root, "seo-pages/tapa-balde-dmax.html"), resolve(output, "tapa-balde-dmax.html")),
-]);
+await cp(resolve(root, "seo-pages/tapas-balde-camionetas.html"), resolve(output, "tapas-balde-camionetas.html"));
 
-console.log(`Generated accessory pages for ${families.flatMap(family => family.products).length} catalog products plus 2 SEO landings`);
+console.log(`Generated accessory pages for ${families.flatMap(family => family.products).length} catalog products plus 1 SEO landing`);

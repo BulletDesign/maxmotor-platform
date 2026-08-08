@@ -29,6 +29,11 @@ test("vehicle generator creates canonical, structured and useful model pages", a
   assert.match(generator, /class="vehicle-sales-banner"/);
   assert.match(generator, /class="vehicle-inventory"/);
   assert.match(generator, /class="inventory-compatible-card"/);
+  assert.match(generator, /01 \/ HOT SELLERS/);
+  assert.match(generator, /const accessoryAnchor = `\$\{vehiclePath\}/);
+  assert.match(generator, /href="\/camionetas\/#modelos"/);
+  assert.match(generator, /class="vehicle-hub-statement"/);
+  assert.doesNotMatch(generator, /class="vehicle-hub-gallery"/);
   assert.match(generator, /Referencias de catálogo/);
   assert.match(generator, /loading="lazy"/);
   for (const pickup of ECUADOR_PICKUPS) {
@@ -87,6 +92,8 @@ test("generated vehicle pages expose every sanitized match and nothing else", as
     const cards = html.match(/class="inventory-compatible-card"/g) || [];
     assert.equal(cards.length, expected.length, pickup.slug);
     assert.equal(html.includes('id="catalogo-compatible"'), expected.length > 0, pickup.slug);
+    assert.match(html, new RegExp(`href="/camionetas/${pickup.slug}#${expected.length ? "catalogo-compatible" : "accesorios"}"`));
+    assert.match(html, /01 \/ HOT SELLERS/);
     assert.doesNotMatch(html, /costot|cantot|codiva/i);
     if (expected.length) pagesWithMatches += 1;
     publishedItems += cards.length;
@@ -94,6 +101,14 @@ test("generated vehicle pages expose every sanitized match and nothing else", as
 
   assert.equal(pagesWithMatches, 18);
   assert.equal(publishedItems, 246);
+});
+
+test("vehicle hub lists names without vehicle photography", async () => {
+  const html = await source("../camionetas/index.html");
+  assert.match(html, /class="vehicle-hub-statement"/);
+  assert.match(html, /href="\/camionetas\/#modelos"/);
+  assert.doesNotMatch(html, /class="vehicle-hub-gallery"/);
+  assert.doesNotMatch(html, /<section class="vehicle-brand"[^]*?<img/);
 });
 
 test("build, home, footer and sitemap expose the vehicle architecture", async () => {

@@ -28,6 +28,11 @@ export async function onRequest(context) {
     return Response.redirect(url.toString(), 308);
   }
 
+  if (["/fichas/tapa-balde-dmax", "/fichas/tapa-balde-dmax.html"].includes(url.pathname)) {
+    url.pathname = "/camionetas/chevrolet-dmax";
+    return Response.redirect(url.toString(), 308);
+  }
+
   if (["/portal-superadmin", "/portal-superadmin.html"].includes(url.pathname)) {
     return new Response("Not Found", { status: 404, headers: { "cache-control": "no-store" } });
   }

@@ -30,6 +30,15 @@ test("canonicalizes the legacy customer portal URL", async () => {
   assert.equal(response.headers.get("location"), "https://maxmotor4x4.com/MiMaxmotor?tab=register");
 });
 
+test("consolidates the legacy D-Max landing into the vehicle page", async () => {
+  const response = await onRequest({
+    request: new Request("https://maxmotor4x4.com/fichas/tapa-balde-dmax?source=google"),
+    next: () => { throw new Error("Legacy D-Max landing must not continue"); },
+  });
+  assert.equal(response.status, 308);
+  assert.equal(response.headers.get("location"), "https://maxmotor4x4.com/camionetas/chevrolet-dmax?source=google");
+});
+
 test("does not expose the legacy superadmin route", async () => {
   const response = await onRequest({
     request: new Request("https://maxmotor4x4.com/portal-superadmin"),
