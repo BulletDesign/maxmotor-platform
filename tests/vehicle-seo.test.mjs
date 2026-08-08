@@ -23,6 +23,10 @@ test("vehicle generator creates canonical, structured and useful model pages", a
   assert.match(generator, /"@type": "FAQPage"/);
   assert.match(generator, /Validamos compatibilidad/);
   assert.match(generator, /año, cabina y versión/);
+  assert.match(generator, /class="vehicle-card-media"/);
+  assert.match(generator, /class="vehicle-card-cta"/);
+  assert.match(generator, /class="vehicle-sales-banner"/);
+  assert.match(generator, /loading="lazy"/);
   for (const pickup of ECUADOR_PICKUPS) {
     assert.match(generator, new RegExp(`/camionetas/\\$\\{pickup\\.slug\\}`));
     assert.ok(pickupName(pickup).length > 4);

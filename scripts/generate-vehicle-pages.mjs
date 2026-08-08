@@ -8,15 +8,24 @@ await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 
 const products = {
-  cover: { name: "Tapas de balde", href: "/fichas/tapas-balde-camionetas", copy: "Rígidas, plegables, enrollables, eléctricas o de lona según año, cabina y medidas." },
-  liner: { name: "Recubrimiento de poliuretano", href: "/#main-catalog", copy: "Protección aplicada en caliente para trabajo, carga diaria y uso severo." },
-  suspension: { name: "Suspensión 4x4", href: "/fichas/tough-dog", copy: "Configuración según carga, altura buscada y tipo de conducción." },
-  hitch: { name: "Barras de tiro", href: "/fichas/tiro-hd", copy: "Fabricación y montaje para remolque o portacarga, con aplicación validada." },
-  bullbar: { name: "Bullbars y guardachoques", href: "/fichas/bullbar-overland", copy: "Protección frontal, rescate e integración de iluminación según proyecto." },
-  rollbar: { name: "Rollbars MXR", href: "/fichas/rollbar-rr1", copy: "Fabricación nacional con acabados y configuración para cada camioneta." },
-  rack: { name: "Bed racks y carga", href: "/fichas/bed-rack", copy: "Estructuras y sistemas para organizar herramientas o equipo overland." },
-  steps: { name: "Estribos y rock sliders", href: "/fichas/estribos-rock", copy: "Acceso lateral y protección adaptados al uso del vehículo." },
-  lights: { name: "Iluminación auxiliar", href: "/fichas/luces-led", copy: "Barras LED, faros y neblineros con instalación eléctrica profesional." },
+  cover: { name: "Tapas de balde", href: "/fichas/tapas-balde-camionetas", image: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_tapa_trifold.jpeg", copy: "Rígidas, plegables, enrollables, eléctricas o de lona según año, cabina y medidas." },
+  liner: { name: "Recubrimiento de poliuretano", href: "/#main-catalog", image: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_seguro.jpeg", copy: "Protección aplicada en caliente para trabajo, carga diaria y uso severo." },
+  suspension: { name: "Suspensión 4x4", href: "/fichas/tough-dog", image: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/suspension_2.jpeg", copy: "Configuración según carga, altura buscada y tipo de conducción." },
+  hitch: { name: "Barras de tiro", href: "/fichas/tiro-hd", image: "https://images.pexels.com/photos/33566025/pexels-photo-33566025.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Fabricación y montaje para remolque o portacarga, con aplicación validada." },
+  bullbar: { name: "Bullbars y guardachoques", href: "/fichas/bullbar-overland", image: "https://images.pexels.com/photos/5628354/pexels-photo-5628354.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Protección frontal, rescate e integración de iluminación según proyecto." },
+  rollbar: { name: "Rollbars MXR", href: "/fichas/rollbar-rr1", image: "https://images.pexels.com/photos/13644357/pexels-photo-13644357.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Fabricación nacional con acabados y configuración para cada camioneta." },
+  rack: { name: "Bed racks y carga", href: "/fichas/bed-rack", image: "https://images.pexels.com/photos/28639111/pexels-photo-28639111.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Estructuras y sistemas para organizar herramientas o equipo overland." },
+  steps: { name: "Estribos y rock sliders", href: "/fichas/estribos-rock", image: "https://images.pexels.com/photos/12138568/pexels-photo-12138568.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Acceso lateral y protección adaptados al uso del vehículo." },
+  lights: { name: "Iluminación auxiliar", href: "/fichas/luces-led", image: "https://images.pexels.com/photos/7127593/pexels-photo-7127593.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Barras LED, faros y neblineros con instalación eléctrica profesional." },
+};
+
+const heroMedia = {
+  work: { src: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_tapa_trifold.jpeg", position: "center", credit: "Protección de balde Maxmotor" },
+  mixed: { src: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/banner2.png", position: "center", credit: "Equipamiento de balde Maxmotor" },
+  adventure: { src: "https://images.pexels.com/photos/5628354/pexels-photo-5628354.jpeg?auto=compress&cs=tinysrgb&w=1800", position: "center", credit: "Foto contextual: Erik Mclean / Pexels" },
+  premium: { src: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/banner3.png", position: "center", credit: "Accesorios premium Maxmotor" },
+  fullsize: { src: "https://images.pexels.com/photos/28639327/pexels-photo-28639327.jpeg?auto=compress&cs=tinysrgb&w=1800", position: "center", credit: "Foto contextual: Stephen Leonardi / Pexels" },
+  compact: { src: "https://images.pexels.com/photos/35331201/pexels-photo-35331201.jpeg?auto=compress&cs=tinysrgb&w=1800", position: "center", credit: "Foto contextual: Iridescentlenz / Pexels" },
 };
 
 const focusProducts = {
@@ -34,6 +43,7 @@ const absolute = (path) => `https://maxmotor4x4.com${path}`;
 function pageFor(pickup) {
   const name = pickupName(pickup);
   const selected = focusProducts[pickup.focus].map((key) => products[key]);
+  const hero = heroMedia[pickup.focus];
   const searchTitle = `Tapas de Balde y Accesorios ${name} | Maxmotor`;
   const title = searchTitle.length <= 60 ? searchTitle : `Tapas y Accesorios ${name.replace("Mitsubishi ", "")} | Maxmotor`;
   const description = `Equipa tu ${name} con tapas de balde, suspensión, barras de tiro, protección y accesorios 4x4. Validamos compatibilidad e instalamos en Ecuador.`;
@@ -56,7 +66,10 @@ function pageFor(pickup) {
       ] },
     ],
   };
-  const cards = selected.map((product, index) => `<article><span>${String(index + 1).padStart(2, "0")}</span><h3>${escapeHtml(product.name)}</h3><p>${escapeHtml(product.copy)}</p><a href="${product.href}">Ver opciones <b>↗</b></a></article>`).join("\n");
+  const cards = selected.map((product, index) => {
+    const productWhatsapp = `https://wa.me/593960855932?text=${encodeURIComponent(`Hola Maxmotor 4x4, quiero cotizar ${product.name} para mi ${name}. Año / cabina / versión:`)}`;
+    return `<article><a class="vehicle-card-media" href="${product.href}" aria-label="Ver ${escapeHtml(product.name)}"><img src="${product.image}" alt="${escapeHtml(product.name)} para camionetas 4x4" width="560" height="360" loading="lazy" decoding="async"></a><div class="vehicle-card-copy"><span>${String(index + 1).padStart(2, "0")}</span><h3><a href="${product.href}">${escapeHtml(product.name)}</a></h3><p>${escapeHtml(product.copy)}</p><a class="vehicle-card-cta" href="${productWhatsapp}" target="_blank" rel="noopener">Cotizar para ${escapeHtml(pickup.model)} <b>↗</b></a></div></article>`;
+  }).join("\n");
   const aliasText = pickup.aliases.length ? `También buscan este modelo como ${pickup.aliases.join(", ")}.` : `Confirmamos la aplicación exacta con el año, la cabina y la versión de tu camioneta.`;
   return `<!doctype html>
 <html lang="es-EC">
@@ -77,12 +90,12 @@ function pageFor(pickup) {
   <meta property="og:title" content="Accesorios para ${escapeHtml(name)} en Ecuador">
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${absolute(`/camionetas/${pickup.slug}`)}">
-  <meta property="og:image" content="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_tapa_trifold.jpeg">
+  <meta property="og:image" content="${hero.src}">
   <meta name="twitter:card" content="summary_large_image">
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;600;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/shared-shell.css?v=20260808-1">
   <link rel="stylesheet" href="assets/type-system.css?v=20260805-2">
-  <link rel="stylesheet" href="assets/seo-product.css?v=20260808-2">
+  <link rel="stylesheet" href="assets/seo-product.css?v=20260808-3">
   <script src="assets/site-shell.js?v=20260808-2"></script>
   <script type="application/ld+json">${JSON.stringify(schema)}</script>
 </head>
@@ -97,12 +110,13 @@ function pageFor(pickup) {
         <p class="dmax-lead">${escapeHtml(pickup.profile)} Maxmotor selecciona, fabrica e instala accesorios de alta durabilidad para uso real.</p>
         <div class="dmax-actions"><a class="dmax-button" href="${whatsapp}" target="_blank" rel="noopener">Equipar mi ${escapeHtml(pickup.model)} <b>↗</b></a><a class="dmax-text-link" href="#accesorios">Ver accesorios ↓</a></div>
       </div>
-      <figure class="dmax-hero__media"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_tapa_trifold.jpeg" alt="Accesorio de protección para el balde de una camioneta pickup" width="890" height="933"><figcaption>Imagen referencial de producto. La aplicación se confirma para ${escapeHtml(name)} según año, cabina y versión.</figcaption></figure>
+      <figure class="dmax-hero__media"><img src="${hero.src}" alt="Equipamiento premium para camionetas 4x4" width="890" height="933" style="object-position:${hero.position}"><figcaption>${escapeHtml(hero.credit)}. Imagen referencial; la aplicación se confirma para ${escapeHtml(name)} según año, cabina y versión.</figcaption></figure>
     </section>
     <section class="dmax-options" id="accesorios" aria-labelledby="accessory-title">
       <div class="dmax-section-title"><p class="dmax-kicker">01 / CONFIGURA</p><h2 id="accessory-title">Herramientas.<br>No juguetes.</h2><p>${escapeHtml(aliasText)} No publicamos compatibilidades genéricas: primero entendemos el uso y después confirmamos el componente.</p></div>
       <div class="dmax-option-grid vehicle-accessory-grid">${cards}</div>
     </section>
+    <aside class="vehicle-sales-banner"><img src="https://images.pexels.com/photos/7326681/pexels-photo-7326681.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="Experiencia overland con una camioneta 4x4" width="1600" height="900" loading="lazy" decoding="async"><div><p class="dmax-kicker">PROYECTO COMPLETO / UN SOLO EQUIPO</p><h2>De trabajo.<br>A inolvidable.</h2><p>No compres piezas sueltas sin una estrategia. Un asesor puede organizar protección, carga, suspensión e iluminación como un solo proyecto.</p><a class="dmax-button" href="${whatsapp}" target="_blank" rel="noopener">Diseñar mi proyecto <b>↗</b></a></div></aside>
     <section class="dmax-fit">
       <div><p class="dmax-kicker">02 / COMPATIBILIDAD</p><h2>Tu versión.<br>La pieza correcta.</h2><p>Una misma ${escapeHtml(pickup.model)} puede cambiar entre generaciones, tipos de cabina y mercados. Envíanos año, cabina, versión y una fotografía para validar antes de instalar.</p></div>
       <div class="vehicle-checklist"><p><b>01</b><span>Marca y modelo</span><strong>${escapeHtml(name)}</strong></p><p><b>02</b><span>Datos necesarios</span><strong>Año, cabina y versión</strong></p><p><b>03</b><span>Instalación</span><strong>Ambato y Quito</strong></p><a class="dmax-button" href="${whatsapp}" target="_blank" rel="noopener">Validar por WhatsApp <b>↗</b></a></div>
@@ -116,14 +130,14 @@ function pageFor(pickup) {
 }
 
 const grouped = Map.groupBy(ECUADOR_PICKUPS, (pickup) => pickup.brand);
-const brandSections = [...grouped].map(([brand, pickups]) => `<section class="vehicle-brand"><h2>${escapeHtml(brand)}</h2><div>${pickups.map((pickup) => `<a href="/camionetas/${pickup.slug}"><span>${escapeHtml(pickup.model)}</span><small>Accesorios, tapas y equipamiento ↗</small></a>`).join("")}</div></section>`).join("\n");
+const brandSections = [...grouped].map(([brand, pickups]) => `<section class="vehicle-brand"><h2>${escapeHtml(brand)}</h2><div>${pickups.map((pickup) => `<a href="/camionetas/${pickup.slug}"><img src="${heroMedia[pickup.focus].src}" alt="Equipamiento para ${escapeHtml(pickupName(pickup))}" width="480" height="280" loading="lazy" decoding="async"><span>${escapeHtml(pickup.model)}</span><small>Accesorios, tapas y equipamiento ↗</small></a>`).join("")}</div></section>`).join("\n");
 const hubSchema = { "@context": "https://schema.org", "@graph": [
   { "@type": "CollectionPage", name: "Accesorios para camionetas en Ecuador", url: absolute("/camionetas"), description: "Guías de accesorios y equipamiento 4x4 por marca y modelo de pickup en Ecuador." },
   { "@type": "ItemList", numberOfItems: ECUADOR_PICKUPS.length, itemListElement: ECUADOR_PICKUPS.map((pickup, index) => ({ "@type": "ListItem", position: index + 1, name: pickupName(pickup), url: absolute(`/camionetas/${pickup.slug}`) })) },
 ] };
 const hub = `<!doctype html>
-<html lang="es-EC"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><base href="../"><title>Accesorios para Camionetas en Ecuador | Maxmotor 4x4</title><meta name="description" content="Encuentra tapas de balde, suspensión, barras de tiro, bullbars, rollbars y equipamiento para las principales camionetas de Ecuador."><meta name="robots" content="index, follow, max-image-preview:large"><link rel="canonical" href="https://maxmotor4x4.com/camionetas"><link rel="alternate" hreflang="es-EC" href="https://maxmotor4x4.com/camionetas"><link rel="icon" href="/assets/favicon-maxmotor.png" type="image/png" sizes="180x180"><link rel="apple-touch-icon" href="/assets/favicon-maxmotor.png"><meta property="og:type" content="website"><meta property="og:locale" content="es_EC"><meta property="og:site_name" content="Maxmotor 4x4"><meta property="og:title" content="Accesorios para camionetas en Ecuador"><meta property="og:description" content="Busca tu pickup y descubre opciones de protección, carga, suspensión y aventura."><meta property="og:url" content="https://maxmotor4x4.com/camionetas"><meta property="og:image" content="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_tapa_trifold.jpeg"><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;600;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/shared-shell.css?v=20260808-1"><link rel="stylesheet" href="assets/type-system.css?v=20260805-2"><link rel="stylesheet" href="assets/seo-product.css?v=20260808-2"><script src="assets/site-shell.js?v=20260808-2"></script><script type="application/ld+json">${JSON.stringify(hubSchema)}</script></head>
-<body><maxmotor-header compact></maxmotor-header><main class="dmax-page vehicle-hub"><section class="vehicle-hub-hero"><p class="dmax-kicker">CAMIONETAS / ECUADOR</p><h1>Encuentra<br>tu 4x4.</h1><p>Tapas de balde, suspensiones, barras de tiro, bullbars, recubrimiento de poliuretano y equipamiento de alta durabilidad para pickups nuevas y de amplio parque circulante.</p><a class="dmax-button" href="#modelos">Buscar mi camioneta <b>↓</b></a></section><section class="vehicle-directory" id="modelos"><div class="dmax-section-title"><p class="dmax-kicker">01 / POR MARCA</p><h2>Tu modelo.<br>Tu proyecto.</h2><p>Selecciona la camioneta. Cada aplicación se verifica por año, cabina, versión y medidas antes de confirmar.</p></div>${brandSections}<aside class="vehicle-missing"><p class="dmax-kicker">¿NO ENCUENTRAS TU MODELO?</p><h2>Igual podemos ayudarte.</h2><a class="dmax-button" href="https://wa.me/593960855932?text=Hola%20Maxmotor%204x4%2C%20quiero%20consultar%20accesorios%20para%20mi%20camioneta%3A" target="_blank" rel="noopener">Consultar otra camioneta <b>↗</b></a></aside></section></main><maxmotor-footer></maxmotor-footer></body></html>`;
+<html lang="es-EC"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><base href="../"><title>Accesorios para Camionetas en Ecuador | Maxmotor 4x4</title><meta name="description" content="Encuentra tapas de balde, suspensión, barras de tiro, bullbars, rollbars y equipamiento para las principales camionetas de Ecuador."><meta name="robots" content="index, follow, max-image-preview:large"><link rel="canonical" href="https://maxmotor4x4.com/camionetas"><link rel="alternate" hreflang="es-EC" href="https://maxmotor4x4.com/camionetas"><link rel="icon" href="/assets/favicon-maxmotor.png" type="image/png" sizes="180x180"><link rel="apple-touch-icon" href="/assets/favicon-maxmotor.png"><meta property="og:type" content="website"><meta property="og:locale" content="es_EC"><meta property="og:site_name" content="Maxmotor 4x4"><meta property="og:title" content="Accesorios para camionetas en Ecuador"><meta property="og:description" content="Busca tu pickup y descubre opciones de protección, carga, suspensión y aventura."><meta property="og:url" content="https://maxmotor4x4.com/camionetas"><meta property="og:image" content="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_tapa_trifold.jpeg"><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;600;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/shared-shell.css?v=20260808-1"><link rel="stylesheet" href="assets/type-system.css?v=20260805-2"><link rel="stylesheet" href="assets/seo-product.css?v=20260808-3"><script src="assets/site-shell.js?v=20260808-2"></script><script type="application/ld+json">${JSON.stringify(hubSchema)}</script></head>
+<body><maxmotor-header compact></maxmotor-header><main class="dmax-page vehicle-hub"><section class="vehicle-hub-hero"><div class="vehicle-hub-copy"><p class="dmax-kicker">CAMIONETAS / ECUADOR</p><h1>Encuentra<br>tu 4x4.</h1><p>Tapas de balde, suspensiones, barras de tiro, bullbars, recubrimiento de poliuretano y equipamiento de alta durabilidad para pickups nuevas y de amplio parque circulante.</p><a class="dmax-button" href="#modelos">Buscar mi camioneta <b>↓</b></a></div><div class="vehicle-hub-gallery" aria-label="Proyectos 4x4 Maxmotor"><img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_tapa_trifold.jpeg" alt="Tapa rígida para camioneta" width="760" height="900"><img src="https://images.pexels.com/photos/5628354/pexels-photo-5628354.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Camioneta preparada para aventura 4x4" width="600" height="500"><span>TOOLS<br>NOT TOYS.</span></div></section><section class="vehicle-directory" id="modelos"><div class="dmax-section-title"><p class="dmax-kicker">01 / POR MARCA</p><h2>Tu modelo.<br>Tu proyecto.</h2><p>Selecciona la camioneta. Cada aplicación se verifica por año, cabina, versión y medidas antes de confirmar.</p></div>${brandSections}<aside class="vehicle-missing"><p class="dmax-kicker">¿NO ENCUENTRAS TU MODELO?</p><h2>Igual podemos ayudarte.</h2><a class="dmax-button" href="https://wa.me/593960855932?text=Hola%20Maxmotor%204x4%2C%20quiero%20consultar%20accesorios%20para%20mi%20camioneta%3A" target="_blank" rel="noopener">Consultar otra camioneta <b>↗</b></a></aside></section></main><maxmotor-footer></maxmotor-footer></body></html>`;
 
 await Promise.all([
   writeFile(resolve(output, "index.html"), hub, "utf8"),
