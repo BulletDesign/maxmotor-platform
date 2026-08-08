@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "inventory:import": "node scripts/import-inventory-compatibility.mjs",
     "build": "node scripts/build-static.mjs",
     "check": "node scripts/check-project.mjs",
     "test": "node --test tests/*.test.mjs",

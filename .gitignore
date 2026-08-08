@@ -6,3 +6,4 @@ dist-production/
 *.log
 .env
 .dev.vars
+CSV_MAXMOTOR.csv

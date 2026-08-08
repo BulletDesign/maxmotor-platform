@@ -1,0 +1,1041 @@
+{
+  "vehicles": {
+    "chevrolet-dmax": [
+      {
+        "name": "PROTECTOR DE BALDE MAXLINER DMAX 2013 D/C WINGLE 5/6/7",
+        "category": "bedProtection"
+      },
+      {
+        "name": "KIT THULE DMAX 2012",
+        "category": "cargo"
+      },
+      {
+        "name": "LARGUERO BARRA DE TECHO WIMBO DMAX 2014 SILVER ORIGINAL",
+        "category": "cargo"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA DMAX 2013 D/C WINGLE",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA DMAX 2014 4X4 D/C",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE BM PARA DMAX 2014/24 4X4 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA DMAX 4X4 14/24 DE 4 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA FORD RANGER 2022/DMAX/BT50 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE TUCCI PARA DMAX 4X2 2014/22 D/C 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE TUCCI PARA DMAX 4X4 D/C 2014-22 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "BODY KIT DARK GREY DMAX 2014 FGC",
+        "category": "exterior"
+      },
+      {
+        "name": "CUBRELLUVIAS DMAX 2014",
+        "category": "exterior"
+      },
+      {
+        "name": "CUBRELLUVIAS DMAX 2014-23 NEGROS CON CROMADO 4PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "CUBRELLUVIAS NEGROS DMAX 2012 4PZS WINGLE",
+        "category": "exterior"
+      },
+      {
+        "name": "CUBRELLUVIAS NEGROS DMAX 2014-23 4PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "MASCARILLA DMAX 2014-2016 NEGRA LLANA",
+        "category": "exterior"
+      },
+      {
+        "name": "MOLDURAS LATERALES DMAX 2018 CON DETALLE CROMADO",
+        "category": "exterior"
+      },
+      {
+        "name": "OVERFENDER DMAX 2019 NEGRO CON LOGO CROMADO KIT 4PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "SNORKEL DMAX 2013 NEGRO PLASTICO",
+        "category": "exterior"
+      },
+      {
+        "name": "RADIO ORIGINAL DMAX 2018 TOUCH",
+        "category": "interior"
+      },
+      {
+        "name": "CROMADOS DE FAROS POSTERIORES DMAX 2006 2PZS",
+        "category": "lighting"
+      },
+      {
+        "name": "DEFENSA DELANTERA METALICA NEGRA CON BARRA LED DMAX 2016",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO LED VINJET DMAX 2012 KIT ARG",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO NEBLINERO DLAA DMAX 2017 4X4 KIT FGC",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO NEBLINERO LED DLAA DMAX 2014 FGC",
+        "category": "lighting"
+      },
+      {
+        "name": "SWITCH ORIGINAL DMAX 2019 4X4",
+        "category": "lighting"
+      },
+      {
+        "name": "ROLL BAR DOBLE TUBO DE ACERO NEGRO PARA VIGO/REVO/DMAX/NAVARA",
+        "category": "rollbars"
+      },
+      {
+        "name": "VIDRIO POSTERIOR CORREDIZO CARRYBOY DMAX 2014",
+        "category": "specific"
+      },
+      {
+        "name": "VIDRIO/COMPUERTA DE CASETA N560 CARRYBOY DMAX 2010",
+        "category": "specific"
+      },
+      {
+        "name": "ESTRIBO ELECTRICO DMAX 2014-2018 2PZS",
+        "category": "steps"
+      },
+      {
+        "name": "ESTRIBO INTEGRAL KEKO DMAX 2014 D/C ALUMINIO",
+        "category": "steps"
+      },
+      {
+        "name": "ESTRIBO METALICO PLANO ROJO DMAX 16/23",
+        "category": "steps"
+      },
+      {
+        "name": "KIT DE BASES ESTRIBOS MY ROAD DMAX 2020",
+        "category": "steps"
+      },
+      {
+        "name": "PISADERA POSTERIOR LATERAL DE ACERO DMAX 2021",
+        "category": "steps"
+      },
+      {
+        "name": "BARRA ESTABILIZADORA DMAX 2020/COLORADO",
+        "category": "suspension"
+      },
+      {
+        "name": "BUJE 14.5X40.2X60.8X69 DMAX DAT/TY 4X4 C/ALMA",
+        "category": "suspension"
+      },
+      {
+        "name": "BUJE 14.5X40X60.8X69 DMAX",
+        "category": "suspension"
+      },
+      {
+        "name": "BUJE 18.2X30X34.7X37.4 HILUX/LUV DMAX",
+        "category": "suspension"
+      },
+      {
+        "name": "BUJE 19X30X51.5X46 DMAX",
+        "category": "suspension"
+      },
+      {
+        "name": "ESPIRALES DELANTEROS OLD MAN EMU DMAX/VIGO/REVO/4RUNNER/FJ",
+        "category": "suspension"
+      },
+      {
+        "name": "JUEGO AMORTIGUADOR DELANTERO DMAX 4X4",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE ALTURA MXR DMAX 4X2/AMORTIGUADORES RANCHO",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE BUJES OLD MAN EMU TOYOTA REVO/VIGO/DMAX",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION DMAX 4X4 2021 COMPLETA",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION RS DMAX 2022",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION TJM DMAX 2016 CON PAQUETES",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION TOUGH DOG DMAX 2024 4X4 CON PAQUETES",
+        "category": "suspension"
+      },
+      {
+        "name": "BARRA DE TIRO KEKO DMAX 2014-2022",
+        "category": "towing"
+      }
+    ],
+    "isuzu-dmax": [],
+    "chevrolet-colorado": [
+      {
+        "name": "BARRA ESTABILIZADORA DMAX 2020/COLORADO",
+        "category": "suspension"
+      }
+    ],
+    "chevrolet-silverado": [
+      {
+        "name": "CROMADO DE MANIJA PARA COMPUERTA SILVERADO 2012 2PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "CROMADOS DE FAROS POSTERIORES SILVERADO 2010 2PZS",
+        "category": "lighting"
+      }
+    ],
+    "toyota-hilux": [
+      {
+        "name": "CARGO MANAGER SEPARADOR DE CARGA ROLL-N-LOCK HILUX VIGO",
+        "category": "cargo"
+      },
+      {
+        "name": "KIT THULE HILUX REVO ANCLAJES",
+        "category": "cargo"
+      },
+      {
+        "name": "TAPA DE BALDE AMERICAN LONA TOYOTA HILUX REVO 4X2 2016 D/C FGC",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE CORREDIZA ELECTRICA MAXMOTOR PARA HILUX REVO 16/25 4X4 D/C",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA TOYOTA HILUX REVO/POER/SINOTRUK 4X4 D/C 2025",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA TOYOTA HILUX VIGO 4X4 D/C",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA VIGO 4X4 D/C EDICION ESPECIAL",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE LONA CHINA POER /REVO 4X4/SINOTRUK D/C",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA HILUX REVO 4X4 16/25 DE 4 PARTES DE ALUMINIO SINOTRUK/POER/JAC",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA POER DE 4 PARTES DE ALUMINIO REVO/SINOTRUK/JAC",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA POER/REVO 4X4 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE REVO/POER/JAC CON LUZ 3PARTES",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE SPIDER PARA REVO/POER 3 PARTES 3ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "BISEL DE TACOMETRO TOYOTA VIGO CROMADO",
+        "category": "exterior"
+      },
+      {
+        "name": "CROMADO DE ABREPUERTA TOYOTA HILUX VIGO 2007 1PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "CROMADO DE MANIJAS TOYOTA HILUX VIGO 2005 8PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "CROMADOS DE ESPEJOS CON LUZ TOYOTA HILUX VIGO 2012 2PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "CUBRELLUVIAS NEGROS HILUX REVO 4P",
+        "category": "exterior"
+      },
+      {
+        "name": "CUBRELLUVIAS TOYOTA REVO NEGROS CON CROMADO",
+        "category": "exterior"
+      },
+      {
+        "name": "OVERFENDER BUSCH WACKER TOYOTA HILUX VIGO 2013 NEGRO JUEGO KIT 6PZS ARG",
+        "category": "exterior"
+      },
+      {
+        "name": "OVERFENDER TOYOTA HILUX REVO 2016 NEGRO CON PERNOS KIT 6PZS ARG",
+        "category": "exterior"
+      },
+      {
+        "name": "OVERFENDERS FALDONES HILUX REVO 2020-2023 RED",
+        "category": "exterior"
+      },
+      {
+        "name": "SNORKEL SAFARI TOYOTA VIGO/FORTUNER 2014 NEGRO PLASTICO",
+        "category": "exterior"
+      },
+      {
+        "name": "MOQUETAS TERMOFORMADAS TOYOTA REVO 2016-23 3PZS",
+        "category": "interior"
+      },
+      {
+        "name": "BISEL CROMADO DLAA TOYOTA HILUX VIGO 2012 CON LUZ LED PARA NEBLINEROS KIT FGC",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO GUIA LED PORTERIOR TOYOTA HILUX 2012-2014 OSCURO ARG",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO LED PENTAIR TOYOTA HILUX VIGO 2012 KIT FGC",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO NEBLINERO DLAA TOYOTA HILUX REVO 2016",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO NEBLINERO DLAA TOYOTA HILUX VIGO 2014 KIT FGC",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO NEBLINERO TOYOTA REVO ROCCO 2019 DLAA CON BISEL LUZ LED KIT FGC",
+        "category": "lighting"
+      },
+      {
+        "name": "SWITCH LIGHTFORCE TOYOTA HILUX",
+        "category": "lighting"
+      },
+      {
+        "name": "SWITCH ORIGINAL PRADO/RAV/HILUX",
+        "category": "lighting"
+      },
+      {
+        "name": "SWITCH ORIGINAL TOYOTA HILUX VIGO",
+        "category": "lighting"
+      },
+      {
+        "name": "ROLL BAR DOBLE TUBO DE ACERO NEGRO PARA VIGO/REVO/DMAX/NAVARA",
+        "category": "rollbars"
+      },
+      {
+        "name": "ROLL BAR KEKO K1 NEGRO HILUX VIGO 2015",
+        "category": "rollbars"
+      },
+      {
+        "name": "ROLL BAR KEKO K3 NEGRO REVO 2016",
+        "category": "rollbars"
+      },
+      {
+        "name": "ROLL BAR KEKO VIGO 2015 EDICION ESPECIAL",
+        "category": "rollbars"
+      },
+      {
+        "name": "ESTRIBO METALICO PLANO ROJO HILUX REVO 16/24",
+        "category": "steps"
+      },
+      {
+        "name": "ESTRIBO PLANO NEGRO HILUX REVO 2016 D/C",
+        "category": "steps"
+      },
+      {
+        "name": "ESTRIBO RR1 HILUX REVO D/C 16-23",
+        "category": "steps"
+      },
+      {
+        "name": "KEKO KIT DE BASES PARA ESTRIBOS HILUX",
+        "category": "steps"
+      },
+      {
+        "name": "PISADERA POSTERIOR LATERAL DE ACERO REVO/VIGO",
+        "category": "steps"
+      },
+      {
+        "name": "ABRAZADERA DE PAQUETE HILUX/NAVARA",
+        "category": "suspension"
+      },
+      {
+        "name": "ABRAZADERA OLD MAN EMU REVO PARA PAQUETES",
+        "category": "suspension"
+      },
+      {
+        "name": "AMORTIGUADOR DELANTERO OLD MAN EMU REVO",
+        "category": "suspension"
+      },
+      {
+        "name": "AMORTIGUADOR EMBOLO PARA COMPUERTA DE CAMIONETA TOYOTA REVO GT-PRO FGC",
+        "category": "suspension"
+      },
+      {
+        "name": "AMORTIGUADOR POSTERIOR OLD MAN EMU VIGO 2013",
+        "category": "suspension"
+      },
+      {
+        "name": "BUJE 18.2X30X34.7X37.4 HILUX/LUV DMAX",
+        "category": "suspension"
+      },
+      {
+        "name": "COLGANTES TOYOTA HILUX REVO 2020",
+        "category": "suspension"
+      },
+      {
+        "name": "ESPIRALES DELANTEROS OLD MAN EMU DMAX/VIGO/REVO/4RUNNER/FJ",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE BUJES OLD MAN EMU TOYOTA REVO/VIGO/DMAX",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION OLD MAN EMU HILUX REVO 4X4 2016-22 2",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION OLD MAN EMU HILUX VIGO 2015 2",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION PROCOMP 6 TOYOTA HILUX VIGO PLEU",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION RS HILUX 2022",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION TJM HILUX REVO",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION TJM ROAMER PARA HILUX 4X4 GEN. ACT.",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT SUSPENSION TJM RUGGED HILUX 4X4 GEN. ACT",
+        "category": "suspension"
+      },
+      {
+        "name": "SCHAKLE OLD MAN EMU REVO",
+        "category": "suspension"
+      },
+      {
+        "name": "SEMI KIT TOUGH DOG TOYOTA HILUX REVO REGULABLE",
+        "category": "suspension"
+      },
+      {
+        "name": "BARRA DE TIRO KEKO TOYOTA HILUX REVO 2016-23",
+        "category": "towing"
+      },
+      {
+        "name": "BARRA DE TIRO WF PARA HILUX REVO 2016/25 CON ACOPLES",
+        "category": "towing"
+      }
+    ],
+    "toyota-tacoma": [],
+    "toyota-tundra": [],
+    "ford-ranger": [
+      {
+        "name": "KIT THULE PIES RANGER 2016/BT-50 2016",
+        "category": "cargo"
+      },
+      {
+        "name": "LARGUERO DE TECHO FORD RANGER 2017",
+        "category": "cargo"
+      },
+      {
+        "name": "TAPA DE BALDE CORREDIZA MANUAL MAXMOTOR PARA RANGER 2022",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE CORREDIZA MANUAL MAXMOTOR PARA RANGER 2023",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE CORREDIZA MANUAL TNN PARA RANGER 2020",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA MAZDA BT-50 2020/FORD RANGER23/TRITON 25",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA RANGER 2024 D/C",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE LONA FORD RANGER 2024 CON LOGO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA FORD RANGER 2021 DE 4 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA FORD RANGER 2022/DMAX/BT50 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA FORD RANGER 2023 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "CUBRELLUVIAS RANGER 2016 NEGRO CON CROMADO 4PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "MOLDURAS PARA FORD RANGER 2019 4PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "OVERFENDERS FORD RANGER CON LUZ",
+        "category": "exterior"
+      },
+      {
+        "name": "RADIO 9 Y PANEL FORD RANGER",
+        "category": "interior"
+      },
+      {
+        "name": "FARO NEBLINERO DLAA FORD RANGER 2011 KIT FGC",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO POSTERIOR FORD RANGER 2018 NEGRO PAR",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO POSTERIOR LED FORD RANGER 2018 PAR",
+        "category": "lighting"
+      },
+      {
+        "name": "ROLL BAR DOBLE TUBO DE ACERO NEGRO PARA FORD RANGER",
+        "category": "rollbars"
+      },
+      {
+        "name": "SEGURO DE COMPUERTA SUS-TEC FORD RANGER 2014",
+        "category": "specific"
+      },
+      {
+        "name": "ESTRIBO WIMBO TUBULAR NEGRO FORD RANGER 2016-23",
+        "category": "steps"
+      },
+      {
+        "name": "PISADERA POSTERIOR LATERAL DE ACERO FORD RANGER 12-22",
+        "category": "steps"
+      },
+      {
+        "name": "BARRA ESTABILIZADORA FORD RANGER",
+        "category": "suspension"
+      },
+      {
+        "name": "BUJE 14X40X39X32 BT50 RANGER 2015",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION OLD MAN EMU BT-50/RANGER 2019 2",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION OLD MAN EMU FORD RANGER 2020 2",
+        "category": "suspension"
+      },
+      {
+        "name": "SCHAKLE OLD MAN EMU BT-50/RANGER 2016",
+        "category": "suspension"
+      },
+      {
+        "name": "BARRA DE TIRO WF PARA FORD RANGER 2022 CON ACOPLES",
+        "category": "towing"
+      }
+    ],
+    "ford-f150": [
+      {
+        "name": "TAPA DE BALDE CORREDIZA MANUAL MAXMOTOR PARA F150 2015 5.5",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA FORD F150 2016 D/C",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA FORD F150 5.5 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "MASCARILLA FORD F150 2018 GRILLE CON LUZ",
+        "category": "exterior"
+      },
+      {
+        "name": "MOQUETA HUSKY POSTERIOR FORD F150 2PZS",
+        "category": "interior"
+      },
+      {
+        "name": "MOQUETAS TERMOFORMADAS FORD F150 2016 3PZS KIT FGC",
+        "category": "interior"
+      },
+      {
+        "name": "CROMADOS DE FAROS DELANTEROS FORD F150 2013 2PZS",
+        "category": "lighting"
+      },
+      {
+        "name": "MASCARILLA FORD F150 2012 CROMADA CON HALOGENOS DL",
+        "category": "lighting"
+      },
+      {
+        "name": "MANIJAS CARBON NEGRAS F150 2013 KIT 4PZS",
+        "category": "specific"
+      },
+      {
+        "name": "ESTRIBO AMERICANO FORD F150 2013 D/C NEGRO/ PISADERA TUBO REDONDO",
+        "category": "steps"
+      },
+      {
+        "name": "ESTRIBO ELECTRICO AMP F150 D/C 2013 RESEARCH ARG",
+        "category": "steps"
+      },
+      {
+        "name": "ESTRIBO PLANO NEGRO F150 C/S 2013 CON LOGO FORD AZUL ARG",
+        "category": "steps"
+      },
+      {
+        "name": "ESTRIBO TUBULAR WIMBO NEGRO ANCHO F150 2016 FGC",
+        "category": "steps"
+      },
+      {
+        "name": "KIT DE NIVELACION DAYSTAR 2.1/2 DELANTERA FORD F150 PLU",
+        "category": "suspension"
+      },
+      {
+        "name": "SEMI KIT TOUGH DOG FOAM CELL FORD F150",
+        "category": "suspension"
+      },
+      {
+        "name": "GANCHO DE BALDE BULL RING PARA FORD F150 2014 PLEU",
+        "category": "towing"
+      }
+    ],
+    "ford-maverick": [],
+    "nissan-frontier": [
+      {
+        "name": "TAPA DE BALDE KEKO LONA NISSAN FRONTIER 2013 D/C NP300 GM",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA NISSAN FRONTIER 2016 D/C GM",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA NISSAN FRONTIER NP300 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "CROMADO DE BANDEJAS NISSAN NAVARA 4PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "CROMADO DE MANIJAS NISSAN NAVARA 2012 KIT 8PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "CROMADOS DE ESPEJOS NISSAN FRONTIER/NAVARA 2PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "SNORKEL NISSAN FRONTIER 2013 NEGRO PLASTICO",
+        "category": "exterior"
+      },
+      {
+        "name": "CROMADOS DE FAROS POSTERIORES NISSAN NAVARA 2PSZ",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO NEBLINERO DLAA NISSAN FRONTIER 2012 KIT FGC",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO NEBLINERO NISSAN FRONTIER 2019",
+        "category": "lighting"
+      },
+      {
+        "name": "ROLL BAR DOBLE TUBO DE ACERO NEGRO PARA VIGO/REVO/DMAX/NAVARA",
+        "category": "rollbars"
+      },
+      {
+        "name": "ABRAZADERA DE PAQUETE HILUX/NAVARA",
+        "category": "suspension"
+      },
+      {
+        "name": "BARRA DE TIRO KEKO NISSAN FRONTIER NP300 2016",
+        "category": "towing"
+      }
+    ],
+    "mitsubishi-l200-triton": [
+      {
+        "name": "PROTECTOR DE BALDE MAXLINER MITSUBISHI L200 2017 D/C/FULLBACK ARG",
+        "category": "bedProtection"
+      },
+      {
+        "name": "PROTECTOR DE BALDE MAXLINER TRITON SPORT 2025 4X2/4X4 D/C SIN MUESCA RIEL INTERNO",
+        "category": "bedProtection"
+      },
+      {
+        "name": "PROTECTOR DE BALDE MAXLINER TRITON WORK 2025 4X2/4X4 D/C CON MUESCA RIEL INTERNO",
+        "category": "bedProtection"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA L200 2008/2015 D/C",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA L200 2019 CON BARANDA D/C",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA MAZDA BT-50 2020/FORD RANGER23/TRITON 25",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE AR PARA L200 19-20 D/C DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA TRITON 2025 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA RIGIDA PLEGABLE GM PARA TRITON 2025 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "OVERFENDERS L200 2019 NEGROS CON RIVETES",
+        "category": "exterior"
+      },
+      {
+        "name": "OVERFENDERS L200 2020 NEGRO CON RIVETE",
+        "category": "exterior"
+      },
+      {
+        "name": "NEBLINERO LED L200 2020 2PZS",
+        "category": "lighting"
+      },
+      {
+        "name": "SWITCH LIGHTFORCE TRITON",
+        "category": "lighting"
+      },
+      {
+        "name": "ROLL BAR DOBLE TUBO DE ACERO NEGRO PARA TRITON 25",
+        "category": "rollbars"
+      },
+      {
+        "name": "ROLL BAR K3 L200 2023",
+        "category": "rollbars"
+      },
+      {
+        "name": "FILTRO DE AIRE K&N MITSUBISHI L200 2016 GM",
+        "category": "specific"
+      },
+      {
+        "name": "ESTRIBO INTEGRAL KEKO NEGRO L200 2016-23 / FULLBACK D/C ALUMINIO GM",
+        "category": "steps"
+      },
+      {
+        "name": "ESTRIBO INTEGRAL KEKO PLATA L200 2016-23 D/C",
+        "category": "steps"
+      },
+      {
+        "name": "ESTRIBO WIMBO TUBULAR NEGRO L200 2020-23",
+        "category": "steps"
+      },
+      {
+        "name": "PISADERA POSTERIOR LATERAL DE ACERO TRITON 2024",
+        "category": "steps"
+      },
+      {
+        "name": "AMORT DEL AJUST MS L200 2006 2015 E1in",
+        "category": "suspension"
+      },
+      {
+        "name": "BRAZOS DE CONTROL TOUGH DOG L200 2006 2023 MONTERO SPORT MESAS",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE ALZAS DE SUSPENSION L200 2021",
+        "category": "suspension"
+      },
+      {
+        "name": "BARRA DE TIRO WF PARA TRITON 2025 CON ACOPLES",
+        "category": "towing"
+      }
+    ],
+    "mazda-bt50": [
+      {
+        "name": "KIT THULE PIES RANGER 2016/BT-50 2016",
+        "category": "cargo"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA MAZDA BT-50 2020/FORD RANGER23/TRITON 25",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA FORD RANGER 2022/DMAX/BT50 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "OVERFENDER MAZDA BT-50 2013 PLASTICOS KIT 6PZS",
+        "category": "exterior"
+      },
+      {
+        "name": "OVERFENDER MAZDA BT-50 2019 NEGROS CON RIVETES",
+        "category": "exterior"
+      },
+      {
+        "name": "FARO NEBLINERO DLAA MAZDA BT-50 2018 FGC",
+        "category": "lighting"
+      },
+      {
+        "name": "PROTECTORES DE ESTRIBOS MAZDA BT-50 ACERO INOXIDABLE KIT 2PZS FGC",
+        "category": "steps"
+      },
+      {
+        "name": "PROTECTORES DE ESTRIBOS MAZDA BT-50 ACERO INOXIDABLE KIT 4PZS FGC",
+        "category": "steps"
+      },
+      {
+        "name": "BUJE 14X40X39X32 BT50 RANGER 2015",
+        "category": "suspension"
+      },
+      {
+        "name": "BUJE 18X33X33.5X38.5 BT50 KIA PREGIO",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION OLD MAN EMU BT-50/RANGER 2019 2",
+        "category": "suspension"
+      },
+      {
+        "name": "PAQUETE POST MZ BT50 2011 2020 CAP 300KG",
+        "category": "suspension"
+      },
+      {
+        "name": "SCHAKLE OLD MAN EMU BT-50/RANGER 2016",
+        "category": "suspension"
+      }
+    ],
+    "gwm-poer": [
+      {
+        "name": "PROTECTOR DE BALDE PLASTICO POER 2023 D/C",
+        "category": "bedProtection"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA TOYOTA HILUX REVO/POER/SINOTRUK 4X4 D/C 2025",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE LONA CHINA POER /REVO 4X4/SINOTRUK D/C",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA HILUX REVO 4X4 16/25 DE 4 PARTES DE ALUMINIO SINOTRUK/POER/JAC",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA POER DE 4 PARTES DE ALUMINIO REVO/SINOTRUK/JAC",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA POER/REVO 4X4 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE REVO/POER/JAC CON LUZ 3PARTES",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE SPIDER PARA REVO/POER 3 PARTES 3ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "FAROS NEBLINEROS POER",
+        "category": "lighting"
+      },
+      {
+        "name": "FAROS POSTERIORES GREAT WALL POER",
+        "category": "lighting"
+      },
+      {
+        "name": "AMORT DELANTERO CON ESPIRAL AJUST GREAT WALL POER 2019 ON E2IN BLINDAJE",
+        "category": "suspension"
+      },
+      {
+        "name": "AMORTIGUADOR POSTERIOR REGULABLE POER",
+        "category": "suspension"
+      },
+      {
+        "name": "BRAZOS DE CONTROL TOUGH DOG POER/TANK 300 E50 MESAS",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT DE SUSPENSION CON REGULACION TOUGH DOG POER CON PAQUETES",
+        "category": "suspension"
+      },
+      {
+        "name": "KIT SUSPENSION TJM ROAMER GREATWALL POER",
+        "category": "suspension"
+      },
+      {
+        "name": "SEMI KIT DE SUSPENSION TOUGH DOG POER FOAM CELL/SINOTRUK",
+        "category": "suspension"
+      },
+      {
+        "name": "SEMI KIT DE SUSPENSION TRE POER 2",
+        "category": "suspension"
+      },
+      {
+        "name": "SEMI KIT TOUGH DOG POER REGULABLE/ SINOTRUK",
+        "category": "suspension"
+      },
+      {
+        "name": "BARRA DE TIRO WIMBO GREAT WALL POER",
+        "category": "towing"
+      }
+    ],
+    "gwm-wingle": [
+      {
+        "name": "PROTECTOR DE BALDE MAXLINER DMAX 2013 D/C WINGLE 5/6/7",
+        "category": "bedProtection"
+      },
+      {
+        "name": "TAPA DE BALDE KEKO LONA DMAX 2013 D/C WINGLE",
+        "category": "covers"
+      },
+      {
+        "name": "CUBRELLUVIAS NEGROS DMAX 2012 4PZS WINGLE",
+        "category": "exterior"
+      },
+      {
+        "name": "KIT DE SUSPENSION TOUGH DOG FOAM CELL WINGLE 5 CON PAQUETES",
+        "category": "suspension"
+      }
+    ],
+    "jac-t6": [
+      {
+        "name": "SNORKEL JAC T6",
+        "category": "exterior"
+      },
+      {
+        "name": "BARRA PORTA FAROS JAC T6 2FAROS",
+        "category": "lighting"
+      }
+    ],
+    "jac-t8": [],
+    "jac-t9": [],
+    "jmc-vigus": [],
+    "foton-tunland": [],
+    "dongfeng-rich6": [],
+    "dongfeng-rich7": [],
+    "dongfeng-z9": [],
+    "kia-tasman": [
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA KIA TASMAN DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      }
+    ],
+    "volkswagen-amarok": [
+      {
+        "name": "OVERFENDER VW AMAROK 10-12 PLASTICO NEGRO MATE C/RIVETES KIT 4PZS ARG",
+        "category": "exterior"
+      },
+      {
+        "name": "FARO NEBLINERO DLAA AMAROK 2014 KIT FGC",
+        "category": "lighting"
+      },
+      {
+        "name": "FARO NEBLINERO DLAA AMAROK 2016 CON TAPA NEGRA FILO CROMADO KIT FGC",
+        "category": "lighting"
+      },
+      {
+        "name": "SWITCH ORIGINAL AMAROK",
+        "category": "lighting"
+      }
+    ],
+    "ram-700": [
+      {
+        "name": "TAPA DE BALDE KEKO LONA RAM 700 D/C",
+        "category": "covers"
+      },
+      {
+        "name": "ROLL BAR KEKO RAM 700",
+        "category": "rollbars"
+      }
+    ],
+    "ram-1000": [],
+    "ram-1500": [],
+    "changan-hunter": [
+      {
+        "name": "TAPA DE BALDE PLEGABLE WIMBO PARA CHANGAN HUNTER DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      }
+    ],
+    "maxus-t60": [
+      {
+        "name": "TAPA DE BALDE KEKO LONA MAXUS T60",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA MAXUS T60 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE MAXMOTOR PARA MAXUS T60 DE 4 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "TAPA DE BALDE PLEGABLE RHINO PARA MAXUS T60 26 DE 3 PARTES DE ALUMINIO",
+        "category": "covers"
+      },
+      {
+        "name": "HALOGENO FOR MX T60 T70 CHERY GM S10 MAX, WITH WIRES",
+        "category": "lighting"
+      }
+    ],
+    "maxus-t90": [],
+    "peugeot-landtrek": [
+      {
+        "name": "TAPA DE BALDE KEKO LONA PEUGEOT LANDTREK/CHANGAN",
+        "category": "covers"
+      }
+    ],
+    "renault-oroch": [],
+    "fiat-titano": [],
+    "shineray-t30-t32": []
+  }
+}
