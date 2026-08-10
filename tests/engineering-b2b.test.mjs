@@ -53,4 +53,6 @@ test("new brand resources are local vectors and the favicon is not empty", async
     assert.match(svg, /<svg\b/);
     assert.match(svg, /<(?:path|rect|polygon|circle|ellipse)\b/, `${name} debe contener geometria visible`);
   }
+  const favicon = await readFile(resolve(root, "assets", "brand", "favicon-maxmotor.svg"), "utf8");
+  assert.match(favicon, /viewBox="0 0 1253\.96 1253\.96"/, "el favicon debe conservar una relacion cuadrada para buscadores");
 });

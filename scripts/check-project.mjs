@@ -62,6 +62,7 @@ for (const [vehicle, items] of Object.entries(publicInventory.vehicles || {})) {
 }
 
 const home = await readFile(join(dist, "index.html"), "utf8");
+if (!home.includes('href="/assets/brand/favicon-maxmotor.svg?v=20260810-2"')) errors.push("El index no referencia la version vigente del favicon");
 if (!/href="\/MiMaxmotor\?tab=register(?:&amp;offer=welcome)?"/.test(home)) errors.push("Falta el CTA de registro MiMaxmotor en el index");
 if (!home.includes('rel="canonical" href="https://maxmotor4x4.com/"')) errors.push("Canonical de produccion ausente en el index");
 if (home.includes('href="/fichas/tapa-balde-dmax"')) errors.push("El index conserva un enlace a la landing D-Max duplicada");
