@@ -13,6 +13,7 @@ const site = "https://maxmotor4x4.com";
 const lastmod = new Date().toISOString().slice(0, 10);
 const pages = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
+  { path: "/ingenieria", changefreq: "monthly", priority: "0.9" },
   { path: "/mxr", changefreq: "monthly", priority: "0.8" },
   { path: "/camionetas", changefreq: "weekly", priority: "0.9" },
   ...ECUADOR_PICKUPS.map((pickup) => ({ path: `/camionetas/${pickup.slug}`, changefreq: "monthly", priority: "0.8" })),

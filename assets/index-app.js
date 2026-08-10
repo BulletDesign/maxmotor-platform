@@ -113,7 +113,7 @@
 
     function imgError(imgEl) {
       imgEl.onerror = null;
-      imgEl.src = 'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png';
+      imgEl.src = '/assets/brand/maxmotor-logo.svg';
       imgEl.style.objectFit = 'contain';
     }
 

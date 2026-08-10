@@ -17,6 +17,7 @@ const files = [
   "robots.txt",
   "sitemap.xml",
   "index.html",
+  "ingenieria.html",
   "portal-admin.html",
   "mxr.html",
   "data.js",

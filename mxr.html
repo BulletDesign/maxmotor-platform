@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo MXR | Accesorios 4x4 y Equipamiento Premium en Ecuador</title>
-    <link rel="icon" href="/assets/favicon-maxmotor.png" type="image/png" sizes="180x180">
+    <link rel="icon" href="/assets/brand/favicon-maxmotor.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="/assets/favicon-maxmotor.png" type="image/png">
     <link rel="apple-touch-icon" href="/assets/favicon-maxmotor.png">
     <meta name="description"
         content="Descubre la línea MXR. Fabricación nacional de rollbars, bullbars y barras de tiro. Mejora tu 4x4 con equipamiento extremo y recubrimiento de poliuretano.">
@@ -18,7 +19,7 @@
     <meta property="og:title" content="Catálogo MXR | Accesorios y Equipamiento 4x4 en Ecuador">
     <meta property="og:description"
         content="Descubre la línea MXR. Fabricación nacional de rollbars, bullbars y barras de tiro. Mejora tu 4x4 con equipamiento extremo y recubrimiento de poliuretano.">
-    <meta property="og:image" content="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png">
+    <meta property="og:image" content="https://maxmotor4x4.com/assets/favicon-maxmotor.png">
     <meta property="og:url" content="https://maxmotor4x4.pages.dev/mxr.html">
     <meta property="og:type" content="website">
 
@@ -1091,7 +1092,7 @@
 
     <header id="main-header" style="justify-content: center;">
         <a href="index.html" class="logo-container" style="text-decoration: none;">
-            <img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png"
+            <img src="/assets/brand/maxmotor-logo.svg"
                 alt="Maxmotor Inicio">
         </a>
     </header>
@@ -1374,7 +1375,7 @@
                 scrollContainer.className = 'horizontal-scroll';
 
                 groupedProducts[category].forEach((prod) => {
-                    const fallbackImg = 'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png';
+                    const fallbackImg = '/assets/brand/maxmotor-logo.svg';
                     let firstImg = (prod.images && prod.images.length > 0) ? prod.images[0] : fallbackImg;
                     if (firstImg.includes('Reuse img for demo') || firstImg.includes('Reuse%20img%20for%20demo')) firstImg = fallbackImg;
 
@@ -1432,7 +1433,7 @@
             // Inyectar Galería Swipeable
             modalGallery.innerHTML = '';
 
-            const fallbackImg = 'https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo%20maxmotor.png';
+            const fallbackImg = '/assets/brand/maxmotor-logo.svg';
             let imagesToDisplay = currentProduct.images;
             if (!imagesToDisplay || imagesToDisplay.length === 0) imagesToDisplay = [fallbackImg];
 
@@ -1517,7 +1518,7 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <img src="https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/logo maxmotor.png"
+                <img src="/assets/brand/maxmotor-footer.svg"
                     class="footer-logo" alt="MXR Logo">
                 <p>Equipamiento 4x4 de alta ingeniería.</p>
             </div>

@@ -15,7 +15,7 @@ async function walk(directory) {
   return files.flat();
 }
 
-for (const required of ["index.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "fichas/tapas-balde-camionetas.html", "assets/mimaxmotor-qr.svg", "robots.txt", "sitemap.xml", "_headers"]) {
+for (const required of ["index.html", "ingenieria.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "fichas/tapas-balde-camionetas.html", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/favicon-maxmotor.svg", "robots.txt", "sitemap.xml", "_headers"]) {
   try { await access(join(dist, required)); } catch { errors.push(`Falta ${required} en dist`); }
 }
 
@@ -39,6 +39,7 @@ if (urls.some((url) => /\/(?:api|portal|admin|mimaxmotor|console)(?:\/|$)/i.test
 if (!urls.includes("https://maxmotor4x4.com/fichas/tapas-balde-camionetas")) errors.push("La categoria de tapas de balde no esta en el sitemap");
 if (urls.includes("https://maxmotor4x4.com/fichas/tapa-balde-dmax")) errors.push("La landing D-Max duplicada sigue en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/camionetas")) errors.push("El hub de camionetas no esta en el sitemap");
+if (!urls.includes("https://maxmotor4x4.com/ingenieria")) errors.push("La landing de ingenieria B2B no esta en el sitemap");
 for (const pickup of ECUADOR_PICKUPS) {
   const path = `camionetas/${pickup.slug}.html`;
   try { await access(join(dist, path)); } catch { errors.push(`Falta ${path} en dist`); }
@@ -65,6 +66,14 @@ if (!/href="\/MiMaxmotor\?tab=register(?:&amp;offer=welcome)?"/.test(home)) erro
 if (!home.includes('rel="canonical" href="https://maxmotor4x4.com/"')) errors.push("Canonical de produccion ausente en el index");
 if (home.includes('href="/fichas/tapa-balde-dmax"')) errors.push("El index conserva un enlace a la landing D-Max duplicada");
 if (!home.includes('href="/camionetas"')) errors.push("Falta el enlace interno al hub de camionetas");
+if (!home.includes('href="/ingenieria"')) errors.push("Falta el acceso a Ingenieria B2B desde el index");
+
+const engineering = await readFile(join(dist, "ingenieria.html"), "utf8");
+for (const marker of ["ingenieria-b2b", "SolidWorks", "Dassault Systèmes", "Shining 3D", "Bodor", "Krass", "Lincoln Electric", "Gemma", "Toyota del Ecuador", "Tool<br><span>not toys."]) {
+  if (!engineering.includes(marker)) errors.push(`Falta contenido B2B: ${marker}`);
+}
+if (!engineering.includes('rel="canonical" href="https://maxmotor4x4.com/ingenieria"')) errors.push("Canonical ausente en Ingenieria B2B");
+if (/logo%20maxmotor\.png/.test(engineering)) errors.push("Ingenieria B2B usa el logo raster remoto");
 
 if (errors.length) {
   console.error(errors.join("\n"));
