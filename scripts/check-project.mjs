@@ -15,7 +15,7 @@ async function walk(directory) {
   return files.flat();
 }
 
-for (const required of ["index.html", "ingenieria.html", "maxlining.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "fichas/tapas-balde-camionetas.html", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/maxlining-white.svg", "assets/brand/favicon-maxmotor-v2.svg", "assets/partners/campaign/primero-ecuador.png", "robots.txt", "sitemap.xml", "_headers"]) {
+for (const required of ["index.html", "ingenieria.html", "maxlining.html", "maxlining/vehiculos.html", "maxlining/accesorios.html", "maxlining/industrial.html", "maxlining/comparacion.html", "maxlining/aplicador.html", "maxlining/distribuidor.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "fichas/tapas-balde-camionetas.html", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/maxlining-white.svg", "assets/brand/favicon-maxmotor-v2.svg", "assets/partners/campaign/primero-ecuador.png", "robots.txt", "sitemap.xml", "_headers"]) {
   try { await access(join(dist, required)); } catch { errors.push(`Falta ${required} en dist`); }
 }
 
@@ -41,6 +41,9 @@ if (urls.includes("https://maxmotor4x4.com/fichas/tapa-balde-dmax")) errors.push
 if (!urls.includes("https://maxmotor4x4.com/camionetas")) errors.push("El hub de camionetas no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/ingenieria")) errors.push("La landing de ingenieria B2B no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/maxlining")) errors.push("La landing de Maxlining no esta en el sitemap");
+for (const slug of ["vehiculos", "accesorios", "industrial", "comparacion", "aplicador", "distribuidor"]) {
+  if (!urls.includes(`https://maxmotor4x4.com/maxlining/${slug}`)) errors.push(`Falta Maxlining ${slug} en el sitemap`);
+}
 for (const pickup of ECUADOR_PICKUPS) {
   const path = `camionetas/${pickup.slug}.html`;
   try { await access(join(dist, path)); } catch { errors.push(`Falta ${path} en dist`); }
@@ -77,7 +80,7 @@ for (const marker of ["ingenieria-b2b", "SolidWorks", "Dassault Systèmes", "Shi
 }
 if ((engineering.match(/<details class="eng-tech-card"/g) || []).length !== 7) errors.push("El stack de produccion no tiene siete herramientas desplegables");
 if ((engineering.match(/<details class="eng-step eng-reveal"/g) || []).length !== 4) errors.push("El pipeline de ingenieria no tiene cuatro etapas desplegables");
-if ((engineering.match(/<details class="eng-brand-case"/g) || []).length !== 4) errors.push("La evidencia OEM no tiene cuatro casos desplegables");
+if ((engineering.match(/<details class="eng-brand-case(?:\s[^\"]*)?"/g) || []).length !== 4) errors.push("La evidencia OEM no tiene cuatro casos desplegables");
 if ((engineering.match(/youtube-nocookie\.com\/embed\//g) || []).length !== 2) errors.push("Faltan demostraciones tecnicas en Ingenieria B2B");
 if (!engineering.includes('rel="canonical" href="https://maxmotor4x4.com/ingenieria"')) errors.push("Canonical ausente en Ingenieria B2B");
 if (/logo%20maxmotor\.png/.test(engineering)) errors.push("Ingenieria B2B usa el logo raster remoto");
@@ -88,6 +91,12 @@ for (const marker of ["Recubrimiento de poliuretano Maxlining", "Baldes y flotas
   if (!maxlining.includes(marker)) errors.push(`Falta contenido Maxlining: ${marker}`);
 }
 if (!maxlining.includes('rel="canonical" href="https://maxmotor4x4.com/maxlining"')) errors.push("Canonical ausente en Maxlining");
+for (const slug of ["vehiculos", "accesorios", "industrial", "comparacion", "aplicador", "distribuidor"]) {
+  const route = await readFile(join(dist, "maxlining", `${slug}.html`), "utf8");
+  if (!route.includes(`rel="canonical" href="https://maxmotor4x4.com/maxlining/${slug}"`)) errors.push(`Canonical ausente en Maxlining ${slug}`);
+  if (!route.includes("<maxlining-nav>")) errors.push(`Navegacion Maxlining ausente en ${slug}`);
+  if (!route.includes("wa.me/593960855932")) errors.push(`CTA comercial ausente en Maxlining ${slug}`);
+}
 
 if (errors.length) {
   console.error(errors.join("\n"));

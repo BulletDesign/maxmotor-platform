@@ -23,7 +23,7 @@ test("engineering B2B page exposes the complete industrial workflow", async () =
   assert.match(html, /<strong>Cómo\.<\/strong>/);
   assert.match(html, /<strong>Para qué\.<\/strong>/);
   assert.match(html, /<strong>Por qué\.<\/strong>/);
-  assert.equal((html.match(/<details class="eng-brand-case"/g) || []).length, 4);
+  assert.equal((html.match(/<details class="eng-brand-case(?:\s[^\"]*)?"/g) || []).length, 4);
   assert.match(html, /más de 600 unidades/);
   assert.match(html, /<table class="eng-table">/);
 });
@@ -40,8 +40,8 @@ test("home and shared navigation expose engineering without remote brand rasters
   assert.match(home, /assets\/partners\/oem\/toyota\.svg/);
   assert.ok(home.indexOf('id="main-catalog"') < home.indexOf('id="mimaxmotor-title"'));
   assert.match(home, /class="intro-logo" src="\/assets\/brand\/maxmotor-logo\.svg"/);
-  assert.match(shell, />Ingenieria B2B<\/a>/);
-  assert.match(shell, />Maxlining Poliuretano<\/a>/);
+  assert.match(shell, />Ingeniería B2B<\/a>/);
+  assert.match(shell, />Maxlining<\/a>/);
   assert.match(shell, /primero-ecuador\.png/);
   assert.match(shell, /\/assets\/brand\/maxmotor-logo\.svg/);
   assert.match(shell, /class="shared-footer__art"/);

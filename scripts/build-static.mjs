@@ -8,6 +8,7 @@ if (basename(output) !== "dist" || !output.startsWith(root)) throw new Error("Un
 
 execFileSync(process.execPath, [join(root, "scripts", "generate-accessory-pages.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-vehicle-pages.mjs")], { cwd: root, stdio: "inherit" });
+execFileSync(process.execPath, [join(root, "scripts", "generate-maxlining-pages.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-sitemap.mjs")], { cwd: root, stdio: "inherit" });
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
@@ -23,7 +24,7 @@ const files = [
   "mxr.html",
   "data.js",
 ];
-const directories = ["assets", "catalog", "fichas", "camionetas"];
+const directories = ["assets", "catalog", "fichas", "camionetas", "maxlining"];
 
 await Promise.all(files.map((file) => cp(join(root, file), join(output, file))));
 await cp(join(root, "portal.html"), join(output, "MiMaxmotor.html"));
