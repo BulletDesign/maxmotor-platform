@@ -10,10 +10,13 @@ test("engineering B2B page exposes the complete industrial workflow", async () =
   assert.match(html, /id="ingenieria-b2b"/);
   assert.match(html, /https:\/\/maxmotor4x4\.com\/ingenieria/);
   assert.match(html, /Tool<br><span>not toys\.<\/span>/);
-  for (const technology of ["SolidWorks", "Dassault Systèmes", "Shining 3D", "Bodor", "Krass", "Lincoln Electric", "Gemma"]) {
+  for (const technology of ["SolidWorks", "Dassault Systèmes", "Shining 3D", "Bodor", "KRRASS", "Lincoln Electric", "Gema"]) {
     assert.match(html, new RegExp(technology));
   }
-  assert.equal((html.match(/class="eng-step eng-reveal"/g) || []).length, 4);
+  assert.equal((html.match(/<details class="eng-step eng-reveal"/g) || []).length, 4);
+  assert.equal((html.match(/youtube-nocookie\.com\/embed\//g) || []).length, 2);
+  assert.match(html, /assets\/partners\/technology\/solidworks\.svg/);
+  assert.match(html, /assets\/partners\/technology\/gema\.svg/);
   assert.match(html, /Toyota del Ecuador/);
   assert.match(html, /<table class="eng-table">/);
 });
@@ -25,8 +28,14 @@ test("home and shared navigation expose engineering without remote brand rasters
   ]);
   assert.match(home, /href="\/ingenieria"/);
   assert.match(home, /id="ingenieria-corporativa"/);
+  assert.match(home, /Producto homologado por/i);
+  assert.match(home, /assets\/partners\/oem\/toyota\.svg/);
+  assert.ok(home.indexOf('id="main-catalog"') < home.indexOf('id="mimaxmotor-title"'));
+  assert.match(home, /class="intro-logo" src="\/assets\/brand\/maxmotor-logo\.svg"/);
   assert.match(shell, />Ingenieria B2B<\/a>/);
   assert.match(shell, /\/assets\/brand\/maxmotor-logo\.svg/);
+  assert.match(shell, /class="shared-footer__art"/);
+  assert.match(shell, /\/assets\/brand\/maxmotor-footer\.svg/);
   assert.doesNotMatch(shell, /logo%20maxmotor\.png/);
 });
 

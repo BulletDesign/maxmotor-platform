@@ -7,8 +7,8 @@ module.exports = {
         "eng-black": "#0b0d10",
         "eng-panel": "#14181d",
         "eng-steel": "#1e242b",
-        "eng-orange": "#f97316",
-        "eng-cyan": "#38bdf8",
+        "eng-orange": "#f02b22",
+        "eng-cyan": "#c5c8c2",
         "eng-ink": "#f5f3ec",
       },
       fontFamily: {

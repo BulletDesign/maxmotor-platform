@@ -69,9 +69,11 @@ if (!home.includes('href="/camionetas"')) errors.push("Falta el enlace interno a
 if (!home.includes('href="/ingenieria"')) errors.push("Falta el acceso a Ingenieria B2B desde el index");
 
 const engineering = await readFile(join(dist, "ingenieria.html"), "utf8");
-for (const marker of ["ingenieria-b2b", "SolidWorks", "Dassault Systèmes", "Shining 3D", "Bodor", "Krass", "Lincoln Electric", "Gemma", "Toyota del Ecuador", "Tool<br><span>not toys."]) {
+for (const marker of ["ingenieria-b2b", "SolidWorks", "Dassault Systèmes", "Shining 3D", "Bodor", "KRRASS", "Lincoln Electric", "Gema", "Toyota del Ecuador", "Tool<br><span>not toys."]) {
   if (!engineering.includes(marker)) errors.push(`Falta contenido B2B: ${marker}`);
 }
+if ((engineering.match(/<details class="eng-step eng-reveal"/g) || []).length !== 4) errors.push("El pipeline de ingenieria no tiene cuatro etapas desplegables");
+if ((engineering.match(/youtube-nocookie\.com\/embed\//g) || []).length !== 2) errors.push("Faltan demostraciones tecnicas en Ingenieria B2B");
 if (!engineering.includes('rel="canonical" href="https://maxmotor4x4.com/ingenieria"')) errors.push("Canonical ausente en Ingenieria B2B");
 if (/logo%20maxmotor\.png/.test(engineering)) errors.push("Ingenieria B2B usa el logo raster remoto");
 
