@@ -18,6 +18,7 @@ const files = [
   "sitemap.xml",
   "index.html",
   "ingenieria.html",
+  "maxlining.html",
   "portal-admin.html",
   "mxr.html",
   "data.js",
@@ -29,6 +30,8 @@ await cp(join(root, "portal.html"), join(output, "MiMaxmotor.html"));
 await cp(join(root, "portal-admin.html"), join(output, "portal-maxmotor.html"));
 await cp(join(root, "portal-superadmin.html"), join(output, "console.html"));
 await Promise.all(directories.map((directory) => cp(join(root, directory), join(output, directory), { recursive: true })));
+// Campaign source exports are working files, not runtime assets for the website.
+await rm(join(output, "assets", "marketing"), { recursive: true, force: true });
 
 // ASSET_ORIGIN is an emergency escape hatch for a poisoned custom-domain cache.
 // Git previews and normal production builds should use same-origin assets.

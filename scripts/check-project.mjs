@@ -15,7 +15,7 @@ async function walk(directory) {
   return files.flat();
 }
 
-for (const required of ["index.html", "ingenieria.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "fichas/tapas-balde-camionetas.html", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/favicon-maxmotor-v2.svg", "robots.txt", "sitemap.xml", "_headers"]) {
+for (const required of ["index.html", "ingenieria.html", "maxlining.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "fichas/tapas-balde-camionetas.html", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/maxlining-white.svg", "assets/brand/favicon-maxmotor-v2.svg", "assets/partners/campaign/primero-ecuador.png", "robots.txt", "sitemap.xml", "_headers"]) {
   try { await access(join(dist, required)); } catch { errors.push(`Falta ${required} en dist`); }
 }
 
@@ -40,6 +40,7 @@ if (!urls.includes("https://maxmotor4x4.com/fichas/tapas-balde-camionetas")) err
 if (urls.includes("https://maxmotor4x4.com/fichas/tapa-balde-dmax")) errors.push("La landing D-Max duplicada sigue en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/camionetas")) errors.push("El hub de camionetas no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/ingenieria")) errors.push("La landing de ingenieria B2B no esta en el sitemap");
+if (!urls.includes("https://maxmotor4x4.com/maxlining")) errors.push("La landing de Maxlining no esta en el sitemap");
 for (const pickup of ECUADOR_PICKUPS) {
   const path = `camionetas/${pickup.slug}.html`;
   try { await access(join(dist, path)); } catch { errors.push(`Falta ${path} en dist`); }
@@ -68,16 +69,25 @@ if (!home.includes('rel="canonical" href="https://maxmotor4x4.com/"')) errors.pu
 if (home.includes('href="/fichas/tapa-balde-dmax"')) errors.push("El index conserva un enlace a la landing D-Max duplicada");
 if (!home.includes('href="/camionetas"')) errors.push("Falta el enlace interno al hub de camionetas");
 if (!home.includes('href="/ingenieria"')) errors.push("Falta el acceso a Ingenieria B2B desde el index");
+if (!home.includes('href="/maxlining"')) errors.push("Falta el acceso a Maxlining desde el index");
 
 const engineering = await readFile(join(dist, "ingenieria.html"), "utf8");
-for (const marker of ["ingenieria-b2b", "SolidWorks", "Dassault Systèmes", "Shining 3D", "Bodor", "KRRASS", "Lincoln Electric", "Gema", "Deepal", "Toyota del Ecuador", "Changan", "GWM / CIAUTO", "Más de 600 vehículos equipados", "Tool<br><span>not toys.", "01 / ¿QUÉ?", "02 / ¿CÓMO?", "03 / ¿PARA QUÉ?", "04 / ¿POR QUÉ?"]) {
+for (const marker of ["ingenieria-b2b", "SolidWorks", "Dassault Systèmes", "Shining 3D", "Bodor", "KRRASS", "Lincoln Electric", "Gema", "Deepal", "Toyota del Ecuador", "Changan", "GWM / CIAUTO", "más de 600 unidades", "Tool<br><span>not toys.", "Cómo.", "Para qué.", "Por qué."]) {
   if (!engineering.includes(marker)) errors.push(`Falta contenido B2B: ${marker}`);
 }
+if ((engineering.match(/<details class="eng-tech-card"/g) || []).length !== 7) errors.push("El stack de produccion no tiene siete herramientas desplegables");
 if ((engineering.match(/<details class="eng-step eng-reveal"/g) || []).length !== 4) errors.push("El pipeline de ingenieria no tiene cuatro etapas desplegables");
 if ((engineering.match(/<details class="eng-brand-case"/g) || []).length !== 4) errors.push("La evidencia OEM no tiene cuatro casos desplegables");
 if ((engineering.match(/youtube-nocookie\.com\/embed\//g) || []).length !== 2) errors.push("Faltan demostraciones tecnicas en Ingenieria B2B");
 if (!engineering.includes('rel="canonical" href="https://maxmotor4x4.com/ingenieria"')) errors.push("Canonical ausente en Ingenieria B2B");
 if (/logo%20maxmotor\.png/.test(engineering)) errors.push("Ingenieria B2B usa el logo raster remoto");
+if (/Ingeniería con<br>un propósito/.test(engineering)) errors.push("La seccion eliminada de proposito sigue publicada");
+
+const maxlining = await readFile(join(dist, "maxlining.html"), "utf8");
+for (const marker of ["Recubrimiento de poliuretano Maxlining", "Baldes y flotas", "Accesorios 4x4", "Superficies operativas", "no operamos como franquicia LINE-X"]) {
+  if (!maxlining.includes(marker)) errors.push(`Falta contenido Maxlining: ${marker}`);
+}
+if (!maxlining.includes('rel="canonical" href="https://maxmotor4x4.com/maxlining"')) errors.push("Canonical ausente en Maxlining");
 
 if (errors.length) {
   console.error(errors.join("\n"));
