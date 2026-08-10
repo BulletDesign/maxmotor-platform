@@ -18,6 +18,12 @@ test("engineering B2B page exposes the complete industrial workflow", async () =
   assert.match(html, /assets\/partners\/technology\/solidworks\.svg/);
   assert.match(html, /assets\/partners\/technology\/gema\.svg/);
   assert.match(html, /Toyota del Ecuador/);
+  assert.match(html, /01 \/ ¿QUÉ\?/);
+  assert.match(html, /02 \/ ¿CÓMO\?/);
+  assert.match(html, /03 \/ ¿PARA QUÉ\?/);
+  assert.match(html, /04 \/ ¿POR QUÉ\?/);
+  assert.equal((html.match(/<details class="eng-brand-case"/g) || []).length, 4);
+  assert.match(html, /Más de 600 vehículos equipados/);
   assert.match(html, /<table class="eng-table">/);
 });
 
