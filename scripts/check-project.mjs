@@ -31,6 +31,13 @@ for (const file of htmlFiles) {
   if (/href="(?:\.\.\/)?fichas\//.test(html)) errors.push(`Enlace relativo a ficha: ${file}`);
 }
 
+const fichePages = htmlFiles.filter((file) => file.startsWith(join(dist, "fichas")) && !file.endsWith("tapas-balde-camionetas.html"));
+for (const file of fichePages) {
+  const html = await readFile(file, "utf8");
+  if (/"@type":"Product"/.test(html)) errors.push(`Ficha de cotizacion publicada como Product sin oferta verificable: ${file}`);
+  if (!/"@type":"WebPage"/.test(html) || !/"@type":"Service"/.test(html)) errors.push(`Marcado WebPage + Service ausente: ${file}`);
+}
+
 const sitemap = await readFile(join(dist, "sitemap.xml"), "utf8");
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 if (urls.length !== new Set(urls).size) errors.push("El sitemap contiene URLs duplicadas");

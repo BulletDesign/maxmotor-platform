@@ -34,7 +34,7 @@ for (const family of families) {
   <link rel="stylesheet" href="assets/product-detail.css?v=20260805-2">
   <link rel="stylesheet" href="assets/type-system.css?v=20260805-2">
   <script src="assets/site-shell.js?v=20260810-4"></script>
-  <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "Product", name: product.name, description: product.summary, image: product.image, brand: { "@type": "Brand", name: product.marca || "Maxmotor 4x4" }, url: `https://maxmotor4x4.com/fichas/${product.slug}` })}</script>
+  <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "WebPage", name: product.name, description: product.summary, url: `https://maxmotor4x4.com/fichas/${product.slug}`, primaryImageOfPage: { "@type": "ImageObject", contentUrl: product.image }, mainEntity: { "@type": "Service", name: `Asesoria e instalacion: ${product.name}`, serviceType: "Asesoria e instalacion de accesorios 4x4", description: product.summary, provider: { "@type": "AutoPartsStore", name: "Maxmotor 4x4", url: "https://maxmotor4x4.com/", telephone: "+593960855932" }, areaServed: { "@type": "Country", name: "Ecuador" } } })}</script>
 </head>
 <body>
   <maxmotor-header compact></maxmotor-header>
