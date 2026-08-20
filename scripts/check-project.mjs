@@ -15,7 +15,7 @@ async function walk(directory) {
   return files.flat();
 }
 
-for (const required of ["index.html", "ingenieria.html", "maxlining.html", "maxlining/vehiculos.html", "maxlining/accesorios.html", "maxlining/industrial.html", "maxlining/comparacion.html", "maxlining/aplicador.html", "maxlining/distribuidor.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "fichas/tapas-balde-camionetas.html", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/maxlining-white.svg", "assets/brand/favicon-maxmotor-v2.svg", "assets/partners/campaign/primero-ecuador.png", "robots.txt", "sitemap.xml", "_headers"]) {
+for (const required of ["index.html", "ingenieria.html", "maxlining.html", "maxlining/vehiculos.html", "maxlining/accesorios.html", "maxlining/industrial.html", "maxlining/comparacion.html", "maxlining/aplicador.html", "maxlining/distribuidor.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "catalog/search-index.json", "fichas/tapas-balde-camionetas.html", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/maxlining-white.svg", "assets/brand/favicon-maxmotor-v2.svg", "assets/partners/campaign/primero-ecuador.png", "robots.txt", "sitemap.xml", "_headers"]) {
   try { await access(join(dist, required)); } catch { errors.push(`Falta ${required} en dist`); }
 }
 
@@ -71,6 +71,11 @@ for (const [vehicle, items] of Object.entries(publicInventory.vehicles || {})) {
     if (fitmentTerms.test(item.name) || /\b(?:19|20)\d{2}\b|\//.test(item.name)) errors.push(`Compatibilidad interna publicada para ${vehicle}: ${item.name}`);
   }
 }
+
+const searchIndex = JSON.parse(await readFile(join(dist, "catalog/search-index.json"), "utf8"));
+if (searchIndex.counts?.vehicles !== ECUADOR_PICKUPS.length) errors.push("El buscador no contiene todas las camionetas");
+if (!searchIndex.entries?.some((entry) => entry.type === "accessory" && entry.url.startsWith("/fichas/"))) errors.push("El buscador no contiene fichas de accesorios");
+if (searchIndex.entries?.some((entry) => /precio|costo|stock|sku/i.test(Object.keys(entry).join(" ")))) errors.push("El buscador publica campos comerciales internos");
 
 const home = await readFile(join(dist, "index.html"), "utf8");
 if (!home.includes('href="/assets/brand/favicon-maxmotor-v2.svg"')) errors.push("El index no referencia la version vigente del favicon");

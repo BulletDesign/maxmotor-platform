@@ -6,10 +6,11 @@
       <nav>
         <a class="header-brand" href="index.html" aria-label="Ir al inicio"><img src="/assets/brand/maxmotor-logo.svg" class="logo" alt="Maxmotor Accesorios 4x4" width="2022" height="866"></a>
         <div class="header-actions">
-          <div class="search-container">
-            <input type="search" class="search-input" id="mainSearchInput" placeholder="Buscar accesorios o vehiculo..." oninput="buscarCatalogo(this.value)" onclick="if(!this.classList.contains('active')) toggleSearch(event)">
-            <i class="fa-solid fa-search search-icon" id="mainSearchBtn" onclick="toggleSearch(event)" aria-hidden="true"></i>
-            <div id="searchResults" class="search-results"></div>
+          <div class="search-container" role="search">
+            <label class="sr-only" for="mainSearchInput">Buscar camioneta o accesorio</label>
+            <input type="search" class="search-input" id="mainSearchInput" placeholder="Busca tu camioneta o accesorio" autocomplete="off" spellcheck="false" aria-controls="searchResults" aria-expanded="false">
+            <button class="search-icon" id="mainSearchBtn" type="button" aria-label="Buscar camioneta o accesorio"><i class="fa-solid fa-search" aria-hidden="true"></i></button>
+            <div id="searchResults" class="search-results" role="listbox" aria-label="Resultados de busqueda"></div>
           </div>
           <a class="portal-entry" href="/MiMaxmotor"><small>PORTAL 4X4</small><span>Mi Maxmotor</span><b aria-hidden="true">→</b></a>
         </div>
