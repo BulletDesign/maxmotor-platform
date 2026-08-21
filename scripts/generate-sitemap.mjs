@@ -14,7 +14,7 @@ const lastmod = new Date().toISOString().slice(0, 10);
 const pages = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/ingenieria", changefreq: "monthly", priority: "0.9" },
-  { path: "/productos", changefreq: "weekly", priority: "0.9" },
+  { path: "/productos/", changefreq: "weekly", priority: "0.9" },
   { path: "/tough-dog", changefreq: "weekly", priority: "0.9" },
   { path: "/maxlining", changefreq: "weekly", priority: "0.9" },
   { path: "/maxlining/vehiculos", changefreq: "weekly", priority: "0.9" },

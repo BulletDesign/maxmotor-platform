@@ -50,7 +50,7 @@ for (const family of families) {
           "@type": "BreadcrumbList",
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Inicio", item: absolute("/") },
-            { "@type": "ListItem", position: 2, name: "Productos", item: absolute("/productos") },
+            { "@type": "ListItem", position: 2, name: "Productos", item: absolute("/productos/") },
             { "@type": "ListItem", position: 3, name: product.name, item: absolute(canonicalPath) },
           ],
         },
@@ -90,7 +90,7 @@ for (const family of families) {
   <main class="detail-shell">
     <section class="product-hero" data-word="${escapeHtml(family.code)}">
       <div class="product-hero__copy">
-        <nav class="detail-crumbs" aria-label="Migas de pan"><a href="/">Inicio</a> / <a href="/productos">Productos</a> / ${escapeHtml(product.name)}</nav>
+        <nav class="detail-crumbs" aria-label="Migas de pan"><a href="/">Inicio</a> / <a href="/productos/">Productos</a> / ${escapeHtml(product.name)}</nav>
         <span class="eyebrow">${escapeHtml(family.code)} / ${escapeHtml(family.name)}</span>
         <h1>${escapeHtml(product.name)}</h1>
         <p class="lead">${escapeHtml(product.summary)}</p>

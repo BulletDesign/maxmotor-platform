@@ -21,8 +21,8 @@ const canonicalFor = (product) => `https://maxmotor4x4.com${product.landing || `
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
-    { "@type": "CollectionPage", "@id": "https://maxmotor4x4.com/productos#page", name: "Productos destacados Maxmotor 4x4", description: "Tapas de balde, rollbars, barras de tiro y suspension Tough Dog con asesoria e instalacion en Ecuador.", url: "https://maxmotor4x4.com/productos", inLanguage: "es-EC" },
-    { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Inicio", item: "https://maxmotor4x4.com/" }, { "@type": "ListItem", position: 2, name: "Productos", item: "https://maxmotor4x4.com/productos" }] },
+    { "@type": "CollectionPage", "@id": "https://maxmotor4x4.com/productos/#page", name: "Productos destacados Maxmotor 4x4", description: "Tapas de balde, rollbars, barras de tiro y suspension Tough Dog con asesoria e instalacion en Ecuador.", url: "https://maxmotor4x4.com/productos/", inLanguage: "es-EC" },
+    { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Inicio", item: "https://maxmotor4x4.com/" }, { "@type": "ListItem", position: 2, name: "Productos", item: "https://maxmotor4x4.com/productos/" }] },
     { "@type": "ItemList", name: "Productos destacados Maxmotor 4x4", numberOfItems: products.length, itemListElement: products.map((product, index) => ({ "@type": "ListItem", position: index + 1, name: product.name, url: canonicalFor(product), image: product.image })) },
     { "@type": "OfferCatalog", name: "Catalogo de equipamiento Maxmotor 4x4", itemListElement: products.map((product) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: product.name, description: product.summary, image: product.image, url: canonicalFor(product), provider: { "@id": "https://maxmotor4x4.com/#store" }, areaServed: "EC" } })) },
   ],
@@ -40,9 +40,9 @@ const html = `<!doctype html>
   <title>Productos 4x4 Destacados | Maxmotor Ecuador</title>
   <meta name="description" content="Tapas de balde, Rollbar ZR, barras de tiro y suspension Tough Dog para camionetas. Asesoria e instalacion Maxmotor en Ecuador.">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <link rel="canonical" href="https://maxmotor4x4.com/productos">
+  <link rel="canonical" href="https://maxmotor4x4.com/productos/">
   <link rel="icon" href="/assets/brand/favicon-maxmotor-v2.svg" type="image/svg+xml"><link rel="alternate icon" href="/assets/favicon-maxmotor.png" type="image/png"><link rel="apple-touch-icon" href="/assets/favicon-maxmotor.png">
-  <meta property="og:type" content="website"><meta property="og:locale" content="es_EC"><meta property="og:site_name" content="Maxmotor 4x4"><meta property="og:title" content="Productos 4x4 destacados | Maxmotor"><meta property="og:description" content="Equipamiento para camionetas con asesoria e instalacion en Ecuador."><meta property="og:url" content="https://maxmotor4x4.com/productos"><meta property="og:image" content="${products[0].image}">
+  <meta property="og:type" content="website"><meta property="og:locale" content="es_EC"><meta property="og:site_name" content="Maxmotor 4x4"><meta property="og:title" content="Productos 4x4 destacados | Maxmotor"><meta property="og:description" content="Equipamiento para camionetas con asesoria e instalacion en Ecuador."><meta property="og:url" content="https://maxmotor4x4.com/productos/"><meta property="og:image" content="${products[0].image}">
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;600;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/shared-shell.css?v=20260810-4"><link rel="stylesheet" href="/assets/type-system.css?v=20260805-2"><link rel="stylesheet" href="/assets/products-hub.css?v=20260820-1"><script src="/assets/site-shell.js?v=20260820-3"></script>
   <script type="application/ld+json">${JSON.stringify(schema)}</script>

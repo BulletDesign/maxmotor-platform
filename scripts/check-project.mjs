@@ -47,7 +47,7 @@ if (!urls.includes("https://maxmotor4x4.com/fichas/tapas-balde-camionetas")) err
 if (urls.includes("https://maxmotor4x4.com/fichas/tapa-balde-dmax")) errors.push("La landing D-Max duplicada sigue en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/camionetas")) errors.push("El hub de camionetas no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/ingenieria")) errors.push("La landing de ingenieria B2B no esta en el sitemap");
-if (!urls.includes("https://maxmotor4x4.com/productos")) errors.push("El hub de productos no esta en el sitemap");
+if (!urls.includes("https://maxmotor4x4.com/productos/")) errors.push("El hub de productos no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/tough-dog")) errors.push("La landing Tough Dog no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/maxlining")) errors.push("La landing de Maxlining no esta en el sitemap");
 for (const slug of ["vehiculos", "accesorios", "industrial", "comparacion", "aplicador", "distribuidor"]) {
