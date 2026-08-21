@@ -17,7 +17,7 @@ const productEntries = families.flatMap((family) => family.products.map((product
   title: product.name,
   eyebrow: family.name,
   description: product.summary,
-  url: `/fichas/${product.slug}`,
+  url: product.landing || `/fichas/${product.slug}`,
   image: product.image,
   terms: [family.name, product.name, product.marca, ...(product.features || [])].filter(Boolean).join(" "),
 })));

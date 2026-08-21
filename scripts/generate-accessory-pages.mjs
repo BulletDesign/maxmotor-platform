@@ -13,10 +13,49 @@ await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 
 const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+const absolute = (path) => `https://maxmotor4x4.com${path}`;
 
 for (const family of families) {
   for (const product of family.products) {
+    const canonicalPath = `/fichas/${product.slug}`;
     const description = `${product.summary} Cotiza compatibilidad e instalacion con Maxmotor 4x4 en Ecuador.`;
+    const related = family.products.filter((item) => item.slug !== product.slug).slice(0, 3);
+    const quote = `https://wa.me/593960855932?text=${encodeURIComponent(`Hola Maxmotor 4x4, quiero cotizar ${product.name}. Mi vehiculo es:`)}`;
+    const schema = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": `${absolute(canonicalPath)}#page`,
+          name: product.name,
+          description: product.summary,
+          url: absolute(canonicalPath),
+          inLanguage: "es-EC",
+          primaryImageOfPage: { "@type": "ImageObject", contentUrl: product.image },
+          mainEntity: { "@id": `${absolute(canonicalPath)}#service` },
+        },
+        {
+          "@type": "Service",
+          "@id": `${absolute(canonicalPath)}#service`,
+          name: product.name,
+          serviceType: `${family.name}: venta, asesoria e instalacion`,
+          description: product.summary,
+          image: product.image,
+          url: absolute(canonicalPath),
+          provider: { "@type": "AutoPartsStore", "@id": "https://maxmotor4x4.com/#store", name: "Maxmotor 4x4", url: "https://maxmotor4x4.com/", telephone: "+593960855932" },
+          areaServed: { "@type": "Country", name: "Ecuador" },
+          availableChannel: { "@type": "ServiceChannel", serviceUrl: absolute(canonicalPath), servicePhone: { "@type": "ContactPoint", telephone: "+593960855932", contactType: "sales" } },
+        },
+        {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Inicio", item: absolute("/") },
+            { "@type": "ListItem", position: 2, name: "Productos", item: absolute("/productos") },
+            { "@type": "ListItem", position: 3, name: product.name, item: absolute(canonicalPath) },
+          ],
+        },
+      ],
+    };
     const html = `<!doctype html>
 <html lang="es-EC">
 <head>
@@ -25,23 +64,53 @@ for (const family of families) {
   <base href="../">
   <title>${escapeHtml(product.name)} | Maxmotor 4x4 Ecuador</title>
   <meta name="description" content="${escapeHtml(description)}">
-  <link rel="canonical" href="https://maxmotor4x4.com/fichas/${product.slug}">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="${absolute(canonicalPath)}">
+  <link rel="alternate" hreflang="es-EC" href="${absolute(canonicalPath)}">
   <link rel="icon" href="/assets/brand/favicon-maxmotor-v2.svg" type="image/svg+xml">
   <link rel="alternate icon" href="/assets/favicon-maxmotor.png" type="image/png">
   <link rel="apple-touch-icon" href="/assets/favicon-maxmotor.png">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_EC">
+  <meta property="og:site_name" content="Maxmotor 4x4">
+  <meta property="og:title" content="${escapeHtml(product.name)} | Maxmotor 4x4">
+  <meta property="og:description" content="${escapeHtml(description)}">
+  <meta property="og:url" content="${absolute(canonicalPath)}">
+  <meta property="og:image" content="${product.image}">
+  <meta name="twitter:card" content="summary_large_image">
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;600;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/shared-shell.css?v=20260810-4">
-  <link rel="stylesheet" href="assets/product-detail.css?v=20260805-2">
+  <link rel="stylesheet" href="assets/product-detail.css?v=20260820-1">
   <link rel="stylesheet" href="assets/type-system.css?v=20260805-2">
-  <script src="assets/site-shell.js?v=20260810-4"></script>
-  <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "WebPage", name: product.name, description: product.summary, url: `https://maxmotor4x4.com/fichas/${product.slug}`, primaryImageOfPage: { "@type": "ImageObject", contentUrl: product.image }, mainEntity: { "@type": "Service", name: `Asesoria e instalacion: ${product.name}`, serviceType: "Asesoria e instalacion de accesorios 4x4", description: product.summary, provider: { "@type": "AutoPartsStore", name: "Maxmotor 4x4", url: "https://maxmotor4x4.com/", telephone: "+593960855932" }, areaServed: { "@type": "Country", name: "Ecuador" } } })}</script>
+  <script src="assets/site-shell.js?v=20260820-3"></script>
+  <script type="application/ld+json">${JSON.stringify(schema)}</script>
 </head>
 <body>
   <maxmotor-header compact></maxmotor-header>
-  <main id="productDetail" class="detail-shell" aria-live="polite"></main>
+  <main class="detail-shell">
+    <section class="product-hero" data-word="${escapeHtml(family.code)}">
+      <div class="product-hero__copy">
+        <nav class="detail-crumbs" aria-label="Migas de pan"><a href="/">Inicio</a> / <a href="/productos">Productos</a> / ${escapeHtml(product.name)}</nav>
+        <span class="eyebrow">${escapeHtml(family.code)} / ${escapeHtml(family.name)}</span>
+        <h1>${escapeHtml(product.name)}</h1>
+        <p class="lead">${escapeHtml(product.summary)}</p>
+        <a class="hero-cta" href="${quote}" target="_blank" rel="noopener">Cotizar para mi vehiculo <span>+</span></a>
+      </div>
+      <div class="product-hero__media">
+        <img src="${product.image}" alt="${escapeHtml(product.name)} para camionetas y 4x4" referrerpolicy="no-referrer" width="1200" height="900">
+        <small class="photo-credit">${escapeHtml(product.photoCredit || "Imagen referencial. Confirma la aplicacion exacta con un asesor Maxmotor.")}</small>
+        <div class="media-label"><span>${escapeHtml(family.name)}</span><strong>TOOLS NOT TOYS</strong></div>
+      </div>
+    </section>
+    <section class="product-body">
+      <div class="section-head"><div><span class="eyebrow">01 / Ventajas</span><h2>Hecho para uso real.</h2></div><p>La aplicacion se selecciona segun marca, modelo, ano y uso del vehiculo. Antes de cotizar confirmamos medidas, anclajes y disponibilidad.</p></div>
+      <div class="feature-grid">${product.features.map((feature, index) => `<article class="feature-card"><b>${String(index + 1).padStart(2, "0")}</b><h3>${escapeHtml(feature)}</h3><p>Configuracion revisada por el equipo tecnico de Maxmotor antes de instalar.</p></article>`).join("")}</div>
+      <div class="technical-band"><div class="technical-title"><span class="eyebrow">02 / Aplicacion</span><h2>La pieza correcta.</h2><p>Una misma camioneta puede cambiar por generacion, cabina y mercado. La especificacion final se valida antes de la compra.</p></div><div class="spec-list"><div class="spec-row"><span>Familia</span><strong>${escapeHtml(family.name)}</strong></div><div class="spec-row"><span>Compatibilidad</span><strong>Marca, modelo, ano y version</strong></div><div class="spec-row"><span>Instalacion</span><strong>Ambato y Quito</strong></div><div class="spec-row"><span>Disponibilidad</span><strong>Confirmacion con ventas y bodega</strong></div></div></div>
+      <section class="quote-panel" id="cotizar"><div><span class="eyebrow">03 / Cotizacion</span><h2>Equipa tu proyecto.</h2></div><div><p>Envia marca, modelo, ano y version para recibir una recomendacion correcta.</p><a class="quote-button" href="${quote}" target="_blank" rel="noopener">Cotizar por WhatsApp <span>&nearr;</span></a></div></section>
+    </section>
+${related.length ? `    <section class="related"><span class="eyebrow">Mas de ${escapeHtml(family.name)}</span><h2>Continua tu 4x4.</h2><div class="related-grid">${related.map((item) => `<a class="related-card" href="${item.landing || `/fichas/${item.slug}`}"><img src="${item.image}" alt="${escapeHtml(item.name)}" width="560" height="360" loading="lazy"><span><strong>${escapeHtml(item.name)}</strong><small>Ver ficha &nearr;</small></span></a>`).join("")}</div></section>` : ""}
+  </main>
   <maxmotor-footer></maxmotor-footer>
-  <script src="catalog/families.js?v=20260805-2"></script>
-  <script src="assets/product-detail.js?v=20260805-2"></script>
 </body>
 </html>`;
     await writeFile(resolve(output, `${product.slug}.html`), html, "utf8");
@@ -50,4 +119,4 @@ for (const family of families) {
 
 await cp(resolve(root, "seo-pages/tapas-balde-camionetas.html"), resolve(output, "tapas-balde-camionetas.html"));
 
-console.log(`Generated accessory pages for ${families.flatMap(family => family.products).length} catalog products plus 1 SEO landing`);
+console.log(`Generated accessory pages for ${families.flatMap((family) => family.products).length} catalog products plus 1 SEO landing`);

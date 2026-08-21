@@ -5,9 +5,9 @@
       id: "tapa-rigida", name: "Tapas rigidas", code: "TR", icon: "fa-box", description: "Seguridad, apertura y proteccion para el balde.",
       products: [
         { slug: "tapa-trifold", name: "Tapa Trifold", image: cdn + "foto_tapa_trifold.jpeg", summary: "Apertura en tres paneles para uso diario y acceso rapido al balde.", features: ["Apertura plegable", "Perfil aerodinamico", "Compatibilidad por modelo"] },
-        { slug: "tapa-quadfold", name: "Tapa QuadFold", image: cdn + "tapa_quad_1.jpg", summary: "Apertura en cuatro paneles para maximizar el acceso util al balde.", features: ["Cuatro paneles", "Apertura modular", "Aplicacion por camioneta"] },
-        { slug: "tapa-electrica", name: "Tapa Electrica", image: cdn + "banner3.png", summary: "Apertura remota y estructura de aluminio para una experiencia premium.", features: ["Control remoto", "Aluminio reforzado", "Cierre de seguridad"] },
-        { slug: "tapa-enrollable", name: "Tapa Enrollable", image: cdn + "banner2.png", summary: "Acceso gradual al balde con una cubierta compacta.", features: ["Apertura regulable", "Diseno compacto", "Uso multiproposito"] },
+        { slug: "tapa-quadfold", name: "Tapa de Balde Plegable 4 Partes", image: cdn + "tapa_quad_1.jpg", summary: "Cuatro paneles para ampliar el acceso util al balde sin desmontar la cubierta.", features: ["Cuatro paneles", "Apertura modular", "Aplicacion por camioneta"] },
+        { slug: "tapa-electrica", name: "Tapa de Balde Corrediza Electrica", image: cdn + "banner3.png", summary: "Apertura remota y estructura de aluminio para operar el balde con precision.", features: ["Control remoto", "Aluminio reforzado", "Cierre de seguridad"] },
+        { slug: "tapa-enrollable", name: "Tapa de Balde Corrediza", image: cdn + "banner2.png", summary: "Apertura gradual y cubierta compacta para conservar acceso flexible al balde.", features: ["Apertura regulable", "Diseno compacto", "Uso multiproposito"] },
       ],
     },
     {
@@ -31,7 +31,7 @@
       id: "suspension", name: "Suspensiones", code: "SU", icon: "fa-arrows-up-down", description: "Altura, control y respuesta segun el uso del vehiculo.",
       products: [
         { slug: "old-man-emu", name: "Old Man Emu", image: cdn + "suspension_1.png", summary: "Suspension especializada para carga, control y desempeño off-road.", features: ["Aplicacion por vehiculo", "Configuracion por carga", "Instalacion tecnica"] },
-        { slug: "tough-dog", name: "Tough Dog", image: cdn + "suspension_2.jpeg", summary: "Amortiguacion reforzada y soluciones de altura para uso exigente.", features: ["Uso severo", "Altura controlada", "Compatibilidad validada"] },
+        { slug: "tough-dog", name: "Suspension Tough Dog", image: "https://www.toughdog.com.au/site/DefaultSite/skins/toughdog_2019/images/products-intro-shock-absorbers.jpg", summary: "Suspension australiana distribuida por Maxmotor para Ecuador, configurada segun carga, altura y terreno.", features: ["Distribucion para Ecuador", "Uso severo y flotas", "Compatibilidad validada"], landing: "/tough-dog", photoCredit: "Material oficial Tough Dog, utilizado con autorizacion comercial" },
         { slug: "bilstein", name: "Bilstein", image: cdn + "suspension_3.png", summary: "Respuesta precisa y control premium para carretera y aventura.", features: ["Tecnologia monotubo", "Control de rebote", "Aplicacion por modelo"] },
         { slug: "tjm-suspension", name: "TJM Suspension", image: cdn + "KITALTURA.png", summary: "Kits de suspension para elevar capacidad y estabilidad del 4x4.", features: ["Kit completo", "Uso mixto", "Montaje profesional"] },
         { slug: "llantas-off-road", name: "Llantas Off-Road", image: "https://images.pexels.com/photos/16033911/pexels-photo-16033911.jpeg?auto=compress&cs=tinysrgb&w=1600", summary: "Opciones AT y MT para carretera, tierra y terreno tecnico.", features: ["Patrones AT y MT", "Medidas por vehiculo", "Asesoria de aplicacion"], photoCredit: "Foto contextual: Chaiya Saleethong / Pexels" },
@@ -41,7 +41,7 @@
     {
       id: "tiro", name: "Barras de tiro", code: "BT", icon: "fa-link", description: "Soluciones de carga y remolque fabricadas para cada aplicacion.",
       products: [
-        { slug: "tiro-estandar", name: "Barra de Tiro MXR", image: "https://images.pexels.com/photos/12519369/pexels-photo-12519369.jpeg?auto=compress&cs=tinysrgb&w=1600", summary: "Receptor para carga, portabicicletas y remolque ligero.", features: ["Receptor de 2 pulgadas", "Fabricacion MXR", "Aplicacion por vehiculo"], staticPage: "fichas/tiro-estandar.html", photoCredit: "Foto contextual: Mathias Reding / Pexels" },
+        { slug: "tiro-estandar", name: "Barra de Tiro", image: "https://images.pexels.com/photos/12519369/pexels-photo-12519369.jpeg?auto=compress&cs=tinysrgb&w=1600", summary: "Receptor fabricado para remolque, portabicicletas y sistemas de carga posteriores.", features: ["Receptor de 2 pulgadas", "Fabricacion MXR", "Aplicacion por vehiculo"], staticPage: "fichas/tiro-estandar.html", photoCredit: "Foto contextual: Mathias Reding / Pexels" },
         { slug: "tiro-hd", name: "Barra de Tiro Heavy Duty", image: "https://images.pexels.com/photos/33566025/pexels-photo-33566025.jpeg?auto=compress&cs=tinysrgb&w=1600", summary: "Estructura reforzada para aplicaciones de mayor exigencia.", features: ["Construccion reforzada", "Aplicacion de alta carga", "Fabricacion a medida"], staticPage: "fichas/tiro-hd.html", photoCredit: "Foto contextual: Mohamed Aouni / Pexels" },
         { slug: "barra-tiro-keko", name: "Barra de Tiro KEKO", image: "https://images.pexels.com/photos/4388158/pexels-photo-4388158.jpeg?auto=compress&cs=tinysrgb&w=1600", summary: "Solucion KEKO para remolque y transporte de accesorios posteriores.", features: ["Marca KEKO", "Aplicacion por modelo", "Montaje profesional"], photoCredit: "Foto contextual: Spencer Davis / Pexels" },
       ],
@@ -60,6 +60,7 @@
     {
       id: "rollbar", name: "Rollbars", code: "RB", icon: "fa-truck-pickup", description: "Linea MXR fabricada a medida para presencia y funcionalidad.",
       products: [
+        { slug: "rollbar-zr", name: "Rollbar ZR", image: "https://images.pexels.com/photos/13644357/pexels-photo-13644357.jpeg?auto=compress&cs=tinysrgb&w=1600", summary: "Rollbar de linea angular fabricado para integrar presencia, carga e iluminacion.", features: ["Diseno angular ZR", "Fabricacion nacional", "Aplicacion por camioneta"], photoCredit: "Foto contextual: Scott Neil / Pexels" },
         { slug: "rollbar-hero", name: "Rollbar Hero", image: "https://images.pexels.com/photos/9331954/pexels-photo-9331954.jpeg?auto=compress&cs=tinysrgb&w=1600", summary: "Estructura tubular premium con base portafocos.", features: ["Acero de alta resistencia", "Acabados MXR", "Aplicacion por camioneta"], staticPage: "fichas/rollbar-hero.html", photoCredit: "Foto contextual: Rhys Abel / Pexels" },
         { slug: "rollbar-rr1", name: "Rollbar RR1", image: "https://images.pexels.com/photos/13644357/pexels-photo-13644357.jpeg?auto=compress&cs=tinysrgb&w=1600", summary: "Doble viga angular con configuracion overland.", features: ["Parrilla superior", "Perfil bajo", "Fabricacion nacional"], staticPage: "fichas/rollbar-rr1.html", photoCredit: "Foto contextual: Scott Neil / Pexels" },
         { slug: "rollbar-hummer", name: "Rollbar Hummer", image: "https://images.pexels.com/photos/28639327/pexels-photo-28639327.jpeg?auto=compress&cs=tinysrgb&w=1600", summary: "Formato tipo jaula con presencia extrema.", features: ["Tubos reforzados", "Acabado texturizado", "Fabricacion a medida"], staticPage: "fichas/rollbar-hummer.html", photoCredit: "Foto contextual: Stephen Leonardi / Pexels" },

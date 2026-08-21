@@ -33,6 +33,11 @@ export async function onRequest(context) {
     return Response.redirect(url.toString(), 308);
   }
 
+  if (["/fichas/tough-dog", "/fichas/tough-dog.html", "/tough-dog.html"].includes(url.pathname)) {
+    url.pathname = "/tough-dog";
+    return Response.redirect(url.toString(), 308);
+  }
+
   if (["/portal-superadmin", "/portal-superadmin.html"].includes(url.pathname)) {
     return new Response("Not Found", { status: 404, headers: { "cache-control": "no-store" } });
   }

@@ -53,7 +53,7 @@ function openProductFamily(categoryId, trigger) {
             </button>
             <div class="family-option__actions">
               <button type="button" data-configure-product="${product.slug}">Configurar</button>
-              <a href="/fichas/${product.slug}">Ficha tecnica ↗</a>
+              <a href="${product.landing || `/fichas/${product.slug}`}">Ficha tecnica ↗</a>
             </div>
           </article>`).join("")}
       </div>
@@ -102,7 +102,7 @@ function openSpecificProductConfig(explorer, family, product) {
       <label>Marca, modelo y ano<input type="text" data-config-vehicle placeholder="Ej. Toyota Hilux 2024"></label>
       <label>Uso principal<select data-config-use><option value="Uso diario">Uso diario</option><option value="Trabajo y carga">Trabajo y carga</option><option value="Aventura off-road">Aventura off-road</option><option value="Viajes overland">Viajes overland</option></select></label>
     </div>
-    <div class="specific-actions"><a href="/fichas/${product.slug}">Ver ficha tecnica</a><a class="specific-quote" data-config-quote target="_blank" rel="noopener">Cotizar configuracion ↗</a></div>`;
+    <div class="specific-actions"><a href="${product.landing || `/fichas/${product.slug}`}">Ver ficha tecnica</a><a class="specific-quote" data-config-quote target="_blank" rel="noopener">Cotizar configuracion ↗</a></div>`;
 
   const quote = panel.querySelector("[data-config-quote]");
   const updateQuote = () => { quote.href = `https://wa.me/593960855932?text=${message()}`; };

@@ -15,7 +15,7 @@ async function walk(directory) {
   return files.flat();
 }
 
-for (const required of ["index.html", "ingenieria.html", "maxlining.html", "maxlining/vehiculos.html", "maxlining/accesorios.html", "maxlining/industrial.html", "maxlining/comparacion.html", "maxlining/aplicador.html", "maxlining/distribuidor.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "catalog/search-index.json", "fichas/tapas-balde-camionetas.html", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/maxlining-white.svg", "assets/brand/favicon-maxmotor-v2.svg", "assets/partners/campaign/primero-ecuador.png", "robots.txt", "sitemap.xml", "_headers"]) {
+for (const required of ["index.html", "ingenieria.html", "tough-dog.html", "productos/index.html", "maxlining.html", "maxlining/vehiculos.html", "maxlining/accesorios.html", "maxlining/industrial.html", "maxlining/comparacion.html", "maxlining/aplicador.html", "maxlining/distribuidor.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "catalog/search-index.json", "fichas/tapas-balde-camionetas.html", "fichas/tapa-quadfold.html", "fichas/tapa-enrollable.html", "fichas/tapa-electrica.html", "fichas/rollbar-zr.html", "fichas/tiro-estandar.html", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/maxlining-white.svg", "assets/brand/favicon-maxmotor-v2.svg", "assets/partners/campaign/primero-ecuador.png", "robots.txt", "sitemap.xml", "_headers"]) {
   try { await access(join(dist, required)); } catch { errors.push(`Falta ${required} en dist`); }
 }
 
@@ -47,6 +47,8 @@ if (!urls.includes("https://maxmotor4x4.com/fichas/tapas-balde-camionetas")) err
 if (urls.includes("https://maxmotor4x4.com/fichas/tapa-balde-dmax")) errors.push("La landing D-Max duplicada sigue en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/camionetas")) errors.push("El hub de camionetas no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/ingenieria")) errors.push("La landing de ingenieria B2B no esta en el sitemap");
+if (!urls.includes("https://maxmotor4x4.com/productos")) errors.push("El hub de productos no esta en el sitemap");
+if (!urls.includes("https://maxmotor4x4.com/tough-dog")) errors.push("La landing Tough Dog no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/maxlining")) errors.push("La landing de Maxlining no esta en el sitemap");
 for (const slug of ["vehiculos", "accesorios", "industrial", "comparacion", "aplicador", "distribuidor"]) {
   if (!urls.includes(`https://maxmotor4x4.com/maxlining/${slug}`)) errors.push(`Falta Maxlining ${slug} en el sitemap`);
@@ -85,6 +87,21 @@ if (home.includes('href="/fichas/tapa-balde-dmax"')) errors.push("El index conse
 if (!home.includes('href="/camionetas"')) errors.push("Falta el enlace interno al hub de camionetas");
 if (!home.includes('href="/ingenieria"')) errors.push("Falta el acceso a Ingenieria B2B desde el index");
 if (!home.includes('href="/maxlining"')) errors.push("Falta el acceso a Maxlining desde el index");
+if (!home.includes('href="/tough-dog"')) errors.push("Falta el acceso a Tough Dog desde el index");
+if (!home.includes('"hasOfferCatalog"')) errors.push("Falta el catalogo semantico del negocio en el index");
+
+const productsHub = await readFile(join(dist, "productos", "index.html"), "utf8");
+for (const product of ["Tapa de Balde Plegable 4 Partes", "Tapa de Balde Corrediza", "Tapa de Balde Corrediza Electrica", "Rollbar ZR", "Barra de Tiro", "Suspension Tough Dog"]) {
+  if (!productsHub.includes(product)) errors.push(`Falta producto destacado: ${product}`);
+}
+if (productsHub.includes('"@type":"Product"')) errors.push("El hub usa Product sin precio publico verificable");
+
+const toughDog = await readFile(join(dist, "tough-dog.html"), "utf8");
+for (const marker of ["DISTRIBUCIÓN ECUADOR", "Nitro Gas", "Foam Cell", "40 mm", "45 mm", "Vuelta a la República", "Sinotruk", "https://www.toughdog.com.au/"]) {
+  if (!toughDog.includes(marker)) errors.push(`Falta contenido Tough Dog: ${marker}`);
+}
+if (!toughDog.includes('rel="canonical" href="https://maxmotor4x4.com/tough-dog"')) errors.push("Canonical ausente en Tough Dog");
+if (toughDog.includes('"@type":"Product"')) errors.push("Tough Dog usa Product sin precio publico verificable");
 
 const engineering = await readFile(join(dist, "ingenieria.html"), "utf8");
 for (const marker of ["ingenieria-b2b", "SolidWorks", "Dassault Systèmes", "Shining 3D", "Bodor", "KRRASS", "Lincoln Electric", "Gema", "Deepal", "Toyota del Ecuador", "Changan", "GWM / CIAUTO", "más de 600 unidades", "Tool<br><span>not toys.", "Cómo.", "Para qué.", "Por qué."]) {

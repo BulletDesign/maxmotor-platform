@@ -13,7 +13,7 @@ const vehicleFor = (slug) => searchIndex.entries.find((entry) => entry.type === 
 
 test("search index connects real vehicle pages and accessory fichas", () => {
   assert.equal(searchIndex.counts.vehicles, 35);
-  assert.equal(searchIndex.counts.accessories, 40);
+  assert.equal(searchIndex.counts.accessories, 41);
   assert.ok(searchIndex.entries.some((entry) => entry.type === "accessory" && entry.url === "/fichas/tapa-trifold"));
   assert.match(normalize(`${vehicleFor("toyota-hilux").title} ${vehicleFor("toyota-hilux").terms}`), /hilux/);
   assert.match(normalize(vehicleFor("toyota-hilux").terms), /estribos/);
