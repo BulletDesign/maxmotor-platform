@@ -1,6 +1,7 @@
 import { requireUser } from "../../_lib/auth.js";
 import { assertSameOrigin, handleError, HttpError, json, readJson } from "../../_lib/http.js";
 import { pointsForPurchase } from "../../_lib/points.js";
+import { initialMaintenanceSchedule } from "../../_lib/maintenance-schedule.js";
 
 const MAX_ITEMS_PER_INVOICE = 25;
 const TRACKING_MODES = new Set(["time", "mileage", "both"]);
@@ -28,14 +29,14 @@ function installationRecord(item, product, vehicle, issuedAt) {
     : Number(vehicle.odometerKm || 0);
   if (!Number.isInteger(installedKm) || installedKm < 0) throw new HttpError(400, `Kilometraje invalido para ${product.name}`);
   if (Number.isNaN(new Date(installedAt).getTime())) throw new HttpError(400, `Fecha de instalacion invalida para ${product.name}`);
-  const serviceDays = ["time", "both"].includes(trackingMode) ? Number(product.serviceDays ?? product.warrantyDays) || 0 : 0;
-  const serviceKm = ["mileage", "both"].includes(trackingMode) ? Number(product.serviceKm ?? product.warrantyKm) || 0 : 0;
+  const schedule = initialMaintenanceSchedule({ product, trackingMode, installedAt, installedKm });
   return {
     product,
     installedAt,
     installedKm,
-    nextServiceAt: serviceDays ? new Date(new Date(installedAt).getTime() + serviceDays * 86400000).toISOString() : null,
-    nextServiceKm: serviceKm ? installedKm + serviceKm : null,
+    nextServiceAt: schedule.nextServiceAt,
+    nextServiceKm: schedule.nextServiceKm,
+    scheduleType: schedule.scheduleType,
     coverageType: appliesWarranty ? "full" : "limited",
     trackingMode,
     warrantyId: crypto.randomUUID(),
@@ -67,7 +68,7 @@ export async function onRequestPost({ request, env }) {
       env.DB.prepare("SELECT id FROM users WHERE customer_code=?1 AND role='customer' AND status='active'").bind(customerCode).first(),
       env.DB.prepare("SELECT id FROM invoices WHERE invoice_number=?1").bind(invoiceNumber).first(),
       env.DB.prepare("SELECT id,user_id userId,odometer_km odometerKm FROM vehicles WHERE id=?1").bind(vehicleId).first(),
-      env.DB.prepare(`SELECT p.id,p.name,p.service_days serviceDays,p.service_km serviceKm,p.warranty_days warrantyDays,p.warranty_km warrantyKm,p.coverage_available coverageAvailable,p.tracking_mode trackingMode FROM operational_products p JOIN product_families f ON f.id=p.family_id WHERE p.id IN (${productPlaceholders}) AND p.active=1 AND f.active=1`).bind(...productIds).all(),
+      env.DB.prepare(`SELECT p.id,p.name,f.name familyName,p.service_days serviceDays,p.service_km serviceKm,p.warranty_days warrantyDays,p.warranty_km warrantyKm,p.coverage_available coverageAvailable,p.tracking_mode trackingMode FROM operational_products p JOIN product_families f ON f.id=p.family_id WHERE p.id IN (${productPlaceholders}) AND p.active=1 AND f.active=1`).bind(...productIds).all(),
     ]);
     if (!customer) throw new HttpError(404, "Cliente no encontrado");
     if (duplicate) throw new HttpError(409, "La factura ya fue registrada");
@@ -101,7 +102,7 @@ export async function onRequestPost({ request, env }) {
       points,
       awardPoints,
       itemCount: installations.length,
-      installations: installations.map((item) => ({ installationId: item.installationId, warrantyId: item.warrantyId, productId: item.product.id, coverageType: item.coverageType, trackingMode: item.trackingMode, nextServiceAt: item.nextServiceAt, nextServiceKm: item.nextServiceKm })),
+      installations: installations.map((item) => ({ installationId: item.installationId, warrantyId: item.warrantyId, productId: item.product.id, coverageType: item.coverageType, trackingMode: item.trackingMode, scheduleType: item.scheduleType, nextServiceAt: item.nextServiceAt, nextServiceKm: item.nextServiceKm })),
     }, 201);
   } catch (error) { return handleError(error); }
 }

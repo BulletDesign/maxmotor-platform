@@ -1,5 +1,6 @@
 import { requireUser } from "../../../../_lib/auth.js";
 import { assertSameOrigin, handleError, HttpError, json, readJson } from "../../../../_lib/http.js";
+import { recurringMaintenanceInterval } from "../../../../_lib/maintenance-schedule.js";
 
 export async function onRequestPost({ request, env, params }) {
   try {
@@ -7,7 +8,7 @@ export async function onRequestPost({ request, env, params }) {
     const actor = await requireUser(request, env.DB, ["employee", "superadmin"]);
     const body = await readJson(request);
     const current = await env.DB.prepare(
-      "SELECT i.id,i.vehicle_id vehicleId,i.warranty_id warrantyId,i.installed_km installedKm,i.next_service_at nextServiceAt,i.next_service_km nextServiceKm,i.coverage_type coverageType,i.tracking_mode trackingMode,p.service_days serviceDays,p.service_km serviceKm,p.warranty_days warrantyDays,p.warranty_km warrantyKm,v.odometer_km vehicleOdometer FROM installations i JOIN operational_products p ON p.id=i.product_id JOIN vehicles v ON v.id=i.vehicle_id WHERE i.id=?1 AND i.status!='void'"
+      "SELECT i.id,i.vehicle_id vehicleId,i.warranty_id warrantyId,i.installed_km installedKm,i.next_service_at nextServiceAt,i.next_service_km nextServiceKm,i.coverage_type coverageType,i.tracking_mode trackingMode,p.name,f.name familyName,p.service_days serviceDays,p.service_km serviceKm,p.warranty_days warrantyDays,p.warranty_km warrantyKm,v.odometer_km vehicleOdometer FROM installations i JOIN operational_products p ON p.id=i.product_id JOIN product_families f ON f.id=p.family_id JOIN vehicles v ON v.id=i.vehicle_id WHERE i.id=?1 AND i.status!='void'"
     ).bind(params.id).first();
     if (!current) throw new HttpError(404, "Accesorio instalado no encontrado");
 
@@ -20,8 +21,7 @@ export async function onRequestPost({ request, env, params }) {
     const servicedAt = String(body.servicedAt || new Date().toISOString());
     const servicedDate = new Date(servicedAt);
     if (Number.isNaN(servicedDate.getTime())) throw new HttpError(400, "Fecha de revision invalida");
-    const serviceDays = tracksTime ? Math.max(0, Number(current.serviceDays ?? current.warrantyDays) || 0) : 0;
-    const serviceKm = tracksMileage ? Math.max(0, Number(current.serviceKm ?? current.warrantyKm) || 0) : 0;
+    const { serviceDays, serviceKm } = recurringMaintenanceInterval(current, current.trackingMode);
     if (!serviceDays && !serviceKm) throw new HttpError(409, "El producto no tiene un intervalo de mantenimiento configurado");
 
     const nextServiceAt = serviceDays ? new Date(servicedDate.getTime() + serviceDays * 86400000).toISOString() : null;
