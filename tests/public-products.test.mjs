@@ -31,4 +31,6 @@ test("Tough Dog has one canonical landing and redirects its legacy ficha", () =>
   assert.doesNotMatch(toughDog, /"@type":"Product"/);
   assert.match(middleware, /\/fichas\/tough-dog/);
   assert.match(middleware, /url\.pathname = "\/tough-dog"/);
+  assert.match(middleware, /\["\/mxr", "\/mxr\.html"\]/);
+  assert.doesNotMatch(home, /href="mxr\.html"/);
 });

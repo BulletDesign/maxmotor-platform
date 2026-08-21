@@ -23,7 +23,6 @@ const pages = [
   { path: "/maxlining/comparacion", changefreq: "monthly", priority: "0.9" },
   { path: "/maxlining/aplicador", changefreq: "monthly", priority: "0.7" },
   { path: "/maxlining/distribuidor", changefreq: "monthly", priority: "0.7" },
-  { path: "/mxr", changefreq: "monthly", priority: "0.8" },
   { path: "/camionetas", changefreq: "weekly", priority: "0.9" },
   ...ECUADOR_PICKUPS.map((pickup) => ({ path: `/camionetas/${pickup.slug}`, changefreq: "monthly", priority: "0.8" })),
   { path: "/fichas/tapas-balde-camionetas", changefreq: "weekly", priority: "0.9" },
