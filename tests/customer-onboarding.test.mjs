@@ -18,10 +18,8 @@ test("normalizes Ecuador WhatsApp numbers and rejects invalid phones", () => {
   );
 });
 
-test("generates readable temporary passwords without ambiguous characters", () => {
-  const passwords = new Set(Array.from({ length: 25 }, () => generateTemporaryPassword()));
-  assert.equal(passwords.size, 25);
-  for (const password of passwords) assert.match(password, /^MXR-[A-HJ-NP-Z]{4}-[2-9]{4}$/);
+test("generates a readable temporary password from the Maxmotor ID", () => {
+  assert.equal(generateTemporaryPassword("MM-13723"), "MXR-MM-13723");
 });
 
 test("staff onboarding is protected and stores only password hashes", async () => {

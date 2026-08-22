@@ -55,12 +55,12 @@ export async function onRequestPost({ request, env }) {
     const id = crypto.randomUUID();
     const vehicleId = crypto.randomUUID();
     const customerCode = await createFriendlyCustomerCode(env.DB);
-    const temporaryPassword = generateTemporaryPassword();
+    const temporaryPassword = generateTemporaryPassword(customerCode);
     const secured = await hashPassword(temporaryPassword);
     const welcomePoints = isWelcomePointsEligible() ? WELCOME_POINTS_AMOUNT : 0;
     const welcomeCoupon = welcomePoints > 0 ? `MAX10-${crypto.randomUUID().replace(/-/g, "").slice(0, 8).toUpperCase()}` : null;
     const statements = [
-      env.DB.prepare("INSERT INTO users(id,customer_code,email,full_name,phone,password_hash,password_salt,national_id,birth_date,origin_province,origin_canton,created_by) VALUES(?1,?2,?3,?4,?5,?6,?7,NULL,NULL,?8,NULL,?9)").bind(id, customerCode, email, fullName, phone, secured.hash, secured.salt, originProvince, actor.id),
+      env.DB.prepare("INSERT INTO users(id,customer_code,email,full_name,phone,password_hash,password_salt,national_id,birth_date,origin_province,origin_canton,created_by,must_change_password) VALUES(?1,?2,?3,?4,?5,?6,?7,NULL,NULL,?8,NULL,?9,1)").bind(id, customerCode, email, fullName, phone, secured.hash, secured.salt, originProvince, actor.id),
       env.DB.prepare("INSERT INTO vehicles(id,user_id,brand,model,model_year,plate,vin,odometer_km) VALUES(?1,?2,?3,?4,?5,?6,NULL,NULL)").bind(vehicleId, id, brand, model, modelYear, plate),
       env.DB.prepare("INSERT INTO consents(id,user_id,consent_type,version) VALUES(?1,?2,'privacy','2026-08-07-staff')").bind(crypto.randomUUID(), id),
       env.DB.prepare("INSERT INTO consents(id,user_id,consent_type,version) VALUES(?1,?2,'whatsapp_service','2026-08-07-staff')").bind(crypto.randomUUID(), id),

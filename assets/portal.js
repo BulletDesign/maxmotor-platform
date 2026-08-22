@@ -1,5 +1,6 @@
 import { vehicleBrandOptions } from "./vehicle-brands.js";
 import { setupGuidedTour } from "./guided-tour.js";
+import "./password-visibility.js";
 
 const authView = document.querySelector("#auth-view");
 const dashboardView = document.querySelector("#dashboard-view");

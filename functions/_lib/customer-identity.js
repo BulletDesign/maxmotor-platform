@@ -1,13 +1,5 @@
 import { HttpError } from "./http.js";
 
-const PASSWORD_LETTERS = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-const PASSWORD_DIGITS = "23456789";
-
-function randomCharacters(alphabet, length) {
-  const bytes = crypto.getRandomValues(new Uint8Array(length));
-  return [...bytes].map((value) => alphabet[value % alphabet.length]).join("");
-}
-
 export async function createFriendlyCustomerCode(db) {
   for (let attempt = 0; attempt < 12; attempt += 1) {
     const digits = 10000 + (crypto.getRandomValues(new Uint32Array(1))[0] % 90000);
@@ -18,8 +10,10 @@ export async function createFriendlyCustomerCode(db) {
   throw new HttpError(503, "No pudimos generar el Maxmotor ID. Intenta nuevamente");
 }
 
-export function generateTemporaryPassword() {
-  return `MXR-${randomCharacters(PASSWORD_LETTERS, 4)}-${randomCharacters(PASSWORD_DIGITS, 4)}`;
+export function generateTemporaryPassword(customerCode) {
+  const normalizedCode = String(customerCode || "").trim().toUpperCase();
+  if (!/^MM-\d{5}$/.test(normalizedCode)) throw new HttpError(500, "Maxmotor ID invalido para generar credenciales");
+  return `MXR-${normalizedCode}`;
 }
 
 export function normalizeWhatsappPhone(value) {
