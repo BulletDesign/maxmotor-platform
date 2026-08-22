@@ -2,7 +2,7 @@ export async function getInvoiceHistory(db, userId) {
   const [invoiceData, itemData] = await Promise.all([
     db.prepare(`SELECT i.id,i.invoice_number invoiceNumber,i.amount_cents amountCents,
       i.issued_at issuedAt,i.created_at createdAt,i.points_enabled pointsEnabled,
-      COALESCE(SUM(CASE WHEN pl.points>0 THEN pl.points ELSE 0 END),0) pointsEarned,
+      COALESCE(SUM(pl.points),0) pointsEarned,
       COALESCE(actor.full_name,'Sistema Maxmotor') createdByName
       FROM invoices i
       LEFT JOIN points_ledger pl ON pl.invoice_id=i.id

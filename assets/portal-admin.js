@@ -13,6 +13,7 @@ let reminderQueue = [];
 let reminderTotal = 0;
 let activeCustomerId = null;
 let onboardedCustomerId = null;
+let currentAdminRole = "employee";
 
 async function api(path, options = {}) {
   const response = await fetch(path, { credentials: "same-origin", ...options, headers: options.body ? { "content-type": "application/json", ...options.headers } : options.headers });
@@ -28,6 +29,12 @@ function money(cents) { return `USD ${Number((cents || 0) / 100).toLocaleString(
 function resetManagedForm(form) { form.reset(); form.elements.id.value = ""; if (form.elements.active) form.elements.active.checked = true; form.querySelector("[data-cancel-form]").hidden = true; }
 const trackingLabels = { none: "Sin seguimiento", time: "Solo tiempo", mileage: "Solo kilometraje", both: "Tiempo y kilometraje" };
 function productOption(product) { return `<option value="${product.id}" data-coverage="${Number(product.coverageAvailable)}" data-tracking="${product.trackingMode}">${escapeHtml(product.familyName)} / ${escapeHtml(product.name)}</option>`; }
+function superadminInvoiceTools(invoice, vehicles) {
+  if (currentAdminRole !== "superadmin") return "";
+  const vehicleOptions = vehicles.map((vehicle) => `<option value="${vehicle.id}">${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)} / ${escapeHtml(vehicle.plate || "sin placa")}</option>`).join("");
+  const productOptions = operationalCatalog.filter((product) => Number(product.active) && Number(product.familyActive)).map(productOption).join("");
+  return `<div class="invoice-superadmin-tools"><span>CONTROL SUPERADMIN</span><form data-correct-invoice="${invoice.id}" class="invoice-correction-form"><div class="field-row"><label>Numero<input name="invoiceNumber" value="${escapeHtml(invoice.invoiceNumber)}" required></label><label>Total USD<input name="amount" type="number" min="0.01" step="0.01" value="${Number(invoice.amountCents / 100).toFixed(2)}" required></label></div><div class="field-row"><label>Fecha<input name="issuedAt" type="date" value="${String(invoice.issuedAt).slice(0, 10)}" required></label><label class="check-field"><input name="pointsEnabled" type="checkbox" ${invoice.pointsEnabled ? "checked" : ""}> Acreditar TP</label></div><label>Motivo<input name="reason" minlength="5" placeholder="Describe el error y la correccion" required></label><button type="submit">Guardar correccion de factura</button></form><details class="invoice-installation-correction"><summary>Agregar accesorio correcto a esta factura</summary><form data-add-invoice-installation="${invoice.id}"><div class="field-row"><label>Vehiculo<select name="vehicleId" required>${vehicleOptions}</select></label><label>Producto<select name="productId" required>${productOptions}</select></label></div><label class="check-field"><input name="appliesWarranty" type="checkbox" checked> Aplica garantia y seguimiento</label><div class="field-row"><label>Fecha de instalacion<input name="installedAt" type="date" value="${String(invoice.issuedAt).slice(0, 10)}" required></label><label>Km de instalacion<input name="installedKm" type="number" min="0" required></label></div><label class="check-field"><input name="serviceCompleted" type="checkbox"> El reajuste o mantenimiento inicial ya fue completado</label><div class="field-row"><label>Fecha del reajuste<input name="servicedAt" type="date"></label><label>Km del reajuste<input name="serviceKm" type="number" min="0"></label></div><label>Motivo<input name="reason" minlength="5" placeholder="Ej. reemplazo de producto ingresado por error" required></label><button type="submit">Vincular accesorio a factura</button></form></details></div>`;
+}
 function syncProductTrackingForm(form) {
   const coverage = form.elements.coverageAvailable.value === "yes";
   const mode = coverage ? form.elements.trackingMode.value : "none";
@@ -248,17 +255,17 @@ async function openCustomerFile(id) {
   document.querySelector("#file-invoices").innerHTML = invoices.length ? invoices.map((invoice) => {
     const items = invoice.items.length ? invoice.items.map((item) => `<li><strong>${escapeHtml(item.productName)}</strong><span>${escapeHtml(item.brand || "Vehiculo")} ${escapeHtml(item.model || "")} / ${escapeHtml(item.plate || "sin placa")}</span></li>`).join("") : "<li><span>Sin accesorios vinculados.</span></li>";
     const points = invoice.pointsEnabled ? `+${Number(invoice.pointsEarned).toLocaleString("es-EC")} TP acreditados` : "Sin acreditacion de TP";
-    return `<details class="invoice-card"><summary><div><span>FACTURA</span><strong>#${escapeHtml(invoice.invoiceNumber)}</strong></div><div><span>${new Date(invoice.issuedAt).toLocaleDateString("es-EC")}</span><strong>USD ${Number(invoice.amountCents / 100).toFixed(2)}</strong></div><em class="${invoice.pointsEnabled ? "is-earned" : ""}">${points}</em></summary><div class="invoice-card__detail"><ul>${items}</ul><small>Ingresada por ${escapeHtml(invoice.createdByName)}</small></div></details>`;
+    return `<details class="invoice-card"><summary><div><span>FACTURA</span><strong>#${escapeHtml(invoice.invoiceNumber)}</strong></div><div><span>${new Date(invoice.issuedAt).toLocaleDateString("es-EC")}</span><strong>USD ${Number(invoice.amountCents / 100).toFixed(2)}</strong></div><em class="${invoice.pointsEnabled ? "is-earned" : ""}">${points}</em></summary><div class="invoice-card__detail"><ul>${items}</ul><small>Ingresada por ${escapeHtml(invoice.createdByName)}</small>${superadminInvoiceTools(invoice, vehicles)}</div></details>`;
   }).join("") : '<p class="empty-state">Este cliente aun no tiene facturas registradas.</p>';
 }
 
 async function openAdmin(user) {
-  if (user?.role === "superadmin") return location.replace("/console");
   if (user?.role === "customer") return location.replace("/MiMaxmotor");
-  if (!user || user.role !== "employee") throw new Error("Esta cuenta no tiene acceso al Portal Maxmotor");
+  if (!user || !["employee", "superadmin"].includes(user.role)) throw new Error("Esta cuenta no tiene acceso al Portal Maxmotor");
+  currentAdminRole = user.role;
   loginView.hidden = true; appView.hidden = false;
   document.querySelector("#admin-name").textContent = user.fullName;
-  document.querySelector("#admin-role").textContent = "Empleado Maxmotor";
+  document.querySelector("#admin-role").textContent = user.role === "superadmin" ? "Superadmin / gestion operativa" : "Empleado Maxmotor";
   document.querySelector("#vehicle-form [name='brand']").innerHTML = vehicleBrandOptions();
   document.querySelector("#customer-onboarding-form [name='brand']").innerHTML = vehicleBrandOptions();
   await Promise.all([loadOverview(), loadCustomers(""), loadCatalog(), loadRewards(), loadRedemptions(), loadNotifications(), loadRewardReminders()]);
@@ -506,6 +513,59 @@ document.querySelector("#reminder-current").addEventListener("click", async (eve
   }
 });
 
+document.querySelector("#file-invoices").addEventListener("submit", async (event) => {
+  const correctionForm = event.target.closest("[data-correct-invoice]");
+  const installationForm = event.target.closest("[data-add-invoice-installation]");
+  if (!correctionForm && !installationForm) return;
+  event.preventDefault();
+  const form = correctionForm || installationForm;
+  const submit = form.querySelector("button[type='submit']");
+  submit.disabled = true;
+  try {
+    if (correctionForm) {
+      await api(`/api/superadmin/invoices/${correctionForm.dataset.correctInvoice}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          invoiceNumber: form.elements.invoiceNumber.value,
+          amountCents: Math.round(Number(form.elements.amount.value) * 100),
+          issuedAt: new Date(`${form.elements.issuedAt.value}T12:00:00`).toISOString(),
+          pointsEnabled: form.elements.pointsEnabled.checked,
+          reason: form.elements.reason.value,
+        }),
+      });
+      setMessage(fileMessage, "Factura y Traction Points corregidos con registro de auditoria.", true);
+    } else {
+      const serviceCompleted = form.elements.serviceCompleted.checked;
+      await api(`/api/superadmin/invoices/${installationForm.dataset.addInvoiceInstallation}/installations`, {
+        method: "POST",
+        body: JSON.stringify({
+          vehicleId: form.elements.vehicleId.value,
+          productId: form.elements.productId.value,
+          appliesWarranty: form.elements.appliesWarranty.checked,
+          installedAt: new Date(`${form.elements.installedAt.value}T12:00:00`).toISOString(),
+          installedKm: Number(form.elements.installedKm.value),
+          serviceCompleted,
+          servicedAt: serviceCompleted && form.elements.servicedAt.value ? new Date(`${form.elements.servicedAt.value}T12:00:00`).toISOString() : null,
+          serviceKm: serviceCompleted ? Number(form.elements.serviceKm.value) : null,
+          reason: form.elements.reason.value,
+        }),
+      });
+      setMessage(fileMessage, "Accesorio vinculado a la factura con su seguimiento tecnico.", true);
+    }
+    await Promise.all([openCustomerFile(activeCustomerId), loadOverview(), loadCustomers("")]);
+  } catch (error) {
+    setMessage(fileMessage, error.message);
+    submit.disabled = false;
+  }
+});
+
 document.querySelectorAll("[data-normalize]").forEach((input) => input.addEventListener("input", () => { if (input.dataset.normalize === "upper") input.value = input.value.toUpperCase(); if (input.dataset.normalize === "words") input.value = input.value.replace(/(^|\s|[-'])\p{L}/gu, (letter) => letter.toUpperCase()); }));
-document.querySelector("#admin-logout").addEventListener("click", async () => { await api("/api/auth/logout?role=employee", { method: "POST" }); location.reload(); });
-api("/api/auth/me?role=employee").then(({ user }) => { if (user) return openAdmin(user); }).catch(() => {});
+document.querySelector("#admin-logout").addEventListener("click", async () => { await api(`/api/auth/logout?role=${currentAdminRole}`, { method: "POST" }); location.reload(); });
+(async () => {
+  for (const role of ["employee", "superadmin"]) {
+    try {
+      const { user } = await api(`/api/auth/me?role=${role}`);
+      if (user) return openAdmin(user);
+    } catch {}
+  }
+})();
