@@ -31,9 +31,26 @@ test("staff onboarding is protected and stores only password hashes", async () =
   assert.match(route, /birth_date,origin_province[\s\S]*NULL,NULL,\?8/);
   assert.match(route, /'whatsapp_service'/);
   assert.match(route, /'marketing'/);
+  assert.match(route, /body\.consent !== true/);
+  assert.match(route, /2026-08-15-integral-v1/);
   assert.match(route, /customer\.staff_create/);
   assert.match(route, /https:\/\/wa\.me\/\$\{whatsappPhone\}/);
   assert.doesNotMatch(route, /JSON\.stringify\(\{[^}]*temporaryPassword/);
+});
+
+test("self registration requires one explicit integral consent", async () => {
+  const [html, script, route] = await Promise.all([
+    source("../portal.html"),
+    source("../assets/portal.js"),
+    source("../functions/api/auth/register.js"),
+  ]);
+  assert.equal((html.match(/name="consent"/g) || []).length, 1);
+  assert.match(html, /WhatsApp[\s\S]*novedades comerciales/);
+  assert.match(html, /retirar esta autorización/);
+  assert.match(script, /consent: form\.elements\.consent\.checked/);
+  assert.match(route, /body\.consent !== true/);
+  for (const type of ["privacy", "whatsapp_service", "marketing"]) assert.match(route, new RegExp(`'${type}'`));
+  assert.match(route, /consent\.integral_accept/);
 });
 
 test("the employee portal separates assisted signup from multi-accessory sales", async () => {

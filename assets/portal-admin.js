@@ -9,6 +9,8 @@ const fileMessage = document.querySelector("#customer-file-message");
 let operationalCatalog = [];
 let catalogFamilies = [];
 let rewardsCatalog = [];
+let reminderQueue = [];
+let reminderTotal = 0;
 let activeCustomerId = null;
 let onboardedCustomerId = null;
 
@@ -120,6 +122,7 @@ function initializeAdminTour() {
       { target: "#award-points-form", title: "Factura multiaccesorio", body: "Registra una sola factura y agrega todos los accesorios instalados. Cada item conserva su propia cobertura y puedes decidir si la venta acumula TP.", before: () => openAdminView("points") },
       { target: ".catalog-explainer", title: "Catalogo operativo", body: "Las familias ordenan productos y permiten medir demanda; cada producto define sus intervalos de mantenimiento.", before: () => openAdminView("catalog") },
       { target: ".rewards-management", title: "Recompensas", body: "Publica, edita, limita o elimina beneficios canjeables con Traction Points.", before: () => openAdminView("rewards") },
+      { target: ".reminder-workbench", title: "Avisos de puntos", body: "Abre un WhatsApp preparado, confirma manualmente el envío y avanza al siguiente cliente sin repetir mensajes.", before: () => openAdminView("reward-reminders") },
       { target: "#redemption-list", title: "Canjes", body: "Aprueba, rechaza y marca como entregadas las solicitudes realizadas por clientes.", before: () => openAdminView("redemptions") },
       { target: "#notification-form", title: "Comunicacion", body: "Publica avisos generales que apareceran durante 30 dias en todos los portales de propietarios.", before: () => openAdminView("notifications") }
     ]
@@ -176,6 +179,37 @@ async function loadNotifications() {
   document.querySelector("#notification-list").innerHTML = data.notifications.length ? data.notifications.map((item) => `<article class="admin-list-row notification-admin-row"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.body)}</span><small>Publicado ${new Date(item.publishedAt).toLocaleDateString("es-EC")}<br>Vence ${new Date(item.expiresAt).toLocaleDateString("es-EC")}</small><button class="danger-inline" type="button" data-delete-notification="${item.id}">Eliminar</button></article>`).join("") : '<p class="empty-state">No hay avisos vigentes.</p>';
 }
 
+const reminderActionLabels = { sent: "Enviado", not_sent: "No enviado", skipped: "Omitido hoy", postponed: "Pausado 30 días", opted_out: "No autoriza", invalid_phone: "Teléfono inválido" };
+
+function renderReminderCurrent() {
+  const container = document.querySelector("#reminder-current");
+  const customer = reminderQueue[0];
+  document.querySelector("#reminder-progress").textContent = `${Math.max(0, reminderTotal - reminderQueue.length)} / ${reminderTotal}`;
+  document.querySelector("#reminder-queue").innerHTML = reminderQueue.slice(0, 6).map((item, index) => `<div class="reminder-queue-item ${index === 0 ? "is-current" : ""}"><b>${String(index + 1).padStart(2, "0")}</b><span>${escapeHtml(item.fullName)}<small>${Number(item.points).toLocaleString("es-EC")} TP</small></span></div>`).join("") || '<p class="empty-state compact">Sin pendientes.</p>';
+  if (!customer) {
+    container.innerHTML = `<div class="reminder-complete"><span>JORNADA AL DÍA</span><h2>No quedan mensajes pendientes.</h2><p>Los clientes en descanso, pausados o sin una recompensa disponible volverán a evaluarse en la próxima jornada.</p></div>`;
+    return;
+  }
+  const rewards = customer.rewards.map((reward) => `<li><strong>${escapeHtml(reward.name)}</strong><span>${Number(reward.pointsCost).toLocaleString("es-EC")} TP</span></li>`).join("");
+  container.innerHTML = `<article class="reminder-customer"><header><div><span>SIGUIENTE CLIENTE / AVISO ${customer.reminderNumber} DE 2</span><h2>${escapeHtml(customer.fullName)}</h2><p>${escapeHtml(customer.customerCode)} · ${escapeHtml(customer.phone)}</p></div><strong>${Number(customer.points).toLocaleString("es-EC")}<small>TP disponibles</small></strong></header><ul class="reminder-rewards">${rewards}</ul><label class="reminder-preview">Mensaje preparado<textarea rows="11" readonly>${escapeHtml(customer.message)}</textarea></label><div class="reminder-primary-actions"><a href="${customer.whatsappUrl}" target="_blank" rel="noopener" data-open-reminder-whatsapp>Abrir WhatsApp <b>↗</b></a><button type="button" data-copy-reminder>Copiar mensaje</button></div><div class="reminder-confirm" hidden><p>WhatsApp está abierto. Confirma lo que ocurrió antes de avanzar.</p><button class="is-sent" type="button" data-reminder-action="sent">Sí, enviado y siguiente</button><button type="button" data-reminder-action="not_sent">No se envió</button></div><details class="reminder-more"><summary>Otras decisiones</summary><div><button type="button" data-reminder-action="skipped">Omitir por hoy</button><button type="button" data-reminder-action="postponed">Pausar 30 días</button><button type="button" data-reminder-action="opted_out">No autoriza mensajes</button><button type="button" data-reminder-action="invalid_phone">Teléfono inválido</button></div></details></article>`;
+}
+
+async function loadRewardReminders(resetProgress = true) {
+  const processed = resetProgress ? 0 : Math.max(0, reminderTotal - reminderQueue.length);
+  const data = await api("/api/admin/reward-reminders");
+  reminderQueue = data.queue || [];
+  reminderTotal = processed + reminderQueue.length;
+  document.querySelector("#reminder-stat-eligible").textContent = data.summary.eligible;
+  document.querySelector("#reminder-stat-cooldown").textContent = data.summary.cooldown;
+  document.querySelector("#reminder-stat-paused").textContent = data.summary.paused;
+  document.querySelector("#reminder-stat-blocked").textContent = Number(data.summary.optedOut) + Number(data.summary.invalidPhone) + Number(data.summary.noConsent);
+  const schedule = document.querySelector("#reminder-schedule");
+  schedule.textContent = `${data.schedule.localDate} · ${data.schedule.recommendedDay ? "jornada recomendada" : "consulta libre"}`;
+  schedule.classList.toggle("is-recommended", data.schedule.recommendedDay);
+  document.querySelector("#reminder-history").innerHTML = data.recent.length ? data.recent.map((item) => `<article class="admin-list-row reminder-history-row"><strong>${escapeHtml(item.fullName)}<small>${escapeHtml(item.customerCode)}</small></strong><span>${reminderActionLabels[item.action] || escapeHtml(item.action)}</span><small>${Number(item.pointsSnapshot).toLocaleString("es-EC")} TP · ${new Date(item.createdAt).toLocaleString("es-EC")}</small><em>${escapeHtml(item.actorName || "Sistema")}</em></article>`).join("") : '<p class="empty-state">Todavía no hay decisiones registradas.</p>';
+  renderReminderCurrent();
+}
+
 async function loadCustomers(query) {
   const data = await api(`/api/admin/customers?q=${encodeURIComponent(query)}`);
   document.querySelector("#customers-table").innerHTML = data.customers.length ? data.customers.map((item) => `<button class="admin-list-row customer-row" type="button" data-customer-id="${item.id}"><strong>${escapeHtml(item.fullName)}<small>${escapeHtml(item.customerCode)}</small></strong><span>${escapeHtml(item.email)}<br>${escapeHtml(item.phone)}</span><span>${item.vehicleCount} vehiculo(s)</span><em>${Number(item.points || 0).toLocaleString("es-EC")} TP</em></button>`).join("") : '<p class="empty-state">No encontramos clientes.</p>';
@@ -183,7 +217,7 @@ async function loadCustomers(query) {
 
 async function openCustomerFile(id) {
   const data = await api(`/api/admin/customers/${encodeURIComponent(id)}`);
-  const { customer, vehicles, installations } = data;
+  const { customer, vehicles, installations, invoices = [] } = data;
   activeCustomerId = customer.id;
   document.querySelector("#customers-browser").hidden = true;
   document.querySelector("#customer-file").hidden = false;
@@ -211,6 +245,11 @@ async function openCustomerFile(id) {
     const nextParts = [tracksTime && item.nextServiceAt ? new Date(item.nextServiceAt).toLocaleDateString("es-EC") : null, tracksMileage && item.nextServiceKm ? `${Number(item.nextServiceKm).toLocaleString("es-EC")} km` : null].filter(Boolean);
     return `<article class="installation-card"><header><div><span>${escapeHtml(item.familyName)} / ${coverage}</span><h3>${escapeHtml(item.productName)}</h3></div><strong>${escapeHtml(item.brand)} ${escapeHtml(item.model)}<small>${escapeHtml(item.plate || "Sin placa")}</small></strong></header><div class="tracking-mode-pill">${trackingLabels[item.trackingMode] || item.trackingMode}</div><div class="maintenance-facts"><p><span>Ultima revision o instalacion</span><b>${lastParts.join(" / ")}</b></p><p><span>Proxima revision</span><b>${nextParts.join(" / ")}</b></p></div>${historyMarkup}<div class="installation-actions"><button class="primary-inline" type="button" data-complete-installation="${item.id}" data-tracking-mode="${item.trackingMode}" data-min-km="${lastKm || 0}">Completado</button>${tracksTime ? `<button type="button" data-extend-installation="${item.id}">Extender garantia</button>` : ""}<button class="danger-inline" type="button" data-delete-installation="${item.id}">Eliminar accesorio</button></div></article>`;
   }).join("") : '<p class="empty-state">Este cliente aun no tiene accesorios instalados.</p>';
+  document.querySelector("#file-invoices").innerHTML = invoices.length ? invoices.map((invoice) => {
+    const items = invoice.items.length ? invoice.items.map((item) => `<li><strong>${escapeHtml(item.productName)}</strong><span>${escapeHtml(item.brand || "Vehiculo")} ${escapeHtml(item.model || "")} / ${escapeHtml(item.plate || "sin placa")}</span></li>`).join("") : "<li><span>Sin accesorios vinculados.</span></li>";
+    const points = invoice.pointsEnabled ? `+${Number(invoice.pointsEarned).toLocaleString("es-EC")} TP acreditados` : "Sin acreditacion de TP";
+    return `<details class="invoice-card"><summary><div><span>FACTURA</span><strong>#${escapeHtml(invoice.invoiceNumber)}</strong></div><div><span>${new Date(invoice.issuedAt).toLocaleDateString("es-EC")}</span><strong>USD ${Number(invoice.amountCents / 100).toFixed(2)}</strong></div><em class="${invoice.pointsEnabled ? "is-earned" : ""}">${points}</em></summary><div class="invoice-card__detail"><ul>${items}</ul><small>Ingresada por ${escapeHtml(invoice.createdByName)}</small></div></details>`;
+  }).join("") : '<p class="empty-state">Este cliente aun no tiene facturas registradas.</p>';
 }
 
 async function openAdmin(user) {
@@ -222,7 +261,7 @@ async function openAdmin(user) {
   document.querySelector("#admin-role").textContent = "Empleado Maxmotor";
   document.querySelector("#vehicle-form [name='brand']").innerHTML = vehicleBrandOptions();
   document.querySelector("#customer-onboarding-form [name='brand']").innerHTML = vehicleBrandOptions();
-  await Promise.all([loadOverview(), loadCustomers(""), loadCatalog(), loadRewards(), loadRedemptions(), loadNotifications()]);
+  await Promise.all([loadOverview(), loadCustomers(""), loadCatalog(), loadRewards(), loadRedemptions(), loadNotifications(), loadRewardReminders()]);
   const awardForm = document.querySelector("#award-points-form");
   awardForm.elements.issuedAt.value = new Date().toISOString().slice(0, 10);
   awardForm.elements.awardPoints.checked = true;
@@ -252,8 +291,7 @@ document.querySelector("#customer-onboarding-form").addEventListener("submit", a
         email: values.email,
         phone: values.phone,
         originProvince: values.originProvince,
-        accountConsent: form.elements.accountConsent.checked,
-        marketingConsent: form.elements.marketingConsent.checked,
+        consent: form.elements.consent.checked,
         vehicle: { brand: values.brand, model: values.model, modelYear: values.modelYear, plate: values.plate },
       }),
     });
@@ -438,6 +476,35 @@ document.querySelector("[data-clear-coupon-search]").addEventListener("click", (
 document.querySelector("#coupon-redemption-list").addEventListener("click", async (event) => { const button = event.target.closest("[data-coupon-id]"); if (!button) return; try { await api(`/api/coupons/${button.dataset.couponId}`, { method: "PATCH", body: JSON.stringify({ status: button.dataset.status }) }); const label = button.dataset.status === "accepted" ? "Cupon aceptado. El cliente ya puede ver la confirmacion." : button.dataset.status === "redeemed" ? "Cupon marcado como redimido." : "Cupon rechazado."; report("#redemption-message", label, true); const code = document.querySelector("#coupon-lookup-form").elements.code.value.trim(); await loadRedemptions(code); } catch (error) { report("#redemption-message", error.message); } });
 document.querySelector("#notification-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; try { await api("/api/notifications", { method: "POST", body: JSON.stringify(Object.fromEntries(new FormData(form))) }); report("#notification-message", "Aviso publicado para todos los clientes durante 30 dias.", true); form.reset(); await loadNotifications(); } catch (error) { report("#notification-message", error.message); } });
 document.querySelector("#notification-list").addEventListener("click", async (event) => { const button = event.target.closest("[data-delete-notification]"); if (!button || !confirm("Eliminar esta notificacion para todos los clientes?")) return; try { await api(`/api/notifications/${button.dataset.deleteNotification}`, { method: "DELETE" }); report("#notification-message", "Notificacion eliminada.", true); await loadNotifications(); } catch (error) { report("#notification-message", error.message); } });
+
+document.querySelector("#refresh-reminders").addEventListener("click", () => loadRewardReminders().catch((error) => report("#reminder-message", error.message)));
+document.querySelector("#reminder-current").addEventListener("click", async (event) => {
+  const customer = reminderQueue[0];
+  if (!customer) return;
+  if (event.target.closest("[data-open-reminder-whatsapp]")) {
+    document.querySelector(".reminder-confirm").hidden = false;
+    return;
+  }
+  if (event.target.closest("[data-copy-reminder]")) {
+    try { await navigator.clipboard.writeText(customer.message); report("#reminder-message", "Mensaje copiado.", true); } catch { report("#reminder-message", "No se pudo copiar; selecciona el texto manualmente."); }
+    return;
+  }
+  const button = event.target.closest("[data-reminder-action]");
+  if (!button) return;
+  const action = button.dataset.reminderAction;
+  if (["opted_out", "invalid_phone"].includes(action) && !confirm(action === "opted_out" ? "¿Confirmas que este cliente no autoriza recordatorios por WhatsApp?" : "¿Confirmas que el teléfono no permite contacto por WhatsApp?")) return;
+  document.querySelectorAll("#reminder-current button").forEach((item) => { item.disabled = true; });
+  try {
+    await api("/api/admin/reward-reminders", { method: "POST", body: JSON.stringify({ customerId: customer.id, action }) });
+    const success = action === "sent" ? "Envío confirmado. Siguiente cliente listo." : `${reminderActionLabels[action]}. Siguiente cliente listo.`;
+    report("#reminder-message", success, true);
+    reminderQueue.shift();
+    await loadRewardReminders(false);
+  } catch (error) {
+    report("#reminder-message", error.message);
+    document.querySelectorAll("#reminder-current button").forEach((item) => { item.disabled = false; });
+  }
+});
 
 document.querySelectorAll("[data-normalize]").forEach((input) => input.addEventListener("input", () => { if (input.dataset.normalize === "upper") input.value = input.value.toUpperCase(); if (input.dataset.normalize === "words") input.value = input.value.replace(/(^|\s|[-'])\p{L}/gu, (letter) => letter.toUpperCase()); }));
 document.querySelector("#admin-logout").addEventListener("click", async () => { await api("/api/auth/logout?role=employee", { method: "POST" }); location.reload(); });

@@ -1,6 +1,6 @@
 import { hashPassword } from "../../_lib/crypto.js";
 import { createSession } from "../../_lib/auth.js";
-import { createFriendlyCustomerCode } from "../../_lib/customer-identity.js";
+import { createFriendlyCustomerCode, normalizeWhatsappPhone } from "../../_lib/customer-identity.js";
 import { assertSameOrigin, handleError, HttpError, json, readJson } from "../../_lib/http.js";
 import { isWelcomePointsEligible, WELCOME_POINTS_AMOUNT } from "../../_lib/promotions.js";
 
@@ -16,6 +16,8 @@ export async function onRequestPost({ request, env }) {
     if (!/^\S+@\S+\.\S+$/.test(email)) throw new HttpError(400, "Correo invalido");
     if (fullName.length < 3) throw new HttpError(400, "Nombre requerido");
     if (password.length < 10) throw new HttpError(400, "La contrasena debe tener al menos 10 caracteres");
+    if (body.consent !== true) throw new HttpError(400, "Debes aceptar la autorizacion de datos y comunicaciones");
+    normalizeWhatsappPhone(body.phone);
     const parsedBirthDate = new Date(`${birthDate}T12:00:00Z`);
     const adultLimit = new Date(); adultLimit.setUTCFullYear(adultLimit.getUTCFullYear() - 18);
     const latestAdultBirthDate = adultLimit.toISOString().slice(0, 10);
@@ -28,7 +30,10 @@ export async function onRequestPost({ request, env }) {
     const statements = [
       env.DB.prepare("INSERT INTO users (id,customer_code,email,full_name,phone,password_hash,password_salt,national_id,birth_date,origin_province,origin_canton) VALUES (?1,?2,?3,?4,?5,?6,?7,NULL,?8,?9,NULL)").bind(id,customerCode,email,fullName,String(body.phone||"").trim(),secured.hash,secured.salt,birthDate,originProvince),
       env.DB.prepare("INSERT INTO vehicles (id,user_id,brand,model,model_year,plate,vin,odometer_km) VALUES (?1,?2,?3,?4,?5,?6,NULL,NULL)").bind(vehicleId,id,String(vehicle.brand).trim(),String(vehicle.model).trim(),Number(vehicle.modelYear)||null,String(vehicle.plate||"").trim().toUpperCase()),
-      env.DB.prepare("INSERT INTO consents (id,user_id,consent_type,version) VALUES (?1,?2,'privacy','2026-08-04')").bind(crypto.randomUUID(),id)
+      env.DB.prepare("INSERT INTO consents (id,user_id,consent_type,version) VALUES (?1,?2,'privacy','2026-08-15-integral-v1')").bind(crypto.randomUUID(),id),
+      env.DB.prepare("INSERT INTO consents (id,user_id,consent_type,version) VALUES (?1,?2,'whatsapp_service','2026-08-15-integral-v1')").bind(crypto.randomUUID(),id),
+      env.DB.prepare("INSERT INTO consents (id,user_id,consent_type,version) VALUES (?1,?2,'marketing','2026-08-15-integral-v1')").bind(crypto.randomUUID(),id),
+      env.DB.prepare("INSERT INTO audit_log(id,actor_user_id,action,entity_type,entity_id,metadata_json) VALUES(?1,?2,'consent.integral_accept','user',?2,?3)").bind(crypto.randomUUID(), id, JSON.stringify({ version: "2026-08-15-integral-v1", purposes: ["privacy", "whatsapp_service", "marketing"], source: "self_registration" }))
     ];
     let welcomeCoupon = null;
     if (welcomePoints > 0) {

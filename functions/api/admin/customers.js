@@ -47,7 +47,7 @@ export async function onRequestPost({ request, env }) {
     if (originProvince.length < 3) throw new HttpError(400, "Provincia requerida");
     if (!brand || !model) throw new HttpError(400, "Vehiculo requerido");
     if (modelYear && (modelYear < 1950 || modelYear > new Date().getFullYear() + 1)) throw new HttpError(400, "Ano de vehiculo invalido");
-    if (body.accountConsent !== true || body.marketingConsent !== true) throw new HttpError(400, "Confirma la autorizacion del cliente para crear la cuenta y enviar informacion por WhatsApp");
+    if (body.consent !== true) throw new HttpError(400, "Confirma la autorizacion integral del cliente para datos y comunicaciones por WhatsApp");
     const whatsappPhone = normalizeWhatsappPhone(phone);
     const existing = await env.DB.prepare("SELECT id FROM users WHERE email=?1").bind(email).first();
     if (existing) throw new HttpError(409, "El correo ya esta registrado");
@@ -62,10 +62,10 @@ export async function onRequestPost({ request, env }) {
     const statements = [
       env.DB.prepare("INSERT INTO users(id,customer_code,email,full_name,phone,password_hash,password_salt,national_id,birth_date,origin_province,origin_canton,created_by,must_change_password) VALUES(?1,?2,?3,?4,?5,?6,?7,NULL,NULL,?8,NULL,?9,1)").bind(id, customerCode, email, fullName, phone, secured.hash, secured.salt, originProvince, actor.id),
       env.DB.prepare("INSERT INTO vehicles(id,user_id,brand,model,model_year,plate,vin,odometer_km) VALUES(?1,?2,?3,?4,?5,?6,NULL,NULL)").bind(vehicleId, id, brand, model, modelYear, plate),
-      env.DB.prepare("INSERT INTO consents(id,user_id,consent_type,version) VALUES(?1,?2,'privacy','2026-08-07-staff')").bind(crypto.randomUUID(), id),
-      env.DB.prepare("INSERT INTO consents(id,user_id,consent_type,version) VALUES(?1,?2,'whatsapp_service','2026-08-07-staff')").bind(crypto.randomUUID(), id),
-      env.DB.prepare("INSERT INTO consents(id,user_id,consent_type,version) VALUES(?1,?2,'marketing','2026-08-07-staff')").bind(crypto.randomUUID(), id),
-      env.DB.prepare("INSERT INTO audit_log(id,actor_user_id,action,entity_type,entity_id,metadata_json) VALUES(?1,?2,'customer.staff_create','user',?3,?4)").bind(crypto.randomUUID(), actor.id, id, JSON.stringify({ customerCode, vehicleId, originProvince, whatsappConsent: true })),
+      env.DB.prepare("INSERT INTO consents(id,user_id,consent_type,version) VALUES(?1,?2,'privacy','2026-08-15-integral-v1')").bind(crypto.randomUUID(), id),
+      env.DB.prepare("INSERT INTO consents(id,user_id,consent_type,version) VALUES(?1,?2,'whatsapp_service','2026-08-15-integral-v1')").bind(crypto.randomUUID(), id),
+      env.DB.prepare("INSERT INTO consents(id,user_id,consent_type,version) VALUES(?1,?2,'marketing','2026-08-15-integral-v1')").bind(crypto.randomUUID(), id),
+      env.DB.prepare("INSERT INTO audit_log(id,actor_user_id,action,entity_type,entity_id,metadata_json) VALUES(?1,?2,'customer.staff_create','user',?3,?4)").bind(crypto.randomUUID(), actor.id, id, JSON.stringify({ customerCode, vehicleId, originProvince, consentVersion: "2026-08-15-integral-v1", purposes: ["privacy", "whatsapp_service", "marketing"] })),
     ];
     if (welcomePoints > 0) {
       statements.push(
