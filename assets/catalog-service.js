@@ -53,7 +53,7 @@
     else if (entry.normalizedTitle.startsWith(term)) value += 80;
     else if (entry.normalizedTitle.includes(term)) value += 55;
     value += tokens.filter((token) => entry.normalizedTitle.includes(token)).length * 18;
-    if (entry.type === "vehicle" && tokens.some((token) => entry.normalizedTitle.includes(token))) value += 22;
+    if (["vehicle", "electrified"].includes(entry.type) && tokens.some((token) => entry.normalizedTitle.includes(token))) value += 22;
     if (entry.type === "accessory") value += 8;
     return value;
   }
@@ -72,6 +72,7 @@
 
   function iconFor(entry) {
     if (entry.type === "vehicle") return '<i class="fa-solid fa-truck-pickup" aria-hidden="true"></i>';
+    if (entry.type === "electrified") return '<i class="fa-solid fa-car-side" aria-hidden="true"></i>';
     if (entry.type === "category") return '<i class="fa-solid fa-layer-group" aria-hidden="true"></i>';
     return '<i class="fa-solid fa-wrench" aria-hidden="true"></i>';
   }

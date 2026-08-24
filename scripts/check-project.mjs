@@ -1,6 +1,7 @@
 import { access, readFile, readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { ECUADOR_PICKUPS } from "../catalog/pickups.mjs";
+import { ELECTRIFIED_VEHICLES } from "../catalog/electrified-vehicles.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const dist = join(root, "dist");
@@ -15,7 +16,7 @@ async function walk(directory) {
   return files.flat();
 }
 
-for (const required of ["index.html", "ingenieria.html", "tough-dog.html", "productos/index.html", "maxlining.html", "maxlining/vehiculos.html", "maxlining/accesorios.html", "maxlining/industrial.html", "maxlining/comparacion.html", "maxlining/aplicador.html", "maxlining/distribuidor.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "catalog/inventory-compatible.json", "catalog/search-index.json", "fichas/tapas-balde-camionetas.html", "fichas/tapa-quadfold.html", "fichas/tapa-enrollable.html", "fichas/tapa-electrica.html", "fichas/rollbar-zr.html", "fichas/tiro-estandar.html", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/maxlining-white.svg", "assets/brand/favicon-maxmotor-v2.svg", "assets/partners/campaign/primero-ecuador.png", "robots.txt", "sitemap.xml", "_headers"]) {
+for (const required of ["index.html", "ingenieria.html", "tough-dog.html", "productos/index.html", "maxlining.html", "maxlining/vehiculos.html", "maxlining/accesorios.html", "maxlining/industrial.html", "maxlining/comparacion.html", "maxlining/aplicador.html", "maxlining/distribuidor.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "camionetas/sinotruk-bolden.html", "hibridos/index.html", "hibridos/deepal-s05.html", "hibridos/geely-ex5.html", "hibridos/byd-shark.html", "catalog/inventory-compatible.json", "catalog/search-index.json", "fichas/tapas-balde-camionetas.html", "fichas/tapa-quadfold.html", "fichas/tapa-enrollable.html", "fichas/tapa-electrica.html", "fichas/rollbar-zr.html", "fichas/tiro-estandar.html", "assets/electrified.css", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/maxlining-white.svg", "assets/brand/favicon-maxmotor-v2.svg", "assets/partners/campaign/primero-ecuador.png", "robots.txt", "sitemap.xml", "_headers"]) {
   try { await access(join(dist, required)); } catch { errors.push(`Falta ${required} en dist`); }
 }
 
@@ -46,6 +47,7 @@ if (urls.some((url) => /\/(?:api|portal|admin|mimaxmotor|console)(?:\/|$)/i.test
 if (!urls.includes("https://maxmotor4x4.com/fichas/tapas-balde-camionetas")) errors.push("La categoria de tapas de balde no esta en el sitemap");
 if (urls.includes("https://maxmotor4x4.com/fichas/tapa-balde-dmax")) errors.push("La landing D-Max duplicada sigue en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/camionetas")) errors.push("El hub de camionetas no esta en el sitemap");
+if (!urls.includes("https://maxmotor4x4.com/hibridos")) errors.push("El hub de hibridos no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/ingenieria")) errors.push("La landing de ingenieria B2B no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/productos/")) errors.push("El hub de productos no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/tough-dog")) errors.push("La landing Tough Dog no esta en el sitemap");
@@ -58,6 +60,11 @@ for (const pickup of ECUADOR_PICKUPS) {
   const path = `camionetas/${pickup.slug}.html`;
   try { await access(join(dist, path)); } catch { errors.push(`Falta ${path} en dist`); }
   if (!urls.includes(`https://maxmotor4x4.com/camionetas/${pickup.slug}`)) errors.push(`Falta ${pickup.slug} en el sitemap`);
+}
+for (const vehicle of ELECTRIFIED_VEHICLES) {
+  const path = `hibridos/${vehicle.slug}.html`;
+  try { await access(join(dist, path)); } catch { errors.push(`Falta ${path} en dist`); }
+  if (!urls.includes(`https://maxmotor4x4.com/hibridos/${vehicle.slug}`)) errors.push(`Falta ${vehicle.slug} en el sitemap`);
 }
 
 const robots = await readFile(join(dist, "robots.txt"), "utf8");
@@ -77,6 +84,7 @@ for (const [vehicle, items] of Object.entries(publicInventory.vehicles || {})) {
 
 const searchIndex = JSON.parse(await readFile(join(dist, "catalog/search-index.json"), "utf8"));
 if (searchIndex.counts?.vehicles !== ECUADOR_PICKUPS.length) errors.push("El buscador no contiene todas las camionetas");
+if (searchIndex.counts?.electrified !== ELECTRIFIED_VEHICLES.length) errors.push("El buscador no contiene todos los electrificados");
 if (!searchIndex.entries?.some((entry) => entry.type === "accessory" && entry.url.startsWith("/fichas/"))) errors.push("El buscador no contiene fichas de accesorios");
 if (searchIndex.entries?.some((entry) => /precio|costo|stock|sku/i.test(Object.keys(entry).join(" ")))) errors.push("El buscador publica campos comerciales internos");
 
@@ -86,6 +94,7 @@ if (!/href="\/MiMaxmotor\?tab=register(?:&amp;offer=welcome)?"/.test(home)) erro
 if (!home.includes('rel="canonical" href="https://maxmotor4x4.com/"')) errors.push("Canonical de produccion ausente en el index");
 if (home.includes('href="/fichas/tapa-balde-dmax"')) errors.push("El index conserva un enlace a la landing D-Max duplicada");
 if (!home.includes('href="/camionetas"')) errors.push("Falta el enlace interno al hub de camionetas");
+if (!home.includes('href="/hibridos"')) errors.push("Falta el enlace interno al hub de hibridos y electricos");
 if (!home.includes('href="/ingenieria"')) errors.push("Falta el acceso a Ingenieria B2B desde el index");
 if (!home.includes('href="/maxlining"')) errors.push("Falta el acceso a Maxlining desde el index");
 if (!home.includes('href="/tough-dog"')) errors.push("Falta el acceso a Tough Dog desde el index");

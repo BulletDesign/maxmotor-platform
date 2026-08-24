@@ -33,7 +33,8 @@ export const ECUADOR_PICKUPS = [
   { slug: "renault-oroch", brand: "Renault", model: "Oroch", aliases: ["Duster Oroch"], focus: "compact", profile: "Una pickup compacta para ciudad y escapadas que prioriza carga práctica y accesorios de bajo peso." },
   { slug: "fiat-titano", brand: "Fiat", model: "Titano", aliases: [], focus: "mixed", profile: "Una camioneta mediana para uso productivo y personal que requiere validar accesorios por versión." },
   { slug: "isuzu-dmax", brand: "Isuzu", model: "D-Max", aliases: ["Isuzu Dmax"], focus: "work", profile: "Una pickup de trabajo reconocida por durabilidad, con aplicaciones que cambian según origen, año y cabina." },
-  { slug: "shineray-t30-t32", brand: "Shineray", model: "T30 / T32", aliases: ["T30", "T32"], focus: "compact", profile: "Pickups compactas de operación urbana para soluciones sencillas de carga y protección." }
+  { slug: "shineray-t30-t32", brand: "Shineray", model: "T30 / T32", aliases: ["T30", "T32"], focus: "compact", profile: "Pickups compactas de operación urbana para soluciones sencillas de carga y protección." },
+  { slug: "sinotruk-bolden", brand: "Sinotruk", model: "Bolden", aliases: ["Bolden Pickup", "Sinotruk Bolden"], focus: "work", profile: "Una pickup de trabajo de nueva generación para protección, carga, remolque y equipamiento funcional validado por versión." },
 ];
 
 export const pickupName = (pickup) => `${pickup.brand} ${pickup.model}`;

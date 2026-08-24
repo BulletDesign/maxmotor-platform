@@ -9,6 +9,7 @@ if (basename(output) !== "dist" || !output.startsWith(root)) throw new Error("Un
 execFileSync(process.execPath, [join(root, "scripts", "generate-accessory-pages.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-featured-products.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-vehicle-pages.mjs")], { cwd: root, stdio: "inherit" });
+execFileSync(process.execPath, [join(root, "scripts", "generate-electrified-pages.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-search-index.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-maxlining-pages.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-sitemap.mjs")], { cwd: root, stdio: "inherit" });
@@ -27,7 +28,7 @@ const files = [
   "mxr.html",
   "data.js",
 ];
-const directories = ["assets", "catalog", "fichas", "productos", "camionetas", "maxlining"];
+const directories = ["assets", "catalog", "fichas", "productos", "camionetas", "hibridos", "maxlining"];
 
 await Promise.all(files.map((file) => cp(join(root, file), join(output, file))));
 await cp(join(root, "portal.html"), join(output, "MiMaxmotor.html"));

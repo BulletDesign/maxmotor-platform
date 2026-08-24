@@ -2,6 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import vm from "node:vm";
 import { ECUADOR_PICKUPS } from "../catalog/pickups.mjs";
+import { ELECTRIFIED_VEHICLES } from "../catalog/electrified-vehicles.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const source = await readFile(resolve(root, "catalog/families.js"), "utf8");
@@ -25,6 +26,8 @@ const pages = [
   { path: "/maxlining/distribuidor", changefreq: "monthly", priority: "0.7" },
   { path: "/camionetas", changefreq: "weekly", priority: "0.9" },
   ...ECUADOR_PICKUPS.map((pickup) => ({ path: `/camionetas/${pickup.slug}`, changefreq: "monthly", priority: "0.8" })),
+  { path: "/hibridos", changefreq: "weekly", priority: "0.9" },
+  ...ELECTRIFIED_VEHICLES.map((vehicle) => ({ path: `/hibridos/${vehicle.slug}`, changefreq: "monthly", priority: "0.8" })),
   { path: "/fichas/tapas-balde-camionetas", changefreq: "weekly", priority: "0.9" },
   ...context.window.MAXMOTOR_FAMILIES.flatMap((family) => family.products).map((product) => ({
     path: `/fichas/${product.slug}`,
