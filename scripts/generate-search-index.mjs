@@ -19,7 +19,7 @@ const productEntries = families.flatMap((family) => family.products.map((product
   description: product.summary,
   url: product.landing || `/fichas/${product.slug}`,
   image: product.image,
-  terms: [family.name, product.name, product.marca, ...(product.features || [])].filter(Boolean).join(" "),
+  terms: [family.name, product.name, product.seoName, product.marca, ...(product.searchTerms || []), ...(product.features || [])].filter(Boolean).join(" "),
 })));
 
 const vehicleEntries = ECUADOR_PICKUPS.map((pickup) => {

@@ -8,7 +8,7 @@ const context = { window: {} };
 vm.createContext(context);
 vm.runInContext(source, context);
 
-const selectedSlugs = ["tapa-quadfold", "tapa-enrollable", "tapa-electrica", "rollbar-zr", "tiro-estandar", "tough-dog"];
+const selectedSlugs = ["toldo-180", "tapa-quadfold", "tapa-enrollable", "tapa-electrica", "rollbar-zr", "tiro-estandar", "tough-dog"];
 const products = context.window.MAXMOTOR_FAMILIES.flatMap((family) => family.products.map((product) => ({ ...product, family: family.name })))
   .filter((product) => selectedSlugs.includes(product.slug))
   .sort((a, b) => selectedSlugs.indexOf(a.slug) - selectedSlugs.indexOf(b.slug));
@@ -47,6 +47,6 @@ const html = `<!doctype html>
   <link rel="stylesheet" href="/assets/shared-shell.css?v=20260810-4"><link rel="stylesheet" href="/assets/type-system.css?v=20260805-2"><link rel="stylesheet" href="/assets/products-hub.css?v=20260820-1"><script src="/assets/site-shell.js?v=20260820-3"></script>
   <script type="application/ld+json">${JSON.stringify(schema)}</script>
 </head>
-<body><maxmotor-header compact></maxmotor-header><main class="product-index"><header class="product-index-hero"><nav aria-label="Migas de pan"><a href="/">Inicio</a><span>/</span>Productos</nav><p>CATALOGO ESENCIAL / ECUADOR</p><h1>Equipo que<br><em>si trabaja.</em></h1><div><p>Seis soluciones de alta demanda para proteger, cargar y controlar tu camioneta. La aplicacion se confirma por modelo, ano y uso.</p><a href="#catalogo">Ver productos <b>↓</b></a></div></header><section id="catalogo" class="product-index-grid" aria-label="Productos destacados">${cards}</section><aside class="product-index-close"><span>NO COMPRES A CIEGAS</span><h2>Primero la camioneta.<br>Despues la pieza.</h2><a href="/camionetas">Buscar por vehiculo <b>→</b></a></aside></main><maxmotor-footer></maxmotor-footer></body></html>`;
+<body><maxmotor-header compact></maxmotor-header><main class="product-index"><header class="product-index-hero"><nav aria-label="Migas de pan"><a href="/">Inicio</a><span>/</span>Productos</nav><p>CATALOGO ESENCIAL / ECUADOR</p><h1>Equipo que<br><em>si trabaja.</em></h1><div><p>Siete soluciones de alta demanda para proteger, cargar y controlar tu camioneta. La aplicacion se confirma por modelo, ano y uso.</p><a href="#catalogo">Ver productos <b>↓</b></a></div></header><section id="catalogo" class="product-index-grid" aria-label="Productos destacados">${cards}</section><aside class="product-index-close"><span>NO COMPRES A CIEGAS</span><h2>Primero la camioneta.<br>Despues la pieza.</h2><a href="/camionetas">Buscar por vehiculo <b>→</b></a></aside></main><maxmotor-footer></maxmotor-footer></body></html>`;
 await writeFile(resolve(output, "index.html"), html, "utf8");
 console.log(`Generated featured product hub with ${products.length} indexable services`);

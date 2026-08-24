@@ -19,7 +19,28 @@
     {
       id: "overland", name: "Overland", code: "OV", icon: "fa-mountain-sun", description: "Sombra, rescate y campamento para salir del mapa.",
       products: [
-        { slug: "toldo-180", name: "Toldo 180", image: cdn + "banner_awning.jpeg", summary: "Cobertura lateral de despliegue rapido para campamento y trabajo.", features: ["Apertura 180 grados", "Montaje lateral", "Versiones Essential y Premium"] },
+        {
+          slug: "toldo-180",
+          name: "Toldo 180",
+          seoName: "Toldo lateral 180 grados para camionetas y 4x4",
+          seoTitle: "Toldo 180 para Camionetas y 4x4 en Ecuador | Maxmotor",
+          metaDescription: "Cotiza un toldo lateral 180 grados para camionetas y 4x4 en Ecuador. Sombra para camping, trabajo y rutas con asesoria tecnica Maxmotor en Ambato y Quito.",
+          image: cdn + "banner_awning.jpeg",
+          summary: "Toldo lateral de 180 grados para crear sombra practica en campamento, trabajo, viajes y rutas 4x4.",
+          searchTerms: ["toldo 180", "toldo lateral 180 grados", "toldo para camioneta", "toldo 4x4", "awning 180", "carpa lateral 4x4", "toldo overland Ecuador"],
+          features: ["Cobertura lateral de 180 grados", "Despliegue rapido para sombra", "Seleccion segun vehiculo y uso"],
+          featureDetails: [
+            "Amplia la zona util junto a la camioneta para proteger del sol y clima durante una parada.",
+            "Una solucion practica para camping, asistencia en ruta, faena y actividades al aire libre.",
+            "Maxmotor confirma espacio, sistema de montaje y aplicacion antes de preparar la cotizacion.",
+          ],
+          faq: [
+            { question: "¿Que es un toldo lateral 180 grados?", answer: "Es una cubierta desplegable que se instala en el costado del vehiculo para generar una zona de sombra de 180 grados. La cobertura final depende del modelo y la configuracion seleccionada." },
+            { question: "¿El toldo 180 sirve para cualquier camioneta o 4x4?", answer: "La aplicacion depende del vehiculo, el rack o soporte disponible y el uso esperado. Maxmotor valida marca, modelo, ano y sistema de montaje antes de cotizar." },
+            { question: "¿Donde instalan toldos 180 en Ecuador?", answer: "Maxmotor brinda asesoria e instalacion en sus sedes de Ambato y Quito, con atencion comercial para clientes de todo Ecuador." },
+            { question: "¿Como cotizo un toldo 180 para mi vehiculo?", answer: "Envia por WhatsApp la marca, modelo, ano y una fotografia lateral del vehiculo. Un asesor revisara compatibilidad y disponibilidad antes de recomendar una configuracion." },
+          ],
+        },
         { slug: "toldo-270", name: "Toldo 270", image: cdn + "toldo_180_essential.jpg", summary: "Zona de sombra ampliada alrededor del vehiculo.", features: ["Cobertura envolvente", "Estructura reforzada", "Configuracion por tamano"] },
         { slug: "winchas", name: "Winchas de Rescate", image: "https://images.pexels.com/photos/18278713/pexels-photo-18278713.jpeg?auto=compress&cs=tinysrgb&w=1600", summary: "Capacidad de recuperacion para rutas exigentes.", features: ["8.000 a 10.000 lb", "Aplicacion universal", "Asesoria de montaje"], photoCredit: "Foto contextual: Semih Kukcu / Pexels" },
         { slug: "grilletes-rescate", name: "Grilletes de Rescate", image: "https://images.pexels.com/photos/11143670/pexels-photo-11143670.jpeg?auto=compress&cs=tinysrgb&w=1600", summary: "Puntos de union robustos para maniobras de recuperacion y remolque.", features: ["Varios acabados", "Uso de rescate", "Seleccion por capacidad"], photoCredit: "Foto contextual: Gaspar Zaldo / Pexels" },

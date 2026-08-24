@@ -49,6 +49,7 @@ if (!urls.includes("https://maxmotor4x4.com/camionetas")) errors.push("El hub de
 if (!urls.includes("https://maxmotor4x4.com/ingenieria")) errors.push("La landing de ingenieria B2B no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/productos/")) errors.push("El hub de productos no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/tough-dog")) errors.push("La landing Tough Dog no esta en el sitemap");
+if (!urls.includes("https://maxmotor4x4.com/fichas/toldo-180")) errors.push("La landing Toldo 180 no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/maxlining")) errors.push("La landing de Maxlining no esta en el sitemap");
 for (const slug of ["vehiculos", "accesorios", "industrial", "comparacion", "aplicador", "distribuidor"]) {
   if (!urls.includes(`https://maxmotor4x4.com/maxlining/${slug}`)) errors.push(`Falta Maxlining ${slug} en el sitemap`);
@@ -88,10 +89,11 @@ if (!home.includes('href="/camionetas"')) errors.push("Falta el enlace interno a
 if (!home.includes('href="/ingenieria"')) errors.push("Falta el acceso a Ingenieria B2B desde el index");
 if (!home.includes('href="/maxlining"')) errors.push("Falta el acceso a Maxlining desde el index");
 if (!home.includes('href="/tough-dog"')) errors.push("Falta el acceso a Tough Dog desde el index");
+if (!home.includes('href="/fichas/toldo-180"')) errors.push("Falta el acceso a Toldo 180 desde el index");
 if (!home.includes('"hasOfferCatalog"')) errors.push("Falta el catalogo semantico del negocio en el index");
 
 const productsHub = await readFile(join(dist, "productos", "index.html"), "utf8");
-for (const product of ["Tapa de Balde Plegable 4 Partes", "Tapa de Balde Corrediza", "Tapa de Balde Corrediza Electrica", "Rollbar ZR", "Barra de Tiro", "Suspension Tough Dog"]) {
+for (const product of ["Toldo 180", "Tapa de Balde Plegable 4 Partes", "Tapa de Balde Corrediza", "Tapa de Balde Corrediza Electrica", "Rollbar ZR", "Barra de Tiro", "Suspension Tough Dog"]) {
   if (!productsHub.includes(product)) errors.push(`Falta producto destacado: ${product}`);
 }
 if (productsHub.includes('"@type":"Product"')) errors.push("El hub usa Product sin precio publico verificable");

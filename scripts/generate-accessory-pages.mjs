@@ -18,7 +18,10 @@ const absolute = (path) => `https://maxmotor4x4.com${path}`;
 for (const family of families) {
   for (const product of family.products) {
     const canonicalPath = `/fichas/${product.slug}`;
-    const description = `${product.summary} Cotiza compatibilidad e instalacion con Maxmotor 4x4 en Ecuador.`;
+    const pageName = product.seoName || product.name;
+    const pageTitle = product.seoTitle || `${product.name} | Maxmotor 4x4 Ecuador`;
+    const socialTitle = product.seoTitle || `${product.name} | Maxmotor 4x4`;
+    const description = product.metaDescription || `${product.summary} Cotiza compatibilidad e instalacion con Maxmotor 4x4 en Ecuador.`;
     const related = family.products.filter((item) => item.slug !== product.slug).slice(0, 3);
     const quote = `https://wa.me/593960855932?text=${encodeURIComponent(`Hola Maxmotor 4x4, quiero cotizar ${product.name}. Mi vehiculo es:`)}`;
     const schema = {
@@ -27,7 +30,7 @@ for (const family of families) {
         {
           "@type": "WebPage",
           "@id": `${absolute(canonicalPath)}#page`,
-          name: product.name,
+          name: pageName,
           description: product.summary,
           url: absolute(canonicalPath),
           inLanguage: "es-EC",
@@ -37,7 +40,7 @@ for (const family of families) {
         {
           "@type": "Service",
           "@id": `${absolute(canonicalPath)}#service`,
-          name: product.name,
+          name: pageName,
           serviceType: `${family.name}: venta, asesoria e instalacion`,
           description: product.summary,
           image: product.image,
@@ -54,6 +57,15 @@ for (const family of families) {
             { "@type": "ListItem", position: 3, name: product.name, item: absolute(canonicalPath) },
           ],
         },
+        ...(product.faq?.length ? [{
+          "@type": "FAQPage",
+          "@id": `${absolute(canonicalPath)}#faq`,
+          mainEntity: product.faq.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: { "@type": "Answer", text: item.answer },
+          })),
+        }] : []),
       ],
     };
     const html = `<!doctype html>
@@ -62,7 +74,7 @@ for (const family of families) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="../">
-  <title>${escapeHtml(product.name)} | Maxmotor 4x4 Ecuador</title>
+  <title>${escapeHtml(pageTitle)}</title>
   <meta name="description" content="${escapeHtml(description)}">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="${absolute(canonicalPath)}">
@@ -73,7 +85,7 @@ for (const family of families) {
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_EC">
   <meta property="og:site_name" content="Maxmotor 4x4">
-  <meta property="og:title" content="${escapeHtml(product.name)} | Maxmotor 4x4">
+  <meta property="og:title" content="${escapeHtml(socialTitle)}">
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${absolute(canonicalPath)}">
   <meta property="og:image" content="${product.image}">
@@ -92,7 +104,7 @@ for (const family of families) {
       <div class="product-hero__copy">
         <nav class="detail-crumbs" aria-label="Migas de pan"><a href="/">Inicio</a> / <a href="/productos/">Productos</a> / ${escapeHtml(product.name)}</nav>
         <span class="eyebrow">${escapeHtml(family.code)} / ${escapeHtml(family.name)}</span>
-        <h1>${escapeHtml(product.name)}</h1>
+        <h1>${escapeHtml(pageName)}</h1>
         <p class="lead">${escapeHtml(product.summary)}</p>
         <a class="hero-cta" href="${quote}" target="_blank" rel="noopener">Cotizar para mi vehiculo <span>+</span></a>
       </div>
@@ -104,9 +116,10 @@ for (const family of families) {
     </section>
     <section class="product-body">
       <div class="section-head"><div><span class="eyebrow">01 / Ventajas</span><h2>Hecho para uso real.</h2></div><p>La aplicacion se selecciona segun marca, modelo, ano y uso del vehiculo. Antes de cotizar confirmamos medidas, anclajes y disponibilidad.</p></div>
-      <div class="feature-grid">${product.features.map((feature, index) => `<article class="feature-card"><b>${String(index + 1).padStart(2, "0")}</b><h3>${escapeHtml(feature)}</h3><p>Configuracion revisada por el equipo tecnico de Maxmotor antes de instalar.</p></article>`).join("")}</div>
+      <div class="feature-grid">${product.features.map((feature, index) => `<article class="feature-card"><b>${String(index + 1).padStart(2, "0")}</b><h3>${escapeHtml(feature)}</h3><p>${escapeHtml(product.featureDetails?.[index] || "Configuracion revisada por el equipo tecnico de Maxmotor antes de instalar.")}</p></article>`).join("")}</div>
       <div class="technical-band"><div class="technical-title"><span class="eyebrow">02 / Aplicacion</span><h2>La pieza correcta.</h2><p>Una misma camioneta puede cambiar por generacion, cabina y mercado. La especificacion final se valida antes de la compra.</p></div><div class="spec-list"><div class="spec-row"><span>Familia</span><strong>${escapeHtml(family.name)}</strong></div><div class="spec-row"><span>Compatibilidad</span><strong>Marca, modelo, ano y version</strong></div><div class="spec-row"><span>Instalacion</span><strong>Ambato y Quito</strong></div><div class="spec-row"><span>Disponibilidad</span><strong>Confirmacion con ventas y bodega</strong></div></div></div>
-      <section class="quote-panel" id="cotizar"><div><span class="eyebrow">03 / Cotizacion</span><h2>Equipa tu proyecto.</h2></div><div><p>Envia marca, modelo, ano y version para recibir una recomendacion correcta.</p><a class="quote-button" href="${quote}" target="_blank" rel="noopener">Cotizar por WhatsApp <span>&nearr;</span></a></div></section>
+      <section class="quote-panel" id="cotizar"><div><span class="eyebrow">03 / Cotizacion</span><h2>Equipa tu proyecto.</h2></div><div><p>Envia marca, modelo, ano y version para recibir una recomendacion correcta.</p><a class="quote-button" href="${quote}" target="_blank" rel="noopener">Cotizar por WhatsApp <span>&nearr;</span></a></div></section>${product.faq?.length ? `
+      <section class="product-faq" id="preguntas"><div class="section-head"><div><span class="eyebrow">04 / Preguntas frecuentes</span><h2>Antes de equipar.</h2></div><p>Respuestas directas para escoger el toldo adecuado y confirmar su aplicacion.</p></div><div class="product-faq__list">${product.faq.map((item) => `<details><summary>${escapeHtml(item.question)}<span>+</span></summary><p>${escapeHtml(item.answer)}</p></details>`).join("")}</div></section>` : ""}
     </section>
 ${related.length ? `    <section class="related"><span class="eyebrow">Mas de ${escapeHtml(family.name)}</span><h2>Continua tu 4x4.</h2><div class="related-grid">${related.map((item) => `<a class="related-card" href="${item.landing || `/fichas/${item.slug}`}"><img src="${item.image}" alt="${escapeHtml(item.name)}" width="560" height="360" loading="lazy"><span><strong>${escapeHtml(item.name)}</strong><small>Ver ficha &nearr;</small></span></a>`).join("")}</div></section>` : ""}
   </main>
