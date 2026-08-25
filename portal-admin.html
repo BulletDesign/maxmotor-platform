@@ -14,7 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/portal.css?v=20260822-1">
   <link rel="stylesheet" href="assets/type-system.css?v=20260805-3">
-  <link rel="stylesheet" href="assets/portal-admin.css?v=20260822-2">
+  <link rel="stylesheet" href="assets/portal-admin.css?v=20260825-1">
   <link rel="stylesheet" href="assets/guided-tour.css?v=20260805-3">
 </head>
 <body class="admin-body">
@@ -74,7 +74,7 @@
             <button id="close-customer-file" class="text-action" type="button">&larr; Volver a clientes</button>
             <div class="customer-file-head"><div><p class="eyebrow">FICHA DE CLIENTE</p><h2 id="file-customer-name">-</h2><span id="file-customer-code">-</span></div><strong id="file-points">0 TP</strong></div>
             <div class="customer-file-grid">
-              <form id="customer-edit-form" class="portal-form admin-card"><h3>Informacion</h3><input name="id" type="hidden"><label>Nombre<input name="fullName" data-normalize="words" required></label><label>Correo<input name="email" type="email" required></label><label>Telefono<input name="phone" required></label><button class="primary-action" type="submit"><span>Guardar cambios</span><b>&rarr;</b></button><button id="suspend-customer" class="danger-action" type="button">Suspender acceso</button><button id="delete-customer" class="danger-action danger-solid" type="button">Eliminar cliente y datos</button></form>
+              <form id="customer-edit-form" class="portal-form admin-card"><h3>Informacion</h3><input name="id" type="hidden"><label>Nombre<input name="fullName" data-normalize="words" required></label><label>Correo<input name="email" type="email" required></label><label>Telefono<input name="phone" required></label><button class="primary-action" type="submit"><span>Guardar cambios</span><b>&rarr;</b></button><button id="resend-credentials" class="credential-action" type="button"><span>Reenviar credenciales</span><b>&nearr;</b></button><p class="credential-action-note">Genera una nueva clave temporal, cierra sesiones anteriores y prepara el mensaje en WhatsApp.</p><button id="suspend-customer" class="danger-action" type="button">Suspender acceso</button><button id="delete-customer" class="danger-action danger-solid" type="button">Eliminar cliente y datos</button></form>
               <form id="customer-invoice-form" class="portal-form admin-card sale-form"><h3>Factura e instalaciones</h3><input name="customerCode" type="hidden"><label>Numero de factura<input name="invoiceNumber" data-normalize="upper" required></label><div class="field-row"><label>Total USD<input name="amount" type="number" min="0.01" step="0.01" required></label><label>Fecha de factura<input name="issuedAt" type="date" required></label></div><label>Vehiculo<select name="vehicleId" required></select></label><label class="points-choice"><input name="awardPoints" type="checkbox" checked><span><strong>Acreditar Traction Points</strong><small>Devuelve el 1,5% de esta compra en TP. Desmarca si la venta ya tiene un descuento que no acumula puntos.</small></span></label><div class="sale-items-heading"><div><strong>Accesorios de esta factura</strong><small>Todos conservaran el mismo numero de factura.</small></div><button type="button" data-add-sale-item>+ Agregar accesorio</button></div><div class="sale-items" data-sale-items></div><button class="add-sale-item-bottom" type="button" data-add-sale-item>+ Agregar otro accesorio</button><p class="form-note">Cada accesorio conserva su propia garantia y seguimiento. La factura y los TP se registran una sola vez.</p><button class="primary-action" type="submit"><span>Registrar factura completa</span><b>&rarr;</b></button></form>
               <form id="vehicle-form" class="portal-form admin-card"><h3>Agregar vehiculo</h3><label>Marca<select name="brand" required><option value="">Selecciona una marca</option></select></label><label>Modelo<input name="model" data-normalize="words" required></label><div class="field-row"><label>Ano<input name="modelYear" type="number" min="1950" max="2030"></label><label>Kilometraje<input name="odometerKm" type="number" min="0" value="0"></label></div><div class="field-row"><label>Placa<input name="plate" data-normalize="upper"></label><label>VIN<input name="vin" data-normalize="upper" maxlength="17"></label></div><button class="primary-action" type="submit"><span>Vincular vehiculo</span><b>&rarr;</b></button></form>
             </div>
@@ -111,6 +111,6 @@
       </div>
     </section>
   </main>
-  <script src="assets/portal-admin.js?v=20260822-2" type="module"></script>
+  <script src="assets/portal-admin.js?v=20260825-1" type="module"></script>
 </body>
 </html>

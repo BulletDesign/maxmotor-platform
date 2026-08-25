@@ -360,6 +360,25 @@ document.addEventListener("change", (event) => {
 document.addEventListener("wheel", (event) => { const select = event.target.closest?.(".sale-form select"); if (select && document.activeElement === select) select.blur(); }, { passive: true });
 
 document.querySelector("#customer-edit-form").addEventListener("submit", async (event) => { event.preventDefault(); const values = Object.fromEntries(new FormData(event.currentTarget)); try { await api(`/api/admin/customers/${values.id}`, { method: "PATCH", body: JSON.stringify(values) }); setMessage(fileMessage, "Ficha actualizada correctamente.", true); await Promise.all([openCustomerFile(values.id), loadCustomers("")]); } catch (error) { setMessage(fileMessage, error.message); } });
+document.querySelector("#resend-credentials").addEventListener("click", async (event) => {
+  if (!activeCustomerId || !confirm("Se generara una nueva contrasena temporal y se cerraran las sesiones actuales del cliente. Continuar?")) return;
+  const button = event.currentTarget;
+  const whatsappWindow = window.open("about:blank", "maxmotor-resend-credentials");
+  button.disabled = true;
+  try {
+    const data = await api(`/api/admin/customers/${activeCustomerId}/credentials`, { method: "POST" });
+    if (whatsappWindow) whatsappWindow.location.href = data.whatsappUrl;
+    else {
+      await navigator.clipboard.writeText(data.message);
+      setMessage(fileMessage, "Credenciales reiniciadas. El navegador bloqueo WhatsApp; el mensaje quedo copiado.", true);
+      return;
+    }
+    setMessage(fileMessage, "Credenciales reiniciadas y mensaje preparado en WhatsApp.", true);
+  } catch (error) {
+    whatsappWindow?.close();
+    setMessage(fileMessage, error.message);
+  } finally { button.disabled = false; }
+});
 document.querySelector("#customer-invoice-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; try { const data = await api("/api/admin/sales", { method: "POST", body: JSON.stringify(salePayload(form)) }); const pointsText = data.awardPoints ? `${Number(data.points).toLocaleString("es-EC")} TP acreditados` : "sin TP por descuento"; setMessage(fileMessage, `Factura registrada: ${data.itemCount} accesorio(s) y ${pointsText}.`, true); form.elements.invoiceNumber.value = ""; form.elements.amount.value = ""; await Promise.all([openCustomerFile(activeCustomerId), loadOverview()]); } catch (error) { setMessage(fileMessage, error.message); } });
 document.querySelector("#vehicle-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; try { await api(`/api/admin/customers/${activeCustomerId}/vehicles`, { method: "POST", body: JSON.stringify(Object.fromEntries(new FormData(form))) }); setMessage(fileMessage, "Vehiculo vinculado correctamente.", true); form.reset(); await Promise.all([openCustomerFile(activeCustomerId), loadCustomers("")]); } catch (error) { setMessage(fileMessage, error.message); } });
 document.querySelector("#file-vehicles").addEventListener("click", async (event) => { const button = event.target.closest("[data-delete-vehicle]"); if (!button || prompt("Escribe ELIMINAR VEHICULO para confirmar") !== "ELIMINAR VEHICULO") return; try { await api(`/api/admin/vehicles/${button.dataset.deleteVehicle}`, { method: "DELETE", body: JSON.stringify({ customerId: activeCustomerId, confirmation: "ELIMINAR VEHICULO" }) }); setMessage(fileMessage, "Vehiculo, instalaciones y garantias eliminados. Los puntos se conservaron.", true); await Promise.all([openCustomerFile(activeCustomerId), loadCustomers("")]); } catch (error) { setMessage(fileMessage, error.message); } });

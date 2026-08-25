@@ -106,6 +106,7 @@
 .credential-warning{color:var(--portal-muted);font-size:.62rem;line-height:1.6}
 .whatsapp-action{width:100%;text-decoration:none;background:#35a853}
 .whatsapp-action:hover{background:#41bd62}
+.credential-action{display:flex;align-items:center;justify-content:space-between;min-height:52px;border:1px solid #35a853;padding:.9rem 1rem;background:rgba(53,168,83,.1);color:#fff;font-size:.68rem;font-weight:900;text-transform:uppercase;cursor:pointer}.credential-action:hover{background:#35a853}.credential-action:disabled{cursor:wait;opacity:.55}.credential-action-note{margin:-.35rem 0 .25rem;color:var(--portal-muted);font-size:.62rem;line-height:1.55}
 .secondary-action{width:100%;min-height:52px;margin-top:.7rem;border:1px solid var(--portal-line);padding:.75rem 1rem;color:#fff;background:transparent;font:800 .72rem var(--font-body);text-transform:uppercase;cursor:pointer}
 @media(max-width:1000px){.onboarding-layout{grid-template-columns:1fr}.onboarding-result{position:static}}
 @media(max-width:580px){.onboarding-form{padding:.8rem}.onboarding-form fieldset{padding:.9rem}.onboarding-result{padding:1rem}.onboarding-result h2{font-size:3rem}}

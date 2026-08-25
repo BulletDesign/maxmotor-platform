@@ -65,6 +65,18 @@ test("the employee portal separates assisted signup from multi-accessory sales",
   assert.match(script, /await openCustomerFile\(onboardedCustomerId\)/);
   assert.match(script, /#customer-invoice-form/);
   assert.match(script, /#onboarding-password/);
+  assert.match(html, /id="resend-credentials"/);
+  assert.match(script, /\/api\/admin\/customers\/\$\{activeCustomerId\}\/credentials/);
+});
+
+test("staff can securely reset and resend customer credentials", async () => {
+  const route = await source("../functions/api/admin/customers/[id]/credentials.js");
+  assert.match(route, /assertSameOrigin\(request\)/);
+  assert.match(route, /requireUser\(request, env\.DB, \["employee", "superadmin"\]\)/);
+  assert.match(route, /hashPassword\(temporaryPassword\)/);
+  assert.match(route, /DELETE FROM sessions WHERE user_id=\?1/);
+  assert.match(route, /customer\.credentials_resend/);
+  assert.doesNotMatch(route, /JSON\.stringify\(\{[^}]*temporaryPassword/);
 });
 
 test("dismissed promotion and completed tours persist across browser sessions", async () => {

@@ -1,5 +1,6 @@
 import { requireUser } from "../../_lib/auth.js";
 import { hashPassword } from "../../_lib/crypto.js";
+import { customerCredentialsMessage } from "../../_lib/customer-credentials.js";
 import { createFriendlyCustomerCode, generateTemporaryPassword, normalizeWhatsappPhone } from "../../_lib/customer-identity.js";
 import { assertSameOrigin, handleError, HttpError, json, readJson } from "../../_lib/http.js";
 import { isWelcomePointsEligible, WELCOME_POINTS_AMOUNT } from "../../_lib/promotions.js";
@@ -12,20 +13,6 @@ export async function onRequestGet({ request, env }) {
     const result = await env.DB.prepare("SELECT u.id,u.customer_code AS customerCode,u.full_name AS fullName,u.email,u.phone,u.status,(SELECT COUNT(*) FROM vehicles v WHERE v.user_id=u.id) AS vehicleCount,(SELECT COALESCE(SUM(points),0) FROM points_ledger p WHERE p.user_id=u.id) AS points FROM users u WHERE u.role='customer' AND (?1='' OR u.full_name LIKE ?2 OR u.customer_code LIKE ?2 OR u.email LIKE ?2 OR u.phone LIKE ?2 OR EXISTS(SELECT 1 FROM vehicles v WHERE v.user_id=u.id AND v.plate LIKE ?2)) ORDER BY u.created_at DESC LIMIT 50").bind(query,like).all();
     return json({ customers: result.results || [] });
   } catch (error) { return handleError(error); }
-}
-
-function whatsappMessage({ fullName, customerCode, email, temporaryPassword, welcomePoints, welcomeCoupon }) {
-  const firstName = fullName.split(/\s+/)[0];
-  const benefits = [
-    "Historial de accesorios instalados",
-    "Garantias y proximas revisiones",
-    "Traction Points y recompensas",
-    "Estado de tus solicitudes y beneficios",
-  ].map((item) => `- ${item}`).join("\n");
-  const welcome = welcomePoints > 0
-    ? `\nBeneficio de bienvenida: ${welcomePoints} TP${welcomeCoupon ? ` y cupon 10% OFF ${welcomeCoupon}` : ""}.`
-    : "";
-  return `Hola ${firstName}, tu cuenta Mi Maxmotor ya esta activa.\n\nMaxmotor ID: ${customerCode}\nUsuario: ${email}\nContrasena temporal: ${temporaryPassword}\n\nDesde Mi Maxmotor puedes revisar:\n${benefits}${welcome}\n\nIngresa en https://maxmotor4x4.com/MiMaxmotor\nPor seguridad, cambia tu contrasena desde la seccion Cuenta al ingresar.\n\nTOOLS NOT TOYS`;
 }
 
 export async function onRequestPost({ request, env }) {
@@ -75,7 +62,7 @@ export async function onRequestPost({ request, env }) {
       );
     }
     await env.DB.batch(statements);
-    const message = whatsappMessage({ fullName, customerCode, email, temporaryPassword, welcomePoints, welcomeCoupon });
+    const message = customerCredentialsMessage({ fullName, customerCode, email, temporaryPassword, welcomePoints, welcomeCoupon });
     return json({
       customer: { id, customerCode, fullName, email, phone, vehicleId },
       credentials: { login: email, temporaryPassword },
