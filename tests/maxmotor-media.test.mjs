@@ -35,16 +35,23 @@ test("product pages expose real media in social and structured data", async () =
 });
 
 test("generated media galleries use versioned card layouts and commercial links", async () => {
-  const [vehicle, product] = await Promise.all([
+  const [vehicle, product, lightbox] = await Promise.all([
     readFile(resolve(root, "camionetas/gwm-poer.html"), "utf8"),
     readFile(resolve(root, "fichas/tiro-estandar.html"), "utf8"),
+    readFile(resolve(root, "assets/media-lightbox.js"), "utf8"),
   ]);
   assert.match(vehicle, /seo-product\.css\?v=20260825-2/);
   assert.match(vehicle, /class="vehicle-project-card"/);
   assert.match(vehicle, /href="\/fichas\/bumpers-bullbars-guardachoques"/);
   assert.match(product, /product-detail\.css\?v=20260825-2/);
   assert.match(product, /class="project-gallery__card"/);
-  assert.match(product, /Consultar este producto/);
+  assert.match(product, /Ampliar y cotizar/);
+  assert.match(vehicle, /data-media-lightbox/);
+  assert.match(vehicle, /data-media-quote="https:\/\/wa\.me\/593960855932/);
+  assert.match(product, /media-lightbox\.js\?v=20260825-2/);
+  assert.match(lightbox, /setTimeout\(\(\) =>/);
+  assert.match(lightbox, /}, 1000\)/);
+  assert.match(lightbox, /is-zoomed/);
 });
 
 test("product galleries remain curated instead of dumping the full media bucket", () => {
