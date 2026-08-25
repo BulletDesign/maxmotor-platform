@@ -33,3 +33,21 @@ test("product pages expose real media in social and structured data", async () =
   assert.match(hitch, /Proyectos reales/);
   assert.match(hitch, /application\/ld\+json/);
 });
+
+test("generated media galleries use versioned card layouts and commercial links", async () => {
+  const [vehicle, product] = await Promise.all([
+    readFile(resolve(root, "camionetas/gwm-poer.html"), "utf8"),
+    readFile(resolve(root, "fichas/tiro-estandar.html"), "utf8"),
+  ]);
+  assert.match(vehicle, /seo-product\.css\?v=20260825-2/);
+  assert.match(vehicle, /class="vehicle-project-card"/);
+  assert.match(vehicle, /href="\/fichas\/bumpers-bullbars-guardachoques"/);
+  assert.match(product, /product-detail\.css\?v=20260825-2/);
+  assert.match(product, /class="project-gallery__card"/);
+  assert.match(product, /Consultar este producto/);
+});
+
+test("product galleries remain curated instead of dumping the full media bucket", () => {
+  assert.ok(productMedia("bullbar-overland").length <= 6);
+  assert.ok(productMedia("bullbar-raptor").length <= 6);
+});

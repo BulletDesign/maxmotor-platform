@@ -57,6 +57,10 @@ const asMedia = (file, family) => ({
 export const MAXMOTOR_MEDIA = Object.entries(groups).flatMap(([family, files]) => files.map((file) => asMedia(file, family)));
 export const mediaGroup = (family) => MAXMOTOR_MEDIA.filter((item) => item.family === family);
 
+const mediaFiles = (...files) => files
+  .map((file) => MAXMOTOR_MEDIA.find((item) => item.file === file))
+  .filter(Boolean);
+
 export const PRODUCT_MEDIA = {
   "tapa-trifold": mediaGroup("covers"),
   "tapa-quadfold": mediaGroup("covers"),
@@ -77,8 +81,22 @@ export const PRODUCT_MEDIA = {
   lightforce: mediaGroup("lighting"),
   hella: mediaGroup("lighting"),
   "luces-led": mediaGroup("lighting"),
-  "bullbar-overland": mediaGroup("frontProtection"),
-  "bullbar-raptor": mediaGroup("frontProtection"),
+  "bullbar-overland": mediaFiles(
+    "Bummper_poer_overland.webp",
+    "bullbar_delantero_poer.webp",
+    "bullbar_delantero_wrangler.webp",
+    "bullbar_ldelantero_andcruiser.webp",
+    "bumper_landcruiser.webp",
+    "Bullbar_y_bumper_delantero_seguridad.webp",
+  ),
+  "bullbar-raptor": mediaFiles(
+    "bullbar_delantero_toyota_hilux_gr.webp",
+    "bullbar_delantero_mazda_bt50.webp",
+    "bumper_delantero_toyota_hilux_gr.webp",
+    "bumper_bt50_mazda.webp",
+    "bumper_delantero_seguridad.webp",
+    "bumper_delantero_policia_ciauto.webp",
+  ),
 };
 
 const vehicleFiles = {

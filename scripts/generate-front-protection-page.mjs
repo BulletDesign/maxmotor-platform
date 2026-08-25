@@ -1,6 +1,7 @@
 import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { FRONT_PROTECTION_MEDIA as media, FRONT_PROTECTION_ROUTE as route } from "../catalog/front-protection.mjs";
+import { mediaGroup } from "../catalog/maxmotor-media.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const canonical = `https://maxmotor4x4.com${route}`;
@@ -10,12 +11,13 @@ const products = [
   { id: "bullbars-metalicos", index: "02", title: "Bullbars metálicos", image: media.bullbars, copy: "Protección frontal desarrollada alrededor de la geometría real del vehículo, con control de fijaciones, sensores, ventilación e interferencias.", facts: ["Captura dimensional", "Integración controlada", "Acabado electrostático"] },
   { id: "guardachoques-4x4", index: "03", title: "Guardachoques 4x4", image: media.guardachoques, copy: "Soluciones frontales para trabajo, flota y aventura que priorizan protección funcional, mantenibilidad y montaje repetible.", facts: ["Uso real", "Producción nacional", "Instalación técnica"] },
 ];
+const realProjects = mediaGroup("frontProtection");
 
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
     { "@type": "WebPage", "@id": `${canonical}#page`, url: canonical, name: "Bumpers, bullbars y guardachoques metálicos 4x4", description: "Bumpers metálicos, bullbars y guardachoques de acero para camionetas 4x4 en Ecuador, desarrollados e instalados por Maxmotor.", primaryImageOfPage: { "@type": "ImageObject", contentUrl: media.hero.src, caption: media.hero.alt }, inLanguage: "es-EC" },
-    { "@type": "Service", "@id": `${canonical}#service`, name: "Diseño e instalación de protección frontal 4x4", provider: { "@type": "AutoPartsStore", name: "Maxmotor 4x4", url: "https://maxmotor4x4.com/" }, areaServed: { "@type": "Country", name: "Ecuador" }, serviceType: ["Bumpers metálicos", "Bullbars metálicos", "Guardachoques 4x4"], image: products.map((item) => item.image.src) },
+    { "@type": "Service", "@id": `${canonical}#service`, name: "Diseño e instalación de protección frontal 4x4", provider: { "@type": "AutoPartsStore", name: "Maxmotor 4x4", url: "https://maxmotor4x4.com/" }, areaServed: { "@type": "Country", name: "Ecuador" }, serviceType: ["Bumpers metálicos", "Bullbars metálicos", "Guardachoques 4x4"], image: realProjects.map((item) => item.src) },
     { "@type": "ItemList", name: "Protección frontal Maxmotor", itemListElement: products.map((item, index) => ({ "@type": "ListItem", position: index + 1, name: item.title, url: `${canonical}#${item.id}` })) },
     { "@type": "FAQPage", mainEntity: [
       { "@type": "Question", name: "¿Cuál es la diferencia entre bumper, bullbar y guardachoques?", acceptedAnswer: { "@type": "Answer", text: "Bumper suele describir un reemplazo frontal completo; bullbar, una estructura de protección integrada; guardachoques es el término general usado para soluciones frontales. La configuración correcta depende del vehículo y del uso." } },

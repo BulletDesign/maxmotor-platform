@@ -31,7 +31,7 @@ const pages = [
   { path: "/hibridos", changefreq: "weekly", priority: "0.9" },
   ...ELECTRIFIED_VEHICLES.map((vehicle) => ({ path: `/hibridos/${vehicle.slug}`, changefreq: "monthly", priority: "0.8" })),
   { path: "/fichas/tapas-balde-camionetas", changefreq: "weekly", priority: "0.9" },
-  { path: FRONT_PROTECTION_ROUTE, changefreq: "monthly", priority: "0.9", images: Object.values(FRONT_PROTECTION_MEDIA).map((image) => image.src) },
+  { path: FRONT_PROTECTION_ROUTE, changefreq: "monthly", priority: "0.9", images: [...new Set([...Object.values(FRONT_PROTECTION_MEDIA).map((image) => image.src), ...MAXMOTOR_MEDIA.filter((item) => item.family === "frontProtection").map((item) => item.src)])] },
   ...context.window.MAXMOTOR_FAMILIES.flatMap((family) => family.products).map((product) => ({
     path: `/fichas/${product.slug}`,
     changefreq: "monthly",
