@@ -1,6 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { ECUADOR_PICKUPS, pickupName } from "../catalog/pickups.mjs";
+import { firstMedia, vehicleMedia } from "../catalog/maxmotor-media.mjs";
 import { INVENTORY_CATEGORIES } from "./inventory-compatibility.mjs";
 
 const root = resolve(import.meta.dirname, "..");
@@ -10,15 +11,50 @@ await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 
 const products = {
-  cover: { name: "Tapas de balde", href: "/fichas/tapas-balde-camionetas", image: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_tapa_trifold.jpeg", copy: "Rígidas, plegables, enrollables, eléctricas o de lona según año, cabina y medidas." },
-  liner: { name: "Recubrimiento de poliuretano", href: "/#main-catalog", image: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_seguro.jpeg", copy: "Protección aplicada en caliente para trabajo, carga diaria y uso severo." },
+  cover: { name: "Tapas de balde", href: "/fichas/tapas-balde-camionetas", image: firstMedia("covers"), copy: "Rígidas, plegables, enrollables, eléctricas o de lona según año, cabina y medidas." },
+  liner: { name: "Recubrimiento de poliuretano", href: "/maxlining/vehiculos", image: firstMedia("polyurethane"), copy: "Protección aplicada en caliente para trabajo, carga diaria y uso severo." },
   suspension: { name: "Suspensión Tough Dog", href: "/tough-dog", image: "https://www.toughdog.com.au/site/DefaultSite/skins/toughdog_2019/images/products-intro-shock-absorbers.jpg", copy: "Distribución para Ecuador y configuración según carga, altura y tipo de conducción." },
-  hitch: { name: "Barras de tiro", href: "/fichas/tiro-hd", image: "https://images.pexels.com/photos/33566025/pexels-photo-33566025.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Fabricación y montaje para remolque o portacarga, con aplicación validada." },
-  bullbar: { name: "Bullbars y guardachoques", href: "/fichas/bullbar-overland", image: "https://images.pexels.com/photos/5628354/pexels-photo-5628354.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Protección frontal, rescate e integración de iluminación según proyecto." },
-  rollbar: { name: "Rollbars MXR", href: "/fichas/rollbar-rr1", image: "https://images.pexels.com/photos/13644357/pexels-photo-13644357.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Fabricación nacional con acabados y configuración para cada camioneta." },
-  rack: { name: "Bed racks y carga", href: "/fichas/bed-rack", image: "https://images.pexels.com/photos/28639111/pexels-photo-28639111.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Estructuras y sistemas para organizar herramientas o equipo overland." },
+  hitch: { name: "Barras de tiro", href: "/fichas/tiro-hd", image: firstMedia("towing"), copy: "Fabricación y montaje para remolque o portacarga, con aplicación validada." },
+  bullbar: { name: "Bullbars y guardachoques", href: "/fichas/bullbar-overland", image: firstMedia("frontProtection"), copy: "Protección frontal, rescate e integración de iluminación según proyecto." },
+  rollbar: { name: "Rollbars MXR", href: "/fichas/rollbar-rr1", image: firstMedia("rollbars"), copy: "Fabricación nacional con acabados y configuración para cada camioneta." },
+  rack: { name: "Bed racks y carga", href: "/fichas/bed-rack", image: firstMedia("racks"), copy: "Estructuras y sistemas para organizar herramientas o equipo overland." },
   steps: { name: "Estribos y rock sliders", href: "/fichas/estribos-rock", image: "https://images.pexels.com/photos/12138568/pexels-photo-12138568.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Acceso lateral y protección adaptados al uso del vehículo." },
   lights: { name: "Iluminación auxiliar", href: "/fichas/luces-led", image: "https://images.pexels.com/photos/7127593/pexels-photo-7127593.jpeg?auto=compress&cs=tinysrgb&w=1200", copy: "Barras LED, faros y neblineros con instalación eléctrica profesional." },
+};
+
+const neutralProductImages = {
+  cover: "https://images.pexels.com/photos/4489749/pexels-photo-4489749.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  liner: "https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  suspension: "https://images.pexels.com/photos/3806288/pexels-photo-3806288.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  hitch: "https://images.pexels.com/photos/33566025/pexels-photo-33566025.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  bullbar: "https://images.pexels.com/photos/5628354/pexels-photo-5628354.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  rollbar: "https://images.pexels.com/photos/13644357/pexels-photo-13644357.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  rack: "https://images.pexels.com/photos/28639111/pexels-photo-28639111.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  steps: products.steps.image,
+  lights: products.lights.image,
+};
+
+const categoryFamily = {
+  covers: "covers",
+  bedProtection: "polyurethane",
+  suspension: "suspension",
+  towing: "towing",
+  cargo: "racks",
+  rollbars: "rollbars",
+  lighting: "lighting",
+  electrical: "lighting",
+  exterior: "frontProtection",
+};
+
+const neutralCategoryImages = {
+  covers: neutralProductImages.cover,
+  bedProtection: neutralProductImages.liner,
+  bedAccessories: neutralProductImages.cover,
+  suspension: neutralProductImages.suspension,
+  towing: neutralProductImages.hitch,
+  cargo: neutralProductImages.rack,
+  rollbars: neutralProductImages.rollbar,
+  exterior: neutralProductImages.bullbar,
 };
 
 const heroMedia = {
@@ -42,7 +78,7 @@ const focusProducts = {
 const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 const absolute = (path) => `https://maxmotor4x4.com${path}`;
 
-function inventorySectionFor(pickup, items) {
+function inventorySectionFor(pickup, items, realProjects) {
   if (!items.length) return "";
   const name = pickupName(pickup);
   const groups = Map.groupBy(items, (item) => item.category);
@@ -55,7 +91,9 @@ function inventorySectionFor(pickup, items) {
       const itemWhatsapp = `https://wa.me/593960855932?text=${encodeURIComponent(`Hola Maxmotor 4x4, vi ${item.name} en el catálogo para ${name}. Quiero confirmar disponibilidad y compatibilidad para año / cabina / versión:`)}`;
       return `<article class="inventory-compatible-card" id="${id}"><p>${escapeHtml(meta.label)}</p><h3>${escapeHtml(item.name)}</h3><span>Nombre comercial. Confirmamos aplicación exacta antes de cotizar.</span><a href="${itemWhatsapp}" target="_blank" rel="noopener">Consultar este accesorio <b>↗</b></a></article>`;
     }).join("\n");
-    return `<details class="inventory-category"><summary><img src="${meta.image}" alt="${escapeHtml(meta.label)} para camionetas" width="190" height="110" loading="lazy" decoding="async"><span><small>${escapeHtml(meta.copy)}</small><strong>${escapeHtml(meta.label)}</strong><b>${productsInCategory.length} ${productsInCategory.length === 1 ? "opción" : "opciones"}</b></span><i aria-hidden="true">+</i></summary><div class="inventory-compatible-grid">${productMarkup}</div></details>`;
+    const exactImage = realProjects.find((item) => item.family === categoryFamily[category]);
+    const categoryImage = exactImage?.src || neutralCategoryImages[category] || meta.image;
+    return `<details class="inventory-category"><summary><img src="${categoryImage}" alt="${escapeHtml(meta.label)} para camionetas" width="190" height="110" loading="lazy" decoding="async"><span><small>${escapeHtml(meta.copy)}</small><strong>${escapeHtml(meta.label)}</strong><b>${productsInCategory.length} ${productsInCategory.length === 1 ? "opción" : "opciones"}</b></span><i aria-hidden="true">+</i></summary><div class="inventory-compatible-grid">${productMarkup}</div></details>`;
   }).join("\n");
   const whatsapp = `https://wa.me/593960855932?text=${encodeURIComponent(`Hola Maxmotor 4x4, quiero revisar los ${items.length} accesorios registrados para ${name}. Año / cabina / versión:`)}`;
 
@@ -66,7 +104,9 @@ function pageFor(pickup) {
   const name = pickupName(pickup);
   const inventoryItems = inventoryCatalog.vehicles[pickup.slug] || [];
   const selected = focusProducts[pickup.focus].map((key) => products[key]);
-  const hero = heroMedia[pickup.focus];
+  const realProjects = vehicleMedia(pickup.slug);
+  const genericHero = heroMedia[pickup.focus];
+  const hero = realProjects[0] ? { src: realProjects[0].src, position: "center", credit: realProjects[0].credit } : genericHero;
   const searchTitle = `Tapas de Balde y Accesorios ${name} | Maxmotor`;
   const title = searchTitle.length <= 60 ? searchTitle : `Tapas y Accesorios ${name.replace("Mitsubishi ", "")} | Maxmotor`;
   const description = `Equipa tu ${name} con tapas de balde, suspensión, barras de tiro, protección y accesorios 4x4. Validamos compatibilidad e instalamos en Ecuador.`;
@@ -76,7 +116,7 @@ function pageFor(pickup) {
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
-      { "@type": "WebPage", "@id": `${absolute(`/camionetas/${pickup.slug}`)}#page`, name: title, description, url: absolute(`/camionetas/${pickup.slug}`), inLanguage: "es-EC", about: { "@type": "Vehicle", name, alternateName: pickup.aliases } },
+      { "@type": "WebPage", "@id": `${absolute(`/camionetas/${pickup.slug}`)}#page`, name: title, description, url: absolute(`/camionetas/${pickup.slug}`), inLanguage: "es-EC", primaryImageOfPage: { "@type": "ImageObject", contentUrl: hero.src }, image: realProjects.map((item) => item.src), about: { "@type": "Vehicle", name, alternateName: pickup.aliases } },
       { "@type": "BreadcrumbList", itemListElement: [
         { "@type": "ListItem", position: 1, name: "Inicio", item: absolute("/") },
         { "@type": "ListItem", position: 2, name: "Camionetas", item: absolute("/camionetas") },
@@ -93,9 +133,11 @@ function pageFor(pickup) {
   };
   const cards = selected.map((product, index) => {
     const productWhatsapp = `https://wa.me/593960855932?text=${encodeURIComponent(`Hola Maxmotor 4x4, quiero cotizar ${product.name} para mi ${name}. Año / cabina / versión:`)}`;
-    return `<article><a class="vehicle-card-media" href="${product.href}" aria-label="Ver ${escapeHtml(product.name)}"><img src="${product.image}" alt="${escapeHtml(product.name)} para camionetas 4x4" width="560" height="360" loading="lazy" decoding="async"></a><div class="vehicle-card-copy"><span>${String(index + 1).padStart(2, "0")}</span><h3><a href="${product.href}">${escapeHtml(product.name)}</a></h3><p>${escapeHtml(product.copy)}</p><a class="vehicle-card-cta" href="${productWhatsapp}" target="_blank" rel="noopener">Cotizar para ${escapeHtml(pickup.model)} <b>↗</b></a></div></article>`;
+    const productKey = Object.entries(products).find(([, value]) => value === product)?.[0];
+    const exactImage = realProjects.find((item) => (product === products.cover && item.family === "covers") || (product === products.liner && item.family === "polyurethane") || (product === products.hitch && item.family === "towing") || (product === products.bullbar && item.family === "frontProtection") || (product === products.rollbar && item.family === "rollbars") || (product === products.rack && item.family === "racks"));
+    return `<article><a class="vehicle-card-media" href="${product.href}" aria-label="Ver ${escapeHtml(product.name)}"><img src="${exactImage?.src || neutralProductImages[productKey] || product.image}" alt="${escapeHtml(exactImage?.alt || `${product.name} para camionetas 4x4`)}" width="560" height="360" loading="lazy" decoding="async"></a><div class="vehicle-card-copy"><span>${String(index + 1).padStart(2, "0")}</span><h3><a href="${product.href}">${escapeHtml(product.name)}</a></h3><p>${escapeHtml(product.copy)}</p><a class="vehicle-card-cta" href="${productWhatsapp}" target="_blank" rel="noopener">Cotizar para ${escapeHtml(pickup.model)} <b>↗</b></a></div></article>`;
   }).join("\n");
-  const inventorySection = inventorySectionFor(pickup, inventoryItems);
+  const inventorySection = inventorySectionFor(pickup, inventoryItems, realProjects);
   const aliasText = pickup.aliases.length ? `También buscan este modelo como ${pickup.aliases.join(", ")}.` : `Confirmamos la aplicación exacta con el año, la cabina y la versión de tu camioneta.`;
   return `<!doctype html>
 <html lang="es-EC">
@@ -142,7 +184,8 @@ function pageFor(pickup) {
       <div class="dmax-section-title"><p class="dmax-kicker">01 / HOT SELLERS</p><h2 id="accessory-title">Herramientas.<br>No juguetes.</h2><p>${escapeHtml(aliasText)} No publicamos compatibilidades genéricas: primero entendemos el uso y después confirmamos el componente.</p></div>
       <div class="dmax-option-grid vehicle-accessory-grid">${cards}</div>
     </section>
-    <aside class="vehicle-maxlining"><div><p class="dmax-kicker">MAXLINING / RECUBRIMIENTO DE POLIURETANO</p><h2>El balde de tu ${escapeHtml(pickup.model)} también trabaja.</h2><p>Protección aplicada para carga, fricción y humedad. Una alternativa profesional al protector plástico, la brea y el batepiedra, con evaluación previa del estado real del balde.</p><div><a class="dmax-button" href="/maxlining/vehiculos">Conocer Maxlining <b>→</b></a><a href="/maxlining/comparacion">Comparar soluciones ↓</a></div></div><img src="https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&w=1500&q=82" alt="Recubrimiento de balde disponible para ${escapeHtml(name)}" width="1500" height="1000" loading="lazy" decoding="async"></aside>
+    <aside class="vehicle-maxlining"><div><p class="dmax-kicker">MAXLINING / RECUBRIMIENTO DE POLIURETANO</p><h2>El balde de tu ${escapeHtml(pickup.model)} también trabaja.</h2><p>Protección aplicada para carga, fricción y humedad. Una alternativa profesional al protector plástico, la brea y el batepiedra, con evaluación previa del estado real del balde.</p><div><a class="dmax-button" href="/maxlining/vehiculos">Conocer Maxlining <b>→</b></a><a href="/maxlining/comparacion">Comparar soluciones ↓</a></div></div><img src="${realProjects.find((item) => item.family === "polyurethane")?.src || firstMedia("polyurethane")}" alt="Recubrimiento de balde disponible para ${escapeHtml(name)}" width="1500" height="1000" loading="lazy" decoding="async"></aside>${realProjects.length ? `
+    <section class="vehicle-projects" aria-labelledby="vehicle-projects-title"><div class="dmax-section-title"><p class="dmax-kicker">PROYECTOS REALES / MAXMOTOR</p><h2 id="vehicle-projects-title">Hecho sobre<br>${escapeHtml(pickup.model)}.</h2><p>Imágenes de trabajos reales identificados para este modelo. La aplicación se confirma según año, cabina y versión.</p></div><div class="vehicle-projects__grid">${realProjects.map((item) => `<figure><img src="${item.src}" alt="${escapeHtml(item.alt)}" width="1200" height="900" loading="lazy" decoding="async"><figcaption>${escapeHtml(item.title)}</figcaption></figure>`).join("")}</div></section>` : ""}
 ${inventorySection ? `    ${inventorySection}\n` : ""}    <aside class="vehicle-sales-banner"><img src="https://images.pexels.com/photos/7326681/pexels-photo-7326681.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="Experiencia overland con una camioneta 4x4" width="1600" height="900" loading="lazy" decoding="async"><div><p class="dmax-kicker">PROYECTO COMPLETO / UN SOLO EQUIPO</p><h2>De trabajo.<br>A inolvidable.</h2><p>No compres piezas sueltas sin una estrategia. Un asesor puede organizar protección, carga, suspensión e iluminación como un solo proyecto.</p><a class="dmax-button" href="${whatsapp}" target="_blank" rel="noopener">Diseñar mi proyecto <b>↗</b></a></div></aside>
     <section class="dmax-fit">
       <div><p class="dmax-kicker">${inventoryItems.length ? "03" : "02"} / COMPATIBILIDAD</p><h2>Tu versión.<br>La pieza correcta.</h2><p>Una misma ${escapeHtml(pickup.model)} puede cambiar entre generaciones, tipos de cabina y mercados. Envíanos año, cabina, versión y una fotografía para validar antes de instalar.</p></div>

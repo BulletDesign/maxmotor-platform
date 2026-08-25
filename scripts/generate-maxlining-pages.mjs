@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { firstMedia, mediaUrl } from "../catalog/maxmotor-media.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const output = resolve(root, "maxlining");
@@ -50,6 +51,7 @@ const page = ({ slug, title, description, kicker, headline, lead, image, imageAl
     name: title.split("|")[0].trim(),
     description,
     url: `https://maxmotor4x4.com/maxlining/${slug}`,
+    image,
     areaServed: { "@type": "Country", name: "Ecuador" },
     provider: { "@type": "AutoPartsStore", name: "Maxmotor 4x4", url: "https://maxmotor4x4.com/", telephone: "+593960855932" },
   })}</script>
@@ -77,13 +79,13 @@ const pages = [
     kicker: "MAXLINING / VEHÍCULOS Y FLOTAS",
     headline: "Tu balde trabaja.<span>Protégelo como herramienta.</span>",
     lead: "Protección aplicada para baldes nuevos, superficies con desgaste y camionetas que cargan todos los días. Evaluamos el estado real antes de definir preparación y alcance.",
-    image: "https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&w=1900&q=84",
+    image: mediaUrl("recubrimiento_de_poliuretano.webp"),
     imageAlt: "Camioneta pickup de trabajo preparada para carga",
     primary: { label: "Cotizar mi balde", href: whatsapp("Hola Maxmotor 4x4, quiero cotizar recubrimiento Maxlining para el balde de mi camioneta. Modelo: ___ Año: ___"), external: true },
     secondary: { label: "Ver aplicaciones", href: "#aplicaciones" },
     body: `
       <section class="maxlining-story" id="aplicaciones"><div class="maxlining-shell maxlining-story__lead"><div><p class="maxlining-kicker">01 / LA NECESIDAD</p><h2>Recubrimiento de balde.<br>Sin piezas sueltas.</h2></div><p>Un balde plástico puede moverse y ocultar suciedad o humedad. La brea y el batepiedra cumplen funciones distintas y su resultado depende del producto y la preparación. Maxlining se aplica sobre la geometría del balde para crear una capa continua, texturizada y reparable por zonas después de una evaluación.</p></div><div class="maxlining-use-grid maxlining-shell"><article><span>01</span><h3>Balde nuevo</h3><p>Protección temprana frente a carga, fricción, tierra y humedad de uso cotidiano.</p></article><article><span>02</span><h3>Restauración de balde</h3><p>Revisión del desgaste, corrosión visible y reparaciones previas antes de preparar.</p></article><article><span>03</span><h3>Flotas</h3><p>Un proceso repetible para unidades de trabajo con operación y carga similares.</p></article></div></section>
-      <section class="maxlining-split"><img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1500&q=82" alt="Camioneta 4x4 circulando en terreno de trabajo" loading="lazy" width="1500" height="1000"><div><p class="maxlining-kicker">02 / ANTES DE APLICAR</p><h2>Primero vemos el balde.</h2><ul><li>Estado de pintura, golpes y corrosión visible.</li><li>Uso particular, carga frecuente o trabajo severo.</li><li>Elementos que deben desmontarse o protegerse.</li><li>Terminación y alcance acordados antes de ejecutar.</li></ul><a class="maxlining-button" href="/maxlining/comparacion">Comparar soluciones <b>→</b></a></div></section>
+      <section class="maxlining-split"><img src="${mediaUrl("recubrimiento_poliuretano_toyota.webp")}" alt="Recubrimiento de poliuretano Maxlining aplicado a camioneta" loading="lazy" width="1500" height="1000"><div><p class="maxlining-kicker">02 / ANTES DE APLICAR</p><h2>Primero vemos el balde.</h2><ul><li>Estado de pintura, golpes y corrosión visible.</li><li>Uso particular, carga frecuente o trabajo severo.</li><li>Elementos que deben desmontarse o protegerse.</li><li>Terminación y alcance acordados antes de ejecutar.</li></ul><a class="maxlining-button" href="/maxlining/comparacion">Comparar soluciones <b>→</b></a></div></section>
       <section class="maxlining-faq"><div class="maxlining-shell"><p class="maxlining-kicker">03 / BÚSQUEDAS FRECUENTES</p><h2>¿Poliuretano, plástico, brea o batepiedra?</h2><details><summary>¿Maxlining sirve como protector de balde?</summary><p>Sí. Es una alternativa aplicada directamente sobre el balde. La preparación y viabilidad se confirman después de revisar su condición.</p></details><details><summary>¿Se puede aplicar para restaurar un balde usado?</summary><p>Depende del daño. Primero se revisan corrosión, golpes, pintura suelta y reparaciones previas para definir qué debe corregirse antes del recubrimiento.</p></details><details><summary>¿Es lo mismo que brea o batepiedra?</summary><p>No necesariamente. Esos nombres agrupan productos y usos diferentes. Maxlining es un sistema de poliuretano aplicado profesionalmente; conviene comparar sustrato, preparación, uso esperado y mantenimiento.</p></details></div></section>`,
   },
   {
@@ -93,13 +95,13 @@ const pages = [
     kicker: "MAXLINING / ACCESORIOS 4X4",
     headline: "El accesorio recibe golpes.<span>La protección también.</span>",
     lead: "Evaluamos piezas metálicas de uso real para definir si Maxlining es compatible con su geometría, sustrato, anclajes y función.",
-    image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1900&q=84",
+    image: firstMedia("frontProtection"),
     imageAlt: "Fabricación y acabado de componentes metálicos",
     primary: { label: "Evaluar mi accesorio", href: whatsapp("Hola Maxmotor 4x4, quiero evaluar un accesorio para recubrimiento Maxlining. Accesorio: ___ Material: ___"), external: true },
     secondary: { label: "Ver piezas", href: "#piezas" },
     body: `
       <section class="maxlining-story" id="piezas"><div class="maxlining-shell maxlining-story__lead"><div><p class="maxlining-kicker">01 / EQUIPAMIENTO</p><h2>Protección donde<br>sí tiene sentido.</h2></div><p>No todo accesorio debe recubrirse. Revisamos zonas de montaje, roscas, tolerancias, soldaduras y superficies funcionales para proteger únicamente lo que puede recibir la aplicación sin comprometer el ensamble.</p></div><div class="maxlining-use-grid maxlining-shell"><article><span>01</span><h3>Bumpers y defensas</h3><p>Superficies expuestas a roce, trabajo y condiciones exteriores.</p></article><article><span>02</span><h3>Rollbars y racks</h3><p>Acabado texturizado para componentes de carga y estructura auxiliar.</p></article><article><span>03</span><h3>Estribos y sliders</h3><p>Evaluación de áreas de apoyo, anclajes y zonas que deben quedar libres.</p></article></div></section>
-      <section class="maxlining-split"><img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1500&q=82" alt="Accesorios instalados en camioneta 4x4" loading="lazy" width="1500" height="1000"><div><p class="maxlining-kicker">02 / CRITERIO TÉCNICO</p><h2>Función antes que apariencia.</h2><ul><li>Confirmamos material y recubrimientos existentes.</li><li>Protegemos roscas, alojamientos y puntos de ajuste.</li><li>Definimos desmontaje e instalación antes de aplicar.</li><li>Inspeccionamos cobertura y función al terminar.</li></ul><a class="maxlining-button" href="/maxlining/industrial">Ver aplicaciones industriales <b>→</b></a></div></section>`,
+      <section class="maxlining-split"><img src="${mediaUrl("recubrimiento_de_poliuretano.webp")}" alt="Accesorio protegido con recubrimiento de poliuretano Maxlining" loading="lazy" width="1500" height="1000"><div><p class="maxlining-kicker">02 / CRITERIO TÉCNICO</p><h2>Función antes que apariencia.</h2><ul><li>Confirmamos material y recubrimientos existentes.</li><li>Protegemos roscas, alojamientos y puntos de ajuste.</li><li>Definimos desmontaje e instalación antes de aplicar.</li><li>Inspeccionamos cobertura y función al terminar.</li></ul><a class="maxlining-button" href="/maxlining/industrial">Ver aplicaciones industriales <b>→</b></a></div></section>`,
   },
   {
     slug: "industrial",
@@ -108,13 +110,13 @@ const pages = [
     kicker: "MAXLINING / INDUSTRIA Y FLOTAS",
     headline: "Protección para activos.<span>No decoración industrial.</span>",
     lead: "Analizamos sustrato, exposición, operación y mantenimiento antes de proponer una aplicación para superficies o equipos de trabajo.",
-    image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1900&q=84",
+    image: mediaUrl("recubrimiento_de_poliuretano_industrial.webp"),
     imageAlt: "Planta industrial con maquinaria y superficies operativas",
     primary: { label: "Solicitar evaluación B2B", href: whatsapp("Hola Maxmotor 4x4, necesito evaluar una aplicación industrial Maxlining. Superficie: ___ Uso: ___ Ubicación: ___"), external: true },
     secondary: { label: "Ver aplicaciones", href: "#industria" },
     body: `
       <section class="maxlining-story" id="industria"><div class="maxlining-shell maxlining-story__lead"><div><p class="maxlining-kicker">01 / ALCANCE INDUSTRIAL</p><h2>El sustrato decide<br>el proceso.</h2></div><p>Metal, concreto, madera u otros materiales no se preparan igual. Tampoco es lo mismo una rampa, un contenedor o una zona de carga. La visita técnica define compatibilidad, preparación, límites y condiciones de servicio.</p></div><div class="maxlining-use-grid maxlining-shell"><article><span>01</span><h3>Transporte y flotas</h3><p>Áreas de carga y componentes expuestos a operación repetitiva.</p></article><article><span>02</span><h3>Maquinaria</h3><p>Piezas y zonas no críticas seleccionadas después de revisar función y mantenimiento.</p></article><article><span>03</span><h3>Infraestructura</h3><p>Rampas, contenedores y superficies que requieren diagnóstico en sitio.</p></article></div></section>
-      <section class="maxlining-split"><img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1500&q=82" alt="Técnico evaluando un proceso industrial" loading="lazy" width="1500" height="1000"><div><p class="maxlining-kicker">02 / BRIEFING B2B</p><h2>Cuatro datos para empezar.</h2><ul><li>Material y dimensiones aproximadas.</li><li>Tipo de desgaste o exposición.</li><li>Condición actual y reparaciones previas.</li><li>Volumen, ubicación y ventana de trabajo.</li></ul><a class="maxlining-button" href="/ingenieria">Conocer ingeniería Maxmotor <b>→</b></a></div></section>`,
+      <section class="maxlining-split"><img src="${mediaUrl("recubrimiento_de_poliuretano_industrial.webp")}" alt="Aplicación industrial de recubrimiento de poliuretano Maxlining" loading="lazy" width="1500" height="1000"><div><p class="maxlining-kicker">02 / BRIEFING B2B</p><h2>Cuatro datos para empezar.</h2><ul><li>Material y dimensiones aproximadas.</li><li>Tipo de desgaste o exposición.</li><li>Condición actual y reparaciones previas.</li><li>Volumen, ubicación y ventana de trabajo.</li></ul><a class="maxlining-button" href="/ingenieria">Conocer ingeniería Maxmotor <b>→</b></a></div></section>`,
   },
   {
     slug: "comparacion",
@@ -123,7 +125,7 @@ const pages = [
     kicker: "MAXLINING / GUÍA DE DECISIÓN",
     headline: "No toda protección<span>resuelve lo mismo.</span>",
     lead: "Compara por integración, preparación, inspección y uso esperado. Una decisión honesta empieza por entender qué problema necesitas resolver.",
-    image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1900&q=84",
+    image: mediaUrl("recubrimiento_poliuretano_mitsubishi.webp"),
     imageAlt: "Camioneta 4x4 utilizada en condiciones exigentes",
     primary: { label: "Pedir recomendación", href: whatsapp("Hola Maxmotor 4x4, quiero comparar opciones de protección para el balde de mi camioneta. Uso: ___ Modelo: ___"), external: true },
     secondary: { label: "Ver comparación", href: "#comparar" },

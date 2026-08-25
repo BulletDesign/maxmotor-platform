@@ -1,27 +1,29 @@
+import { firstMedia } from "../catalog/maxmotor-media.mjs";
+
 export const INVENTORY_CATEGORIES = {
   covers: {
     label: "Tapas de balde",
-    image: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_tapa_trifold.jpeg",
+    image: firstMedia("covers"),
     copy: "Protección y cierre del balde según medida, cabina y generación.",
   },
   bedProtection: {
     label: "Protectores de balde",
-    image: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/foto_seguro.jpeg",
+    image: firstMedia("polyurethane"),
     copy: "Soluciones para proteger la zona de carga del trabajo y el clima.",
   },
   bedAccessories: {
     label: "Accesorios de balde",
-    image: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/banner2.png",
+    image: firstMedia("racks"),
     copy: "Apertura, seguridad y componentes funcionales para la zona de carga.",
   },
   suspension: {
     label: "Suspensión y control",
-    image: "https://pub-0ffd5554f540471f9047257c4ab3923d.r2.dev/repoimg/suspension_2.jpeg",
+    image: firstMedia("suspension"),
     copy: "Componentes de altura, soporte de carga y respuesta del vehículo.",
   },
   towing: {
     label: "Tiro y remolque",
-    image: "https://images.pexels.com/photos/33566025/pexels-photo-33566025.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    image: firstMedia("towing"),
     copy: "Accesorios para remolque y transporte con aplicación validada.",
   },
   steps: {
@@ -41,17 +43,17 @@ export const INVENTORY_CATEGORIES = {
   },
   cargo: {
     label: "Carga y techo",
-    image: "https://images.pexels.com/photos/28639111/pexels-photo-28639111.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    image: firstMedia("racks"),
     copy: "Organización de carga y soportes para trabajo, viaje y overland.",
   },
   rollbars: {
     label: "Rollbars",
-    image: "https://images.pexels.com/photos/13644357/pexels-photo-13644357.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    image: firstMedia("rollbars"),
     copy: "Estructuras para el balde con configuración específica por camioneta.",
   },
   exterior: {
     label: "Exterior y carrocería",
-    image: "https://images.pexels.com/photos/5628354/pexels-photo-5628354.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    image: firstMedia("frontProtection"),
     copy: "Protección, aerodinámica y acabados exteriores para cada proyecto.",
   },
   interior: {

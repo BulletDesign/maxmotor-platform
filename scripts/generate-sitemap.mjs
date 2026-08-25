@@ -4,6 +4,7 @@ import vm from "node:vm";
 import { ECUADOR_PICKUPS } from "../catalog/pickups.mjs";
 import { ELECTRIFIED_VEHICLES } from "../catalog/electrified-vehicles.mjs";
 import { FRONT_PROTECTION_MEDIA, FRONT_PROTECTION_ROUTE } from "../catalog/front-protection.mjs";
+import { MAXMOTOR_MEDIA, productMedia, vehicleMedia } from "../catalog/maxmotor-media.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const source = await readFile(resolve(root, "catalog/families.js"), "utf8");
@@ -18,15 +19,15 @@ const pages = [
   { path: "/ingenieria", changefreq: "monthly", priority: "0.9" },
   { path: "/productos/", changefreq: "weekly", priority: "0.9" },
   { path: "/tough-dog", changefreq: "weekly", priority: "0.9" },
-  { path: "/maxlining", changefreq: "weekly", priority: "0.9" },
-  { path: "/maxlining/vehiculos", changefreq: "weekly", priority: "0.9" },
-  { path: "/maxlining/accesorios", changefreq: "monthly", priority: "0.8" },
-  { path: "/maxlining/industrial", changefreq: "monthly", priority: "0.8" },
-  { path: "/maxlining/comparacion", changefreq: "monthly", priority: "0.9" },
+  { path: "/maxlining", changefreq: "weekly", priority: "0.9", images: MAXMOTOR_MEDIA.filter((item) => item.family === "polyurethane").map((item) => item.src) },
+  { path: "/maxlining/vehiculos", changefreq: "weekly", priority: "0.9", images: MAXMOTOR_MEDIA.filter((item) => item.family === "polyurethane").map((item) => item.src) },
+  { path: "/maxlining/accesorios", changefreq: "monthly", priority: "0.8", images: [FRONT_PROTECTION_MEDIA.hero.src, ...MAXMOTOR_MEDIA.filter((item) => item.family === "polyurethane").map((item) => item.src)] },
+  { path: "/maxlining/industrial", changefreq: "monthly", priority: "0.8", images: MAXMOTOR_MEDIA.filter((item) => item.file.includes("industrial")).map((item) => item.src) },
+  { path: "/maxlining/comparacion", changefreq: "monthly", priority: "0.9", images: MAXMOTOR_MEDIA.filter((item) => item.family === "polyurethane").map((item) => item.src) },
   { path: "/maxlining/aplicador", changefreq: "monthly", priority: "0.7" },
   { path: "/maxlining/distribuidor", changefreq: "monthly", priority: "0.7" },
   { path: "/camionetas", changefreq: "weekly", priority: "0.9" },
-  ...ECUADOR_PICKUPS.map((pickup) => ({ path: `/camionetas/${pickup.slug}`, changefreq: "monthly", priority: "0.8" })),
+  ...ECUADOR_PICKUPS.map((pickup) => ({ path: `/camionetas/${pickup.slug}`, changefreq: "monthly", priority: "0.8", images: vehicleMedia(pickup.slug).map((item) => item.src) })),
   { path: "/hibridos", changefreq: "weekly", priority: "0.9" },
   ...ELECTRIFIED_VEHICLES.map((vehicle) => ({ path: `/hibridos/${vehicle.slug}`, changefreq: "monthly", priority: "0.8" })),
   { path: "/fichas/tapas-balde-camionetas", changefreq: "weekly", priority: "0.9" },
@@ -35,6 +36,7 @@ const pages = [
     path: `/fichas/${product.slug}`,
     changefreq: "monthly",
     priority: "0.8",
+    images: productMedia(product.slug).map((item) => item.src),
   })),
 ];
 
