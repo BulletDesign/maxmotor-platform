@@ -16,7 +16,7 @@ async function walk(directory) {
   return files.flat();
 }
 
-for (const required of ["index.html", "ingenieria.html", "tough-dog.html", "productos/index.html", "maxlining.html", "maxlining/vehiculos.html", "maxlining/accesorios.html", "maxlining/industrial.html", "maxlining/comparacion.html", "maxlining/aplicador.html", "maxlining/distribuidor.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "camionetas/sinotruk-bolden.html", "hibridos/index.html", "hibridos/deepal-s05.html", "hibridos/geely-ex5.html", "hibridos/byd-shark.html", "catalog/inventory-compatible.json", "catalog/search-index.json", "fichas/tapas-balde-camionetas.html", "fichas/tapa-quadfold.html", "fichas/tapa-enrollable.html", "fichas/tapa-electrica.html", "fichas/rollbar-zr.html", "fichas/tiro-estandar.html", "assets/electrified.css", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/maxlining-white.svg", "assets/brand/favicon-maxmotor-v2.svg", "assets/partners/campaign/primero-ecuador.png", "robots.txt", "sitemap.xml", "_headers"]) {
+for (const required of ["index.html", "ingenieria.html", "tough-dog.html", "productos/index.html", "maxlining.html", "maxlining/vehiculos.html", "maxlining/accesorios.html", "maxlining/industrial.html", "maxlining/comparacion.html", "maxlining/aplicador.html", "maxlining/distribuidor.html", "MiMaxmotor.html", "portal-maxmotor.html", "console.html", "camionetas/index.html", "camionetas/sinotruk-bolden.html", "hibridos/index.html", "hibridos/deepal-s05.html", "hibridos/geely-ex5.html", "hibridos/byd-shark.html", "catalog/inventory-compatible.json", "catalog/search-index.json", "fichas/bumpers-bullbars-guardachoques.html", "fichas/tapas-balde-camionetas.html", "fichas/tapa-quadfold.html", "fichas/tapa-enrollable.html", "fichas/tapa-electrica.html", "fichas/rollbar-zr.html", "fichas/tiro-estandar.html", "assets/front-protection.css", "assets/electrified.css", "assets/mimaxmotor-qr.svg", "assets/brand/maxmotor-logo.svg", "assets/brand/maxlining-white.svg", "assets/brand/favicon-maxmotor-v2.svg", "assets/partners/campaign/primero-ecuador.png", "robots.txt", "sitemap.xml", "_headers"]) {
   try { await access(join(dist, required)); } catch { errors.push(`Falta ${required} en dist`); }
 }
 
@@ -45,6 +45,7 @@ if (urls.length !== new Set(urls).size) errors.push("El sitemap contiene URLs du
 if (urls.some((url) => !url.startsWith("https://maxmotor4x4.com/"))) errors.push("El sitemap contiene URLs fuera del dominio de produccion");
 if (urls.some((url) => /\/(?:api|portal|admin|mimaxmotor|console)(?:\/|$)/i.test(new URL(url).pathname))) errors.push("El sitemap contiene rutas privadas");
 if (!urls.includes("https://maxmotor4x4.com/fichas/tapas-balde-camionetas")) errors.push("La categoria de tapas de balde no esta en el sitemap");
+if (!urls.includes("https://maxmotor4x4.com/fichas/bumpers-bullbars-guardachoques")) errors.push("La categoria de proteccion frontal no esta en el sitemap");
 if (urls.includes("https://maxmotor4x4.com/fichas/tapa-balde-dmax")) errors.push("La landing D-Max duplicada sigue en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/camionetas")) errors.push("El hub de camionetas no esta en el sitemap");
 if (!urls.includes("https://maxmotor4x4.com/hibridos")) errors.push("El hub de hibridos no esta en el sitemap");
@@ -95,6 +96,7 @@ if (!home.includes('rel="canonical" href="https://maxmotor4x4.com/"')) errors.pu
 if (home.includes('href="/fichas/tapa-balde-dmax"')) errors.push("El index conserva un enlace a la landing D-Max duplicada");
 if (!home.includes('href="/camionetas"')) errors.push("Falta el enlace interno al hub de camionetas");
 if (!home.includes('href="/hibridos"')) errors.push("Falta el enlace interno al hub de hibridos y electricos");
+if (!home.includes('href="/fichas/bumpers-bullbars-guardachoques"')) errors.push("Falta el enlace interno a proteccion frontal");
 if (!home.includes('href="/ingenieria"')) errors.push("Falta el acceso a Ingenieria B2B desde el index");
 if (!home.includes('href="/maxlining"')) errors.push("Falta el acceso a Maxlining desde el index");
 if (!home.includes('href="/tough-dog"')) errors.push("Falta el acceso a Tough Dog desde el index");

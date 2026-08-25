@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import vm from "node:vm";
 import { ECUADOR_PICKUPS } from "../catalog/pickups.mjs";
 import { ELECTRIFIED_VEHICLES } from "../catalog/electrified-vehicles.mjs";
+import { FRONT_PROTECTION_MEDIA, FRONT_PROTECTION_ROUTE } from "../catalog/front-protection.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const source = await readFile(resolve(root, "catalog/families.js"), "utf8");
@@ -29,6 +30,7 @@ const pages = [
   { path: "/hibridos", changefreq: "weekly", priority: "0.9" },
   ...ELECTRIFIED_VEHICLES.map((vehicle) => ({ path: `/hibridos/${vehicle.slug}`, changefreq: "monthly", priority: "0.8" })),
   { path: "/fichas/tapas-balde-camionetas", changefreq: "weekly", priority: "0.9" },
+  { path: FRONT_PROTECTION_ROUTE, changefreq: "monthly", priority: "0.9", images: Object.values(FRONT_PROTECTION_MEDIA).map((image) => image.src) },
   ...context.window.MAXMOTOR_FAMILIES.flatMap((family) => family.products).map((product) => ({
     path: `/fichas/${product.slug}`,
     changefreq: "monthly",
@@ -37,9 +39,10 @@ const pages = [
 ];
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${pages.map((page) => `  <url>
     <loc>${site}${page.path}</loc>
+${(page.images || []).map((image) => `    <image:image><image:loc>${image.replaceAll("&", "&amp;")}</image:loc></image:image>`).join("\n")}${page.images?.length ? "\n" : ""}
     <lastmod>${lastmod}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>

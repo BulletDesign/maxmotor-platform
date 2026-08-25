@@ -53,6 +53,7 @@ const categoryEntries = [
   { type: "category", title: "Recubrimiento de poliuretano Maxlining", eyebrow: "Servicio", description: "Proteccion profesional para baldes, carrocerias y superficies de trabajo.", url: "/maxlining/vehiculos", terms: "poliuretano recubrimiento balde protector batepiedra brea maxlining" },
   { type: "category", title: "Todas las camionetas", eyebrow: "Directorio", description: `${ECUADOR_PICKUPS.length} modelos organizados por marca.`, url: "/camionetas", terms: "camionetas vehiculos pickups modelos marcas ecuador" },
   { type: "category", title: "Híbridos y eléctricos", eyebrow: "Directorio", description: `${ELECTRIFIED_VEHICLES.length} modelos electrificados organizados por marca.`, url: "/hibridos", terms: "hibridos electricos deepal geely suzuki changan byd ecuador" },
+  { type: "category", title: "Bumpers, bullbars y guardachoques metálicos", eyebrow: "Protección frontal", description: "Soluciones de acero desarrolladas por vehículo para trabajo, flota y aventura.", url: "/fichas/bumpers-bullbars-guardachoques", terms: "bumper metalico bumpers metalicos bullbar bullbars metalicos guardachoque guardachoques parachoque defensa frontal acero 4x4 ecuador" },
 ];
 
 const payload = {

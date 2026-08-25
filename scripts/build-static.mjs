@@ -7,6 +7,7 @@ const output = join(root, "dist");
 if (basename(output) !== "dist" || !output.startsWith(root)) throw new Error("Unsafe output directory");
 
 execFileSync(process.execPath, [join(root, "scripts", "generate-accessory-pages.mjs")], { cwd: root, stdio: "inherit" });
+execFileSync(process.execPath, [join(root, "scripts", "generate-front-protection-page.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-featured-products.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-vehicle-pages.mjs")], { cwd: root, stdio: "inherit" });
 execFileSync(process.execPath, [join(root, "scripts", "generate-electrified-pages.mjs")], { cwd: root, stdio: "inherit" });
