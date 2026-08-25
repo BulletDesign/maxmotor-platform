@@ -7,6 +7,9 @@ const trackingLabels = { none: "Sin seguimiento", time: "Solo tiempo", mileage: 
 const PROVINCES = ["Azuay", "Bolivar", "Canar", "Carchi", "Chimborazo", "Cotopaxi", "El Oro", "Esmeraldas", "Galapagos", "Guayas", "Imbabura", "Loja", "Los Rios", "Manabi", "Morona Santiago", "Napo", "Orellana", "Pastaza", "Pichincha", "Santa Elena", "Santo Domingo de los Tsachilas", "Sucumbios", "Tungurahua", "Zamora Chinchipe"];
 const PERIOD_LABELS = { day: "Hoy", week: "Esta semana", month: "Este mes" };
 let activePeriod = "month";
+let catalogCache = { families: [], products: [] };
+let pointsCustomers = [];
+let pointsSearchQuery = "";
 
 async function api(path, options = {}) {
   const response = await fetch(path, { credentials: "same-origin", ...options, headers: options.body ? { "content-type": "application/json", ...options.headers } : options.headers });
@@ -44,6 +47,7 @@ function initializeSuperTour() {
       { target: ".leaders-grid", title: "Demanda comercial", body: "Identifica el producto mas vendido y el vehiculo con mas instalaciones para orientar compras a proveedores." },
       { target: ".demographic-grid", title: "Segmentacion", body: "Consulta origen provincial y edades de nuevos usuarios del periodo para planificar publicidad." },
       { target: "#product-form", title: "Catalogo operativo", body: "Define si un producto tiene cobertura y si se controla por tiempo, kilometraje o ambos.", before: () => openSuperView("catalog") },
+      { target: "#points-adjust-form", title: "Ajustes de Traction Points", body: "Busca un cliente y suma o retira TP. Todo ajuste exige motivo y queda registrado en auditoria.", before: () => openSuperView("points") },
       { target: "#reward-form", title: "Traction Rewards", body: "Publica recompensas con costo en puntos, pago restante y limite disponible.", before: () => openSuperView("rewards") },
       { target: "#redemption-list", title: "Control de canjes", body: "Aprueba o rechaza solicitudes; al aprobar se reservan los Traction Points correspondientes.", before: () => openSuperView("redemptions") },
       { target: "#employee-form", title: "Equipo y accesos", body: "Crea empleados, suspende accesos y restablece claves sin exponerlas.", before: () => openSuperView("team") },
@@ -76,10 +80,63 @@ async function loadMetrics(period = activePeriod) {
 
 async function loadCatalog() {
   const catalog = await api("/api/catalog/operational");
+  catalogCache = catalog;
   document.querySelector("#product-form [name='familyId']").innerHTML = catalog.families.filter((item) => Number(item.active)).map((item) => `<option value="${item.id}">${safe(item.name)}</option>`).join("");
   document.querySelector("#reward-form [name='productId']").innerHTML = `<option value="">Selecciona un producto</option>${catalog.products.filter((item) => Number(item.active) && Number(item.familyActive)).map((item) => `<option value="${item.id}">${safe(item.familyName)} / ${safe(item.name)}</option>`).join("")}`;
-  document.querySelector("#product-list").innerHTML = catalog.products.map((item) => `<article class="admin-list-row"><strong>${safe(item.name)}</strong><span>${safe(item.familyName)}</span><small>${Number(item.coverageAvailable) ? `${trackingLabels[item.trackingMode] || item.trackingMode}${item.serviceDays ? ` / ${item.serviceDays} dias` : ""}${item.serviceKm ? ` / ${Number(item.serviceKm).toLocaleString("es-EC")} km` : ""}` : "Garantia limitada"}</small><em>${Number(item.active) ? "Activo" : "Inactivo"}</em></article>`).join("") || '<p class="empty-state">Crea el primer producto operativo.</p>';
+  document.querySelector("#product-list").innerHTML = catalog.products.map((item) => `<article class="admin-list-row"><strong>${safe(item.name)}</strong><span>${safe(item.familyName)}</span><small>${Number(item.coverageAvailable) ? `${trackingLabels[item.trackingMode] || item.trackingMode}${item.serviceDays ? ` / ${item.serviceDays} dias` : ""}${item.serviceKm ? ` / ${Number(item.serviceKm).toLocaleString("es-EC")} km` : ""}` : "Garantia limitada"}</small><div class="product-row-actions"><em>${Number(item.active) ? "Activo" : "Inactivo"}</em><button type="button" data-edit-product="${item.id}">Editar</button></div></article>`).join("") || '<p class="empty-state">Crea el primer producto operativo.</p>';
   syncProductTrackingForm();
+}
+
+function resetProductForm() {
+  const form = document.querySelector("#product-form");
+  form.reset();
+  form.elements.id.value = "";
+  form.elements.active.checked = true;
+  document.querySelector("#product-form-title").textContent = "Nuevo producto operativo";
+  document.querySelector("#product-submit-label").textContent = "Crear producto";
+  document.querySelector("#cancel-product-edit").hidden = true;
+  syncProductTrackingForm();
+}
+
+function editProduct(productId) {
+  const product = catalogCache.products.find((item) => item.id === productId);
+  if (!product) return;
+  const form = document.querySelector("#product-form");
+  form.elements.id.value = product.id;
+  form.elements.familyId.value = product.familyId;
+  form.elements.name.value = product.name;
+  form.elements.coverageAvailable.value = Number(product.coverageAvailable) ? "yes" : "no";
+  form.elements.trackingMode.value = product.trackingMode || "none";
+  form.elements.serviceDays.value = product.serviceDays || 60;
+  form.elements.serviceKm.value = product.serviceKm || 10000;
+  form.elements.active.checked = Boolean(Number(product.active));
+  document.querySelector("#product-form-title").textContent = "Editar producto operativo";
+  document.querySelector("#product-submit-label").textContent = "Guardar cambios";
+  document.querySelector("#cancel-product-edit").hidden = false;
+  syncProductTrackingForm();
+  form.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function renderPointsCustomers() {
+  const container = document.querySelector("#points-customer-list");
+  container.innerHTML = pointsCustomers.length ? pointsCustomers.map((customer) => `<button class="admin-list-row points-customer-row" type="button" data-points-customer="${customer.id}"><strong>${safe(customer.fullName)}<small>${safe(customer.customerCode)}</small></strong><span>${safe(customer.email)}<br>${safe(customer.phone || "Sin teléfono")}</span><small>${Number(customer.pendingReserved || 0).toLocaleString("es-EC")} TP reservados</small><em>${Number(customer.available || 0).toLocaleString("es-EC")} TP disponibles</em></button>`).join("") : '<p class="empty-state">No encontramos clientes con esa búsqueda.</p>';
+}
+
+async function loadPointsCustomers(query) {
+  pointsSearchQuery = query;
+  const data = await api(`/api/superadmin/points?q=${encodeURIComponent(query)}`);
+  pointsCustomers = data.customers || [];
+  renderPointsCustomers();
+}
+
+function selectPointsCustomer(customerId) {
+  const customer = pointsCustomers.find((item) => item.id === customerId);
+  if (!customer) return;
+  const form = document.querySelector("#points-adjust-form");
+  form.hidden = false;
+  form.elements.customerId.value = customer.id;
+  document.querySelector("#points-selected-customer").innerHTML = `<strong>${safe(customer.fullName)}</strong><span>${safe(customer.customerCode)}</span><div><p><small>Saldo total</small><b>${Number(customer.balance || 0).toLocaleString("es-EC")} TP</b></p><p><small>Disponible</small><b>${Number(customer.available || 0).toLocaleString("es-EC")} TP</b></p></div>`;
+  if (matchMedia("(max-width: 900px)").matches) form.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 async function loadRedemptions() {
@@ -115,9 +172,31 @@ document.querySelector("#super-login-form").addEventListener("submit", async (ev
 document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => { document.querySelectorAll("[data-view]").forEach((item) => item.classList.toggle("is-active", item === button)); document.querySelectorAll("[data-panel]").forEach((panel) => { panel.hidden = panel.dataset.panel !== button.dataset.view; }); document.querySelector("#super-title").textContent = button.textContent; }));
 document.querySelectorAll("[data-period]").forEach((button) => button.addEventListener("click", async () => { document.querySelectorAll("[data-period]").forEach((item) => item.classList.toggle("is-active", item === button)); button.disabled = true; try { await loadMetrics(button.dataset.period); } finally { button.disabled = false; } }));
 document.querySelector("#family-form").addEventListener("submit", async (event) => { event.preventDefault(); try { await api("/api/catalog/families", { method: "POST", body: JSON.stringify(Object.fromEntries(new FormData(event.currentTarget))) }); report("#family-message", "Familia creada.", true); event.currentTarget.reset(); await loadCatalog(); } catch (error) { report("#family-message", error.message); } });
-document.querySelector("#product-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); const coverageAvailable = form.elements.coverageAvailable.value === "yes"; try { await api("/api/catalog/operational", { method: "POST", body: JSON.stringify({ ...values, coverageAvailable, trackingMode: coverageAvailable ? form.elements.trackingMode.value : "none" }) }); report("#product-message", "Producto creado.", true); form.reset(); syncProductTrackingForm(); await Promise.all([loadCatalog(), loadMetrics()]); } catch (error) { report("#product-message", error.message); } });
+document.querySelector("#product-form").addEventListener("submit", async (event) => { event.preventDefault(); const form = event.currentTarget; const values = Object.fromEntries(new FormData(form)); const coverageAvailable = form.elements.coverageAvailable.value === "yes"; const editing = Boolean(values.id); try { await api(editing ? `/api/catalog/operational/${values.id}` : "/api/catalog/operational", { method: editing ? "PATCH" : "POST", body: JSON.stringify({ ...values, coverageAvailable, trackingMode: coverageAvailable ? form.elements.trackingMode.value : "none", active: form.elements.active.checked }) }); report("#product-message", editing ? "Producto actualizado." : "Producto creado.", true); resetProductForm(); await Promise.all([loadCatalog(), loadMetrics()]); } catch (error) { report("#product-message", error.message); } });
 document.querySelector("#product-form [name='coverageAvailable']").addEventListener("change", syncProductTrackingForm);
 document.querySelector("#product-form [name='trackingMode']").addEventListener("change", syncProductTrackingForm);
+document.querySelector("#cancel-product-edit").addEventListener("click", resetProductForm);
+document.querySelector("#product-list").addEventListener("click", (event) => { const button = event.target.closest("[data-edit-product]"); if (button) editProduct(button.dataset.editProduct); });
+document.querySelector("#points-search-form").addEventListener("submit", async (event) => { event.preventDefault(); const query = event.currentTarget.elements.query.value.trim(); try { await loadPointsCustomers(query); } catch (error) { report("#points-adjust-message", error.message); } });
+document.querySelector("#points-customer-list").addEventListener("click", (event) => { const button = event.target.closest("[data-points-customer]"); if (button) selectPointsCustomer(button.dataset.pointsCustomer); });
+document.querySelector("#points-adjust-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const values = Object.fromEntries(new FormData(form));
+  const label = values.direction === "add" ? "sumar" : "retirar";
+  if (!confirm(`Confirmar ${label} ${Number(values.points).toLocaleString("es-EC")} TP?`)) return;
+  const submit = form.querySelector("button[type='submit']");
+  submit.disabled = true;
+  try {
+    const data = await api("/api/superadmin/points", { method: "POST", body: JSON.stringify({ ...values, points: Number(values.points) }) });
+    report("#points-adjust-message", `Ajuste registrado: ${data.delta > 0 ? "+" : ""}${Number(data.delta).toLocaleString("es-EC")} TP. Saldo disponible: ${Number(data.available).toLocaleString("es-EC")} TP.`, true);
+    form.elements.points.value = "";
+    form.elements.reason.value = "";
+    await loadPointsCustomers(pointsSearchQuery);
+    selectPointsCustomer(data.customer.id);
+  } catch (error) { report("#points-adjust-message", error.message); }
+  finally { submit.disabled = false; }
+});
 document.querySelector("#reward-form").addEventListener("submit", async (event) => { event.preventDefault(); const values = Object.fromEntries(new FormData(event.currentTarget)); try { await api("/api/rewards", { method: "POST", body: JSON.stringify({ ...values, pointsCost: Number(values.pointsCost), stockLimit: Number(values.stockLimit), price: Number(values.price), cashAfterPoints: Number(values.cashAfterPoints) }) }); report("#reward-message", "Recompensa publicada.", true); event.currentTarget.reset(); await loadMetrics(); } catch (error) { report("#reward-message", error.message); } });
 document.querySelector("#reward-form [name='fulfillmentType']").addEventListener("change", (event) => { const field = document.querySelector(".reward-product-field"); field.hidden = event.target.value !== "install"; field.querySelector("select").required = !field.hidden; });
 document.querySelector("#redemption-list").addEventListener("click", async (event) => { const button = event.target.closest("[data-redemption-id]"); if (!button) return; const vehicleId = button.closest(".admin-list-row").querySelector("[data-redemption-vehicle]")?.value; try { await api(`/api/redemptions/${button.dataset.redemptionId}`, { method: "PATCH", body: JSON.stringify({ status: button.dataset.status, vehicleId }) }); report("#redemption-message", "Estado del canje actualizado.", true); await Promise.all([loadRedemptions(), loadMetrics()]); } catch (error) { report("#redemption-message", error.message); } });
