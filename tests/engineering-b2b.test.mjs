@@ -66,3 +66,15 @@ test("new brand resources are local vectors and the favicon is not empty", async
   const favicon = await readFile(resolve(root, "assets", "brand", "favicon-maxmotor-v2.svg"), "utf8");
   assert.match(favicon, /viewBox="0 0 1253\.96 1253\.96"/, "el favicon debe conservar una relacion cuadrada para buscadores");
 });
+
+test("shared shell prevents intrinsic media widths from breaking mobile layouts", async () => {
+  const [shell, styles] = await Promise.all([
+    readFile(resolve(root, "assets", "site-shell.js"), "utf8"),
+    readFile(resolve(root, "assets", "shared-shell.css"), "utf8"),
+  ]);
+  assert.doesNotMatch(shell, /class="logo"[^>]+width="2022"/);
+  assert.match(shell, /class="logo"[^>]+max-width:42vw/);
+  assert.match(styles, /html,body\{width:100%;max-width:100%;overflow-x:clip\}/);
+  assert.match(styles, /img,svg,video,canvas,iframe\{max-width:100%\}/);
+  assert.match(styles, /\.shared-site-header \.logo\{display:block;width:250px;max-width:100%/);
+});

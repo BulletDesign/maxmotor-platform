@@ -4,7 +4,7 @@
     <div id="main-header-wrapper">
       <div class="top-banner"><div class="marquee-container"><span class="marquee-content">ENVIOS A TODO EL PAIS &nbsp;•&nbsp; ASESORIA TECNICA PERSONALIZADA &nbsp;•&nbsp; INSTALACION PROFESIONAL &nbsp;•&nbsp; ENVIOS A TODO EL PAIS</span></div></div>
       <nav>
-        <a class="header-brand" href="/" aria-label="Ir al inicio"><img src="/assets/brand/maxmotor-logo.svg" class="logo" alt="Maxmotor Accesorios 4x4" width="2022" height="866"></a>
+        <a class="header-brand" href="/" aria-label="Ir al inicio"><img src="/assets/brand/maxmotor-logo.svg" class="logo" alt="Maxmotor Accesorios 4x4" width="250" height="66" style="display:block;width:250px;max-width:42vw;height:66px;object-fit:contain"></a>
         <div class="header-actions">
           <div class="search-container" role="search">
             <label class="sr-only" for="mainSearchInput">Buscar camioneta o accesorio</label>
@@ -20,7 +20,7 @@
     <footer class="shared-footer">
       <div class="shared-footer__eyebrow"><span>MAXMOTOR 4X4 / ECUADOR</span><strong>TOOLS NOT TOYS.</strong></div>
       <div class="shared-footer__grid">
-        <div class="shared-footer__brand"><img src="/assets/brand/maxmotor-logo.svg" alt="Maxmotor 4x4" width="2022" height="866"><p>Equipamiento, manufactura e ingeniería para camionetas, SUV, flotas y proyectos off-road.</p><div class="footer-actions"><a class="footer-action footer-action--primary" href="https://wa.me/593960855932?text=Hola%20Maxmotor%204x4%2C%20necesito%20asesoria." target="_blank" rel="noopener">Contactar por WhatsApp</a><a class="footer-action" href="/MiMaxmotor">Mi Maxmotor</a></div></div>
+        <div class="shared-footer__brand"><img src="/assets/brand/maxmotor-logo.svg" alt="Maxmotor 4x4" width="330" height="110"><p>Equipamiento, manufactura e ingeniería para camionetas, SUV, flotas y proyectos off-road.</p><div class="footer-actions"><a class="footer-action footer-action--primary" href="https://wa.me/593960855932?text=Hola%20Maxmotor%204x4%2C%20necesito%20asesoria." target="_blank" rel="noopener">Contactar por WhatsApp</a><a class="footer-action" href="/MiMaxmotor">Mi Maxmotor</a></div></div>
         <nav class="footer-nav footer-nav--main" aria-label="Explorar Maxmotor"><small>EXPLORAR</small><a href="${rootPrefix}index.html">Inicio</a><a href="${rootPrefix}camionetas/">Camionetas</a><a href="/hibridos">Híbridos y eléctricos</a><a href="/productos/">Productos destacados</a><a href="${rootPrefix}index.html#main-catalog">Accesorios 4x4</a><a href="/ingenieria">Ingeniería B2B</a><a href="/tough-dog">Tough Dog Ecuador</a></nav>
         <nav class="footer-nav footer-nav--services" aria-label="Servicios y líneas"><small>LÍNEAS</small><a href="/tough-dog">Tough Dog Ecuador</a><a href="/fichas/toldo-180">Toldo lateral 180°</a><a href="/maxlining">Maxlining</a><a href="/maxlining/vehiculos">Recubrimiento de balde</a><a href="/maxlining/industrial">Poliuretano industrial</a><a href="${rootPrefix}fichas/tapas-balde-camionetas.html">Tapas de balde</a><a href="${rootPrefix}fichas/tiro-hd.html">Barras de tiro</a><a href="/fichas/bumpers-bullbars-guardachoques">Bumpers y bullbars</a></nav>
         <div class="footer-locations"><small>SEDES</small><p><b>Ambato</b><br><a class="footer-map-link" href="https://www.google.com/maps/search/?api=1&query=Av.+Atahualpa+18-0202%2C+Ambato%2C+Ecuador" target="_blank" rel="noopener">Av. Atahualpa 18-0202 ↗</a><br><a href="tel:+593960855932">096 085 5932</a></p><p><b>Quito</b><br><a class="footer-map-link" href="https://www.google.com/maps/search/?api=1&query=De+Las+Hiedras+428%2C+Torre+Oxford%2C+Quito%2C+Ecuador" target="_blank" rel="noopener">De Las Hiedras 428, Torre Oxford ↗</a><br><a href="tel:+593987986672">098 798 6672</a></p><p class="footer-coming-soon"><b>Muy pronto Guayaquil</b><br><span>Nueva sede Maxmotor 4x4</span></p></div>
@@ -34,7 +34,7 @@
     <div class="shared-site-header">
       <div class="top-banner"><div class="marquee-container"><span class="marquee-content">ENVIOS A TODO EL PAIS &nbsp;•&nbsp; ASESORIA TECNICA PERSONALIZADA &nbsp;•&nbsp; INSTALACION PROFESIONAL &nbsp;•&nbsp; ENVIOS A TODO EL PAIS</span></div></div>
       <nav>
-        <a class="header-brand" href="/" aria-label="Ir al inicio"><img src="/assets/brand/maxmotor-logo.svg" class="logo" alt="Maxmotor Accesorios 4x4" width="2022" height="866"></a>
+        <a class="header-brand" href="/" aria-label="Ir al inicio"><img src="/assets/brand/maxmotor-logo.svg" class="logo" alt="Maxmotor Accesorios 4x4" width="250" height="66" style="display:block;width:250px;max-width:42vw;height:66px;object-fit:contain"></a>
         <div class="header-actions">
           <a class="shared-header-search" href="/#mainSearchInput"><span>Buscar accesorios o vehículo</span><b aria-hidden="true">⌕</b></a>
           <a class="portal-entry" href="/MiMaxmotor"><small>PORTAL 4X4</small><span>Mi Maxmotor</span><b aria-hidden="true">→</b></a>

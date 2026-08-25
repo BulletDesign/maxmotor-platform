@@ -94,11 +94,11 @@ for (const family of families) {
   <meta property="og:image" content="${primaryImage}">
   <meta name="twitter:card" content="summary_large_image">
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;600;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/shared-shell.css?v=20260810-4">
+  <link rel="stylesheet" href="assets/shared-shell.css?v=20260825-1">
   <link rel="stylesheet" href="assets/product-detail.css?v=20260825-2">
   <link rel="stylesheet" href="assets/media-lightbox.css?v=20260825-2">
   <link rel="stylesheet" href="assets/type-system.css?v=20260805-2">
-  <script src="assets/site-shell.js?v=20260820-3"></script>
+  <script src="assets/site-shell.js?v=20260825-1"></script>
   <script src="assets/media-lightbox.js?v=20260825-2" defer></script>
   <script type="application/ld+json">${JSON.stringify(schema)}</script>
 </head>

@@ -40,10 +40,10 @@ const page = ({ slug, title, description, kicker, headline, lead, image, imageAl
   <meta property="og:url" content="https://maxmotor4x4.com/maxlining/${slug}">
   <meta property="og:image" content="${image}">
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Montserrat:wght@400;500;700;900&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/shared-shell.css?v=20260810-4">
+  <link rel="stylesheet" href="/assets/shared-shell.css?v=20260825-1">
   <link rel="stylesheet" href="/assets/type-system.css?v=20260805-2">
   <link rel="stylesheet" href="/assets/maxlining.css?v=20260810-3">
-  <script src="/assets/site-shell.js?v=20260810-4"></script>
+  <script src="/assets/site-shell.js?v=20260825-1"></script>
   <script src="/assets/maxlining-shell.js?v=20260810-1"></script>
   <script type="application/ld+json">${JSON.stringify({
     "@context": "https://schema.org",
